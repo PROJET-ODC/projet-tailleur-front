@@ -3,6 +3,10 @@ import LoginPage from "../pages/LoginPage";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
 import ProfilPage from "../pages/ProfilPage.jsx";
+import { renderRoutes } from "./generate-routes.jsx";
+import RegisterPage from "../pages/RegisterPage.jsx";
+
+
 import MesCommandes from '../components/principal/sidebar/MesCommandes';
 import Articles from '../components/principal/sidebar/Articles';
 import Approvisionnements from '../components/principal/sidebar/Approvisionnements';
@@ -14,20 +18,27 @@ export const routes = [
     {
         layout: AnonymousLayout,
         routes: [
-            {
-                name: 'login',
-                title: 'Login page',
-                component: LoginPage,
-                path: '/login',
-                isPublic: true,
-            },
-            {
-                name: 'home', // Ajusté pour éviter les duplications
-                title: 'Home page',
-                component: HomePage,
-                path: '/',
-                isPublic: true,
-            }
+          {
+            name: "login",
+            title: "Login page",
+            component: LoginPage,
+            path: "/",
+            isPublic: true,
+          },
+          {
+            name: "login",
+            title: "Login page",
+            component: LoginPage,
+            path: "/login",
+            isPublic: true,
+          },
+          {
+            name: "register",
+            title: "Register page",
+            component: RegisterPage,
+            path: "/register",
+            isPublic: true,
+          },
         ]
     },
     {
