@@ -4,6 +4,7 @@ import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
 import ProfilPage from "../pages/ProfilPage.jsx";
 import {renderRoutes} from "./generate-routes.jsx";
+import PostPage from "../pages/PostPage";
 
 
 export const routes = [
@@ -34,6 +35,12 @@ export const routes = [
                 title: 'Home page',
                 component: HomePage,
                 path: '/home'
+            },
+            {
+                name: 'post',
+                title: 'Post page',
+                component: PostPage,
+                path: '/post'
             },
             {
                 name: 'users',
