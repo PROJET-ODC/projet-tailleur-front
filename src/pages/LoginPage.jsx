@@ -1,12 +1,27 @@
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, replace, useNavigate } from "react-router-dom";
 import LoginSchemaValidation from "../validations/LoginSchemaValidation.js";
 import { loginApi } from "../api/auth.js";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import scriptUrls from "../utils/scriptsUrl";
+import useScriptLoader from "../hooks/useScriptLoader";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { isAuth } from "../utils/decryptJWT.js";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { updateAuthStatus } = useContext(AuthContext);
+  const isLoggedIn = isAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/home");
+    }
+  }, [isLoggedIn, navigate]);
+
+  useScriptLoader(scriptUrls);
+
   const [isPending, setIsPending] = useState(false);
 
   const loginFormik = useFormik({
@@ -17,7 +32,6 @@ function LoginPage() {
     onSubmit: async (values) => {
       setIsPending(true);
       const result = await loginApi(values);
-      console.log(result);
 
       if (result.status == "KO") {
         toast.error(result.message);
@@ -25,8 +39,9 @@ function LoginPage() {
       } else {
         toast.success(result.message);
         localStorage.setItem("token", result.token);
+        updateAuthStatus();
         setIsPending(false);
-        navigate("/home");
+        navigate("/home", { replace: true });
       }
     },
     validationSchema: LoginSchemaValidation,

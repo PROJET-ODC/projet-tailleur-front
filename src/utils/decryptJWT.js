@@ -14,4 +14,16 @@ const decodedToken = () => {
   return null;
 };
 
+export const isAuth = () => {
+  return decodedToken() !== null;
+};
+
+export const getRole = () => {
+  const decoded = decodedToken();
+  if (decoded) {
+    return decoded.role;
+  }
+  return null;
+};
+
 export default decodedToken;

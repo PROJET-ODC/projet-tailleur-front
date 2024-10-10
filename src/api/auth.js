@@ -15,8 +15,10 @@ const loginApi = async (data) => {
 
 const registerApi = async (data) => {
   const result = await apiBase
-    .post("/register")
+    .post("/register", data)
     .then((response) => {
+      console.log(response);
+
       return response.data;
     })
     .catch((error) => {

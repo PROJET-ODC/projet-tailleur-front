@@ -1,7 +1,9 @@
+import scriptUrls from "../utils/scriptsUrl";
+import useScriptLoader from "../hooks/useScriptLoader";
 function HomePage() {
+  useScriptLoader(scriptUrls);
   return (
     <div className="is-white">
-        
       <div
         id="main-navbar"
         className="navbar navbar-v1 is-inline-flex is-transparent no-shadow is-hidden-mobile"

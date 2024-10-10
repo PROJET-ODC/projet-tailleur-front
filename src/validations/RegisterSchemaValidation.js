@@ -19,12 +19,9 @@ const RegisterSchemaValidation = Yup.object().shape({
     confirm_password: Yup.string()
         .oneOf([Yup.ref('password'), null], "Les mots de passe ne correspondent pas")
         .required("La confirmation du mot de passe est requise"),
-    identifiant: Yup.string()
-        .required("L'identifiant est requis")
-        .min(4, "L'identifiant doit contenir au moins 4 caractères"),
     role: Yup.string()
         .required("Le rôle est requis")
-        .oneOf(["ADMIN", "USER", "TAILLEUR", "VENDEUR"], "Rôle invalide"), // vous pouvez adapter les valeurs de rôle si nécessaire
+        .oneOf(["USER", "TAILLEUR", "VENDEUR"], "Rôle invalide"), // vous pouvez adapter les valeurs de rôle si nécessaire
     phone: Yup.string()
         .required("Le numéro de téléphone est requis")
         .matches(

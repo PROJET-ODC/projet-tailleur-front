@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { registerApi } from "../api/auth";
 import RegisterSchemaValidation from "../validations/RegisterSchemaValidation";
+import scriptUrls from "../utils/scriptsUrl";
+import useScriptLoader from "../hooks/useScriptLoader";
+import generateUniqueId from "../utils/generateUniqueId";
+import { isAuth } from "../utils/decryptJWT";
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const [isPending, setIsPending] = useState(false);
+  const isLoggedIn = isAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/home");
+    }
+  }, [isLoggedIn, navigate]);
+
+  useScriptLoader(scriptUrls);
+
+  const urlUpload = import.meta.env.VITE_API_URL + "/uploadProfile";
 
   const registerFormik = useFormik({
     initialValues: {
@@ -24,16 +38,14 @@ function RegisterPage() {
       bio: "",
     },
     onSubmit: async (values) => {
-      setIsPending(true);
-      const result = await registerApi(values);
-      console.log(result);
+      values.identifiant = generateUniqueId(values.firstname, values.lastname);
 
+      const result = await registerApi(values);
       if (result.status == "KO") {
         toast.error(result.message);
-        setIsPending(false);
       } else {
+        console.log(result);
         toast.success(result.message);
-        setIsPending(false);
         navigate("/login");
       }
     },
@@ -41,7 +53,7 @@ function RegisterPage() {
   });
 
   return (
-    <form onSubmit={registerFormik.handleSubmit} className="signup-wrapper">
+    <div className="signup-wrapper">
       <div className="fake-nav">
         <a href="index.html" className="logo">
           <img
@@ -74,15 +86,18 @@ function RegisterPage() {
             <div id="step-dot-4" className="dot is-fourth" data-step="75">
               <i data-feather="lock"></i>
             </div>
-            <div id="step-dot-5" className="dot is-fifth" data-step="100">
+            {/* <div id="step-dot-5" className="dot is-fifth" data-step="100">
               <i data-feather="flag"></i>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
 
       <div className="outer-panel">
-        <div className="outer-panel-inner">
+        <form
+          onSubmit={registerFormik.handleSubmit}
+          className="outer-panel-inner"
+        >
           <div className="process-title !font-bold">
             <h2 id="step-title-1" className="step-title is-active ">
               Bienvenue, selectionnez le type de compte.
@@ -127,6 +142,9 @@ function RegisterPage() {
                   <a
                     className="button is-fullwidth process-button"
                     data-step="step-dot-2"
+                    onClick={() =>
+                      registerFormik.setFieldValue("role", "VENDEUR")
+                    }
                   >
                     Continuer
                   </a>
@@ -159,6 +177,9 @@ function RegisterPage() {
                   <a
                     className="button is-fullwidth process-button"
                     data-step="step-dot-2"
+                    onClick={() =>
+                      registerFormik.setFieldValue("role", "TAILLEUR")
+                    }
                   >
                     Continue
                   </a>
@@ -189,6 +210,7 @@ function RegisterPage() {
                   <a
                     className="button is-fullwidth process-button"
                     data-step="step-dot-2"
+                    onClick={() => registerFormik.setFieldValue("role", "USER")}
                   >
                     Continue
                   </a>
@@ -212,10 +234,10 @@ function RegisterPage() {
                     onBlur={registerFormik.handleBlur}
                   />
                 </div>
-                {registerFormik.touched.email &&
-                  registerFormik.errors.email && (
+                {registerFormik.touched.firstname &&
+                  registerFormik.errors.firstname && (
                     <p className="text-red-500">
-                      {registerFormik.errors.email}
+                      {registerFormik.errors.firstname}
                     </p>
                   )}
               </div>
@@ -226,12 +248,18 @@ function RegisterPage() {
                     type="text"
                     className="input"
                     placeholder="Entrer votre nom"
-                    name="nom"
-                    value={registerFormik.values.nom}
+                    name="lastname"
+                    value={registerFormik.values.lastname}
                     onChange={registerFormik.handleChange}
                     onBlur={registerFormik.handleBlur}
                   />
                 </div>
+                {registerFormik.touched.lastname &&
+                  registerFormik.errors.lastname && (
+                    <p className="text-red-500">
+                      {registerFormik.errors.lastname}
+                    </p>
+                  )}
               </div>
               <div className="field">
                 <label>Email</label>
@@ -246,6 +274,46 @@ function RegisterPage() {
                     onBlur={registerFormik.handleBlur}
                   />
                 </div>
+                {registerFormik.touched.email &&
+                  registerFormik.errors.email && (
+                    <p className="text-red-500">
+                      {registerFormik.errors.email}
+                    </p>
+                  )}
+              </div>
+              <div className="field">
+                <label>La bio</label>
+                <div className="control">
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder="votre biographie"
+                    name="bio"
+                    value={registerFormik.values.bio}
+                    onChange={registerFormik.handleChange}
+                    onBlur={registerFormik.handleBlur}
+                  />
+                </div>
+                {registerFormik.touched.bio && registerFormik.errors.bio && (
+                  <p className="text-red-500">{registerFormik.errors.bio}</p>
+                )}
+              </div>
+              <div className="field">
+                <label>l'adresse</label>
+                <div className="control">
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder="votre adresse"
+                    name="city"
+                    value={registerFormik.values.city}
+                    onChange={registerFormik.handleChange}
+                    onBlur={registerFormik.handleBlur}
+                  />
+                </div>
+                {registerFormik.touched.city && registerFormik.errors.city && (
+                  <p className="text-red-500">{registerFormik.errors.city}</p>
+                )}
               </div>
             </div>
 
@@ -275,15 +343,25 @@ function RegisterPage() {
                     data-demo-src="assets/img/avatars/avatar-w.png"
                     alt=""
                   />
-                  <form
+                  {/* <form
                     id="profile-pic-dz"
                     className="dropzone is-hidden"
-                    action="https://friendkit.cssninja.io/"
-                  ></form>
+                    action={urlUpload}
+                  >
+                    <input
+                      type="file"
+                      name="picture"
+                      id=""
+                      value={registerFormik.values.picture}
+                      onChange={registerFormik.handleChange}
+                      onBlur={registerFormik.handleBlur}
+                    />
+                  </form> */}
                 </div>
                 <div className="limitation">
                   <small>
-                    Only images with a size lower than 3MB are allowed.
+                    Seules les images d'une taille inférieure à 3 Mo sont
+                    autorisées.
                   </small>
                 </div>
               </div>
@@ -317,6 +395,12 @@ function RegisterPage() {
                     onBlur={registerFormik.handleBlur}
                   />
                 </div>
+                {registerFormik.touched.password &&
+                  registerFormik.errors.password && (
+                    <p className="text-red-500">
+                      {registerFormik.errors.password}
+                    </p>
+                  )}
               </div>
               <div className="field">
                 <label>Confirmer mot de passe</label>
@@ -331,6 +415,12 @@ function RegisterPage() {
                     onBlur={registerFormik.handleBlur}
                   />
                 </div>
+                {registerFormik.touched.confirm_password &&
+                  registerFormik.errors.confirm_password && (
+                    <p className="text-red-500">
+                      {registerFormik.errors.confirm_password}
+                    </p>
+                  )}
               </div>
               <div className="field">
                 <label>Phone Number</label>
@@ -338,51 +428,37 @@ function RegisterPage() {
                   <input
                     type="text"
                     className="input"
-                    placeholder="Entrez votre numéro de téléphone"
-                    name="confirm_password"
-                    value={registerFormik.values.confirm_password}
+                    placeholder="(77|78|76)7777777"
+                    name="phone"
+                    value={registerFormik.values.phone}
                     onChange={registerFormik.handleChange}
                     onBlur={registerFormik.handleBlur}
                   />
                 </div>
+                {registerFormik.touched.phone &&
+                  registerFormik.errors.phone && (
+                    <p className="text-red-500">
+                      {registerFormik.errors.phone}
+                    </p>
+                  )}
               </div>
-            </div>
 
-            <div className="buttons">
-              <a className="button process-button" data-step="step-dot-3">
-                Back
-              </a>
-              <a
-                className="button process-button is-next"
-                data-step="step-dot-5"
-              >
-                Next
-              </a>
-            </div>
-          </div>
-
-          <div id="signup-panel-5" className="process-panel-wrap is-narrow">
-            <div className="form-panel">
-              <img
-                className="success-image"
-                src="assets/img/illustrations/signup/mailbox.svg"
-                alt=""
-              />
-              <div className="success-text">
-                <h3>Congratz, you successfully created your account.</h3>
-                <p>
-                  We just sent you a confirmation email. PLease confirm your
-                  account within 24 hours.
-                </p>
-                <a id="signup-finish" className="button is-fullwidth">
-                  Let Me In
+              <div className="buttons">
+                <a className="button process-button" data-step="step-dot-3">
+                  Précédent
                 </a>
+                <button
+                  className="button process-button is-next"
+                  // data-step="step-dot-5"
+                  type="submit"
+                >
+                  S'inscrire
+                </button>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
-
       <div id="crop-modal" className="modal is-small crop-modal is-animated">
         <div className="modal-background"></div>
         <div className="modal-content">
@@ -401,7 +477,7 @@ function RegisterPage() {
           </div>
         </div>
       </div>
-    </form>
+    </div>
   );
 }
 
