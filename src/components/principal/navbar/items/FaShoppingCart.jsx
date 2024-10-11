@@ -1,7 +1,6 @@
-import React from 'react';
-import Loader from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/Loader.jsx';
-import CartHeader from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/CartHeader.jsx';
-import CartList from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/CartList.jsx';
+import Loader from "./itemsComponents/sousComponentitems/Loader";
+import CartHeader from "./itemsComponents/sousComponentitems/CartHeader";
+import CartList from "./itemsComponents/sousComponentitems/CartList";
 
 const FaShoppingCart = () => {
   return (
@@ -21,7 +20,9 @@ const FaShoppingCart = () => {
           {/* Liste des articles */}
           <CartList />
 
-          <a href="#" className="button primary-button is-raised">Checkout</a>
+          <a href="#" className="button primary-button is-raised">
+            Checkout
+          </a>
         </div>
       </div>
     </div>

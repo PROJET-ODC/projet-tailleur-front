@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MessageItem = ({ imgSrc, userName, message, time }) => {
   return (
     <div className="media">

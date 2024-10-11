@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 
-function Post() {
+function PostInput() {
   const [files, setFiles] = useState([]); // État pour stocker les fichiers sélectionnés
   const fileInputRef = useRef(null);
 
@@ -92,7 +92,13 @@ function Post() {
                 ></textarea>
                 <a
                   className="button is-rounded is-solid accent-button"
-                  style={{ alignSelf: "flex-end", marginRight: "10px", Buttom: "0px", position: "absolute", top: "100px" }}
+                  style={{
+                    alignSelf: "flex-end",
+                    marginRight: "10px",
+                    Buttom: "0px",
+                    position: "absolute",
+                    top: "100px",
+                  }}
                 >
                   Publier
                 </a>{" "}
@@ -737,7 +743,6 @@ function Post() {
             <div className="card-heading">
               <h3>Nouveau album</h3>
 
-              {/* Button to add pictures/videos */}
               <div
                 className="button is-solid accent-button fileinput-button"
                 onClick={handleFileInputClick} // Trigger file input click
@@ -928,7 +933,9 @@ function Post() {
                         <i data-feather="globe"></i>
                         <div className="media-content">
                           <h3>Public</h3>
-                          <small>Tout le monde peut voir cette publication.</small>
+                          <small>
+                            Tout le monde peut voir cette publication.
+                          </small>
                         </div>
                       </div>
                     </a>
@@ -937,7 +944,9 @@ function Post() {
                         <i data-feather="users"></i>
                         <div className="media-content">
                           <h3>Amies</h3>
-                          <small>Seuls les amis peuvent voir cette publication.</small>
+                          <small>
+                            Seuls les amis peuvent voir cette publication.
+                          </small>
                         </div>
                       </div>
                     </a>
@@ -977,4 +986,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default PostInput;

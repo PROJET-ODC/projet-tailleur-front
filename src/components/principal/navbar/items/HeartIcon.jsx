@@ -1,5 +1,4 @@
-import React from 'react';
-import FriendRequestList from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/FriendRequestList.jsx';
+import FriendRequestList from "./itemsComponents/sousComponentitems/FriendRequestList";
 
 const HeartIcon = () => {
   return (

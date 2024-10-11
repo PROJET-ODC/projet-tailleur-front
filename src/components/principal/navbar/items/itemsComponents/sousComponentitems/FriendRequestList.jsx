@@ -1,6 +1,11 @@
-import React from 'react';
-
-const FriendRequestItem = ({ imageSrc, name, mutualFriends, isAdded, onAdd, onRemove }) => {
+const FriendRequestList = ({
+  imageSrc,
+  name,
+  mutualFriends,
+  isAdded,
+  onAdd,
+  onRemove,
+}) => {
   return (
     <div className="media">
       <figure className="media-left">
@@ -15,10 +20,16 @@ const FriendRequestItem = ({ imageSrc, name, mutualFriends, isAdded, onAdd, onRe
       <div className="media-right">
         {!isAdded ? (
           <>
-            <button className="button icon-button is-solid grey-button raised" onClick={onAdd}>
+            <button
+              className="button icon-button is-solid grey-button raised"
+              onClick={onAdd}
+            >
               <i data-feather="user-plus"></i>
             </button>
-            <button className="button icon-button is-solid grey-button raised" onClick={onRemove}>
+            <button
+              className="button icon-button is-solid grey-button raised"
+              onClick={onRemove}
+            >
               <i data-feather="user-minus"></i>
             </button>
           </>
@@ -32,4 +43,4 @@ const FriendRequestItem = ({ imageSrc, name, mutualFriends, isAdded, onAdd, onRe
   );
 };
 
-export default FriendRequestItem;
+export default FriendRequestList;

@@ -1,5 +1,3 @@
-import React from "react";
-// import SearchBarComponent from "./itemsComponents/SearchBarComponent"
 
 const SearchBar = () => {
 return (

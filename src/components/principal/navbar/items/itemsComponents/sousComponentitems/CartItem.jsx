@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CartItem = ({ imageSrc, itemName, itemPrice, itemQuantity }) => {
   return (
     <li className="cart-row">

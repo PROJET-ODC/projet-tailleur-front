@@ -1,6 +1,5 @@
-import React from 'react';
-import ProfileImage from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/ProfileImage.jsx';
-import ProfileDropdown from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/ProfileDropdown.jsx';
+import ProfileImage from './itemsComponents/sousComponentitems/ProfileImage';
+import ProfileDropdown from './itemsComponents/sousComponentitems/ProfileDropdown';
 
 const ProfileIcon = () => {
   return (

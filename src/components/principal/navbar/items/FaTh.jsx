@@ -1,7 +1,6 @@
-import React from 'react';
-import IconLink from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/IconLink';
-import Icon from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/Icon';
-import Indicator from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/Indicator';
+import IconLink from './itemsComponents/sousComponentitems/IconLink';
+import Icon from './itemsComponents/sousComponentitems/Icon';
+import Indicator from './itemsComponents/sousComponentitems/Indicator';
 
 const FaTh = () => {
   return (

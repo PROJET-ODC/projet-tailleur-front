@@ -1,4 +1,3 @@
-import React from 'react';
 
 const NotificationItem = ({ imgSrc, userName, action, time, icon }) => {
   return (

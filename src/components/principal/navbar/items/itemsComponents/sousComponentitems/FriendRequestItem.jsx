@@ -1,5 +1,3 @@
-import React from 'react';
-
 const FriendRequestItem = ({ imageSrc, name, mutualFriends, isAdded, onAdd, onRemove }) => {
   return (
     <div className="media">

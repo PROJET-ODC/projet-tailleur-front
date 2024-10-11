@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfileHeader from './ProfileHeader';
 import ProfileAccountItem from './ProfileAccountItem';
 import LogoutButton from './LogoutButton';

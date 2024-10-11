@@ -2889,9 +2889,8 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   display: flex;
   align-items: center;
   margin-top: 10px;
-k
-
 }
+
 .comments-body {
   max-height: 300px; 
   overflow-y: auto; 

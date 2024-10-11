@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CartTotal = ({ total }) => {
   return (
     <div className="shopping-cart-total">

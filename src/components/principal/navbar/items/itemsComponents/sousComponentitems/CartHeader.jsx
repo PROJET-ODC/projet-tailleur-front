@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CartHeader = ({ total }) => {
   return (
     <div className="shopping-cart-header">

@@ -1,5 +1,4 @@
-import React from 'react';
-import NotificationList from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/NotificationList';
+import NotificationList from "./itemsComponents/sousComponentitems/NotificationList";
 
 const BellIcon = () => {
   return (

@@ -1,5 +1,4 @@
-import React from 'react';
-import MessageList from '/home/aissata/projet-tailleur-front/src/components/principal/navbar/items/itemsComponents/sousComponentitems/MessageList.jsx';
+import MessageList from "./itemsComponents/sousComponentitems/MessageList";
 
 const EnvelopeIcon = () => {
   return (
