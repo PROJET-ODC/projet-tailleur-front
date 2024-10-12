@@ -2,6 +2,7 @@ import AnonymousLayout from "../layouts/AnonymousLayout";
 import LoginPage from "../pages/LoginPage";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
+import CommandePage from "../pages/CommandePage.jsx";
 import ProfilPage from "../pages/ProfilPage.jsx";
 import { renderRoutes } from "./generate-routes.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
@@ -65,6 +66,12 @@ export const routes = [
         component: NotFound, // Un composant pour la page 404
         path: "*",
       },
+      {
+        name: 'commande',
+        title: 'Home page',
+        component: CommandePage,
+        path: '/commande'
+      }
     ],
   },
 ];
