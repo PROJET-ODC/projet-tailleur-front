@@ -7,6 +7,7 @@ import ProfilPage from "../pages/ProfilPage.jsx";
 import { renderRoutes } from "./generate-routes.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import NotFound from "../pages/NotFoundPage"; // Mettez à jour le chemin selon votre structure de projet
+import ProfilePage from "../components/profile/ProfilePage.jsx";
 
 export const routes = [
   {
@@ -54,7 +55,7 @@ export const routes = [
             name: "profil",
             title: "Profil",
             hasSiderLink: true,
-            component: ProfilPage,
+            component: ProfilePage,
             path: "/profile",
             exact: true,
           },
