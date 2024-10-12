@@ -1,29 +1,30 @@
 import { useState, useRef } from "react";
 
 function PostInput() {
-  const [files, setFiles] = useState([]); // État pour stocker les fichiers sélectionnés
+  const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
+  const [showPostModal, setShowPostModal] = useState(false);
 
-  // Fonction pour gérer la sélection de fichiers
+  const handlePostClick = () => {
+    setShowPostModal((prevState) => !prevState);
+  };
+
   const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files); // Convertir FileList en tableau
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // Ajouter les fichiers sélectionnés à la liste existante
+    const selectedFiles = Array.from(event.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
   };
 
-  // Fonction pour supprimer tous les fichiers
   const handleClearAll = () => {
-    setFiles([]); // Réinitialiser les fichiers
-    fileInputRef.current.value = ""; // Réinitialiser l'input file
+    setFiles([]);
+    fileInputRef.current.value = "";
   };
 
-  // Fonction pour supprimer un fichier spécifique
   const handleRemoveFile = (index) => {
     const newFiles = [...files];
-    newFiles.splice(index, 1); // Supprimer le fichier à l'index spécifié
+    newFiles.splice(index, 1);
     setFiles(newFiles);
   };
 
-  // Fonction pour déclencher l'input file caché
   const handleFileInputClick = () => {
     fileInputRef.current.click();
   };
@@ -41,7 +42,7 @@ function PostInput() {
                 <span>Publish</span>
               </a>
             </li>
-            <li>
+            <li onClick={handlePostClick}>
               <a className="modal-trigger" data-modal="albums-modal">
                 <span className="icon is-small">
                   <i data-feather="image"></i>
@@ -50,7 +51,7 @@ function PostInput() {
               </a>
             </li>
 
-            <li className="close-wrap">
+            <li className="close-wrap" onClick={handlePostClick}>
               <span className="close-publish">
                 <i data-feather="x"></i>
               </span>
@@ -81,28 +82,15 @@ function PostInput() {
                   rows="3"
                   placeholder="Write something about you..."
                   style={{
-                    border: "1px solid #ccc", // Bordure grise
-                    width: "100%", // Largeur du textarea
-                    maxWidth: "500px", // Limiter la largeur
+                    border: "1px solid #ccc",
+                    width: "100%",
+                    maxWidth: "500px",
                     padding: "10px",
-                    marginBottom: "20px", // Espacer le textarea du bouton
+                    // marginBottom: "20px",
                     borderRadius: "4px",
-                    marginRight: "40px", // Coins arrondis
+                    marginRight: "40px",
                   }}
                 ></textarea>
-                <a
-                  className="button is-rounded is-solid accent-button"
-                  style={{
-                    alignSelf: "flex-end",
-                    marginRight: "10px",
-                    Buttom: "0px",
-                    position: "absolute",
-                    top: "100px",
-                  }}
-                >
-                  Publier
-                </a>{" "}
-                {/* Bouton aligné à droite */}
               </div>
             </div>
 
@@ -468,250 +456,6 @@ function PostInput() {
             </div>
           </div>
 
-          <div className="hidden-options">
-            <div className="target-channels">
-              <div className="channel">
-                <div className="round-checkbox is-small">
-                  <div>
-                    <input type="checkbox" id="checkbox-1" />
-                    <label htmlFor="checkbox-1"></label>
-                  </div>
-                </div>
-                <div className="channel-icon">
-                  <i data-feather="bell"></i>
-                </div>
-                <div className="channel-name">Activity Feed</div>
-
-                <div className="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger">
-                  <div>
-                    <button className="button" aria-haspopup="true">
-                      <i className="main-icon" data-feather="smile"></i>
-                      <span>Friends</span>
-                      <i className="caret" data-feather="chevron-down"></i>
-                    </button>
-                  </div>
-                  <div className="dropdown-menu" role="menu">
-                    <div className="dropdown-content">
-                      <a href="#" className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="globe"></i>
-                          <div className="media-content">
-                            <h3>Public</h3>
-                            <small>Anyone can see this publication.</small>
-                          </div>
-                        </div>
-                      </a>
-                      <a className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="users"></i>
-                          <div className="media-content">
-                            <h3>Friends</h3>
-                            <small>
-                              only friends can see this publication.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                      <a className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="user"></i>
-                          <div className="media-content">
-                            <h3>Specific friends</h3>
-                            <small>Dont show it to some friends.</small>
-                          </div>
-                        </div>
-                      </a>
-                      <hr className="dropdown-divider" />
-                      <a className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="lock"></i>
-                          <div className="media-content">
-                            <h3>Only me</h3>
-                            <small>Only me can see this publication.</small>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="channel">
-                <div className="round-checkbox is-small">
-                  <div>
-                    <input type="checkbox" id="checkbox-2" />
-                    <label htmlFor="checkbox-2"></label>
-                  </div>
-                </div>
-                <div className="story-icon">
-                  <div className="plus-icon">
-                    <i data-feather="plus"></i>
-                  </div>
-                </div>
-
-                <div className="channel-name">My Story</div>
-
-                <div className="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger">
-                  <div>
-                    <button className="button" aria-haspopup="true">
-                      <i className="main-icon" data-feather="smile"></i>
-                      <span>Friends</span>
-                      <i className="caret" data-feather="chevron-down"></i>
-                    </button>
-                  </div>
-                  <div className="dropdown-menu" role="menu">
-                    <div className="dropdown-content">
-                      <a href="#" className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="globe"></i>
-                          <div className="media-content">
-                            <h3>Public</h3>
-                            <small>Anyone can see this publication.</small>
-                          </div>
-                        </div>
-                      </a>
-                      <a className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="users"></i>
-                          <div className="media-content">
-                            <h3>Friends</h3>
-                            <small>
-                              only friends can see this publication.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                      <a className="dropdown-item">
-                        <div className="media">
-                          <i data-feather="users"></i>
-                          <div className="media-content">
-                            <h3>Friends and contacts</h3>
-                            <small>Your friends and contacts.</small>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="friends-list is-hidden">
-              <div className="list-header">
-                <span>Send in a message</span>
-                <div className="actions">
-                  <a
-                    id="open-compose-search"
-                    href="javascript:void(0);"
-                    className="search-trigger"
-                  >
-                    <i data-feather="search"></i>
-                  </a>
-
-                  <div id="compose-search" className="control is-hidden">
-                    <input
-                      type="text"
-                      className="input"
-                      placeholder="Search People"
-                    />
-                    <span>
-                      <i data-feather="search"></i>
-                    </span>
-                  </div>
-                  <a
-                    href="javascript:void(0);"
-                    className="is-inverted modal-trigger"
-                    data-modal="create-group-modal"
-                  >
-                    Create group
-                  </a>
-                </div>
-              </div>
-
-              <div className="list-body">
-                <div className="friend-block">
-                  <div className="round-checkbox is-small">
-                    <div>
-                      <input type="checkbox" id="checkbox-3" />
-                      <label htmlFor="checkbox-3"></label>
-                    </div>
-                  </div>
-                  <img
-                    className="friend-avatar"
-                    src="../via.placeholder.com/300x300.png"
-                    data-demo-src="assets/img/avatars/dan.jpg"
-                    alt=""
-                  />
-                  <div className="friend-name">Dan Walker</div>
-                </div>
-
-                <div className="friend-block">
-                  <div className="round-checkbox is-small">
-                    <div>
-                      <input type="checkbox" id="checkbox-4" />
-                      <label htmlFor="checkbox-4"></label>
-                    </div>
-                  </div>
-                  <img
-                    className="friend-avatar"
-                    src="../via.placeholder.com/300x300.png"
-                    data-demo-src="assets/img/avatars/daniel.jpg"
-                    alt=""
-                  />
-                  <div className="friend-name">Daniel Wellington</div>
-                </div>
-
-                <div className="friend-block">
-                  <div className="round-checkbox is-small">
-                    <div>
-                      <input type="checkbox" id="checkbox-5" />
-                      <label htmlFor="checkbox-5"></label>
-                    </div>
-                  </div>
-                  <img
-                    className="friend-avatar"
-                    src="../via.placeholder.com/300x300.png"
-                    data-demo-src="assets/img/avatars/stella.jpg"
-                    alt=""
-                  />
-                  <div className="friend-name">Stella Bergmann</div>
-                </div>
-
-                <div className="friend-block">
-                  <div className="round-checkbox is-small">
-                    <div>
-                      <input type="checkbox" id="checkbox-6" />
-                      <label htmlFor="checkbox-6"></label>
-                    </div>
-                  </div>
-                  <img
-                    className="friend-avatar"
-                    src="../via.placeholder.com/300x300.png"
-                    data-demo-src="assets/img/avatars/david.jpg"
-                    alt=""
-                  />
-                  <div className="friend-name">David Kim</div>
-                </div>
-
-                <div className="friend-block">
-                  <div className="round-checkbox is-small">
-                    <div>
-                      <input type="checkbox" id="checkbox-7" />
-                      <label htmlFor="checkbox-7"></label>
-                    </div>
-                  </div>
-                  <img
-                    className="friend-avatar"
-                    src="../via.placeholder.com/300x300.png"
-                    data-demo-src="assets/img/avatars/nelly.png"
-                    alt=""
-                  />
-                  <div className="friend-name">Nelly Schwartz</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div className="more-wrap">
             <button
               id="show-compose-friends"
@@ -736,7 +480,12 @@ function PostInput() {
 
       {/* Modal */}
 
-      <div id="albums-modal" className="modal albums-modal is-xxl has-light-bg">
+      <div
+        id="albums-modal"
+        className={`modal albums-modal is-xxl has-light-bg ${
+          showPostModal ? " is-active" : ""
+        }`}
+      >
         <div className="modal-background"></div>
         <div className="modal-content">
           <div className="card">
@@ -745,7 +494,7 @@ function PostInput() {
 
               <div
                 className="button is-solid accent-button fileinput-button"
-                onClick={handleFileInputClick} // Trigger file input click
+                onClick={handleFileInputClick}
               >
                 <i className="mdi mdi-plus"></i>
                 Add pictures/videos
@@ -764,7 +513,7 @@ function PostInput() {
                 type="file"
                 ref={fileInputRef}
                 style={{ display: "none" }}
-                multiple // Allow multiple files to be selected
+                multiple
               />
               {/* Additional sections */}
               <div className="left-section">
@@ -830,12 +579,12 @@ function PostInput() {
                       type="file"
                       id="file"
                       ref={fileInputRef}
-                      style={{ display: "none" }} // Cacher l'input si nécessaire
+                      style={{ display: "none" }}
                       multiple
                     />
                     <div
                       className="button is-solid accent-button fileinput-button"
-                      onClick={() => fileInputRef.current.click()} // Déclencher le clic
+                      onClick={() => fileInputRef.current.click()}
                     >
                       <i className="mdi mdi-plus"></i>
                       Ajouter des photos/vidéos
@@ -850,7 +599,7 @@ function PostInput() {
                       {/* Bouton pour ajouter des fichiers */}
                       <span
                         className="button has-icon is-solid grey-button fileinput-button"
-                        onClick={handleFileInputClick} // Déclencher le clic
+                        onClick={handleFileInputClick}
                       >
                         <i data-feather="plus"></i>
                       </span>
@@ -862,7 +611,7 @@ function PostInput() {
                       <button
                         type="reset"
                         className="button is-solid grey-button cancel"
-                        onClick={handleClearAll} // Effacer tous les fichiers
+                        onClick={handleClearAll}
                       >
                         <span>Clear all</span>
                       </button>
@@ -891,7 +640,7 @@ function PostInput() {
                             <div>
                               <span className="preview">
                                 <img
-                                  src={URL.createObjectURL(file)} // Affichage de l'image sélectionnée
+                                  src={URL.createObjectURL(file)}
                                   alt={file.name}
                                   width="120"
                                   height="120"
@@ -909,8 +658,8 @@ function PostInput() {
                     ref={fileInputRef}
                     style={{ display: "none" }}
                     multiple
-                    accept="image/*" // Accepter uniquement les images
-                    onChange={handleFileChange} // Gérer les fichiers sélectionnés
+                    accept="image/*"
+                    onChange={handleFileChange}
                   />
                 </div>
               </div>

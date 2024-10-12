@@ -17,6 +17,10 @@ const scriptUrls = [
   "/src/assets/js/popovers-pages.js",
   "/src/assets/js/lightbox.js",
   "/src/assets/js/signup.js",
+  "/src/assets/js/feed.js", // Ajouté
+  "/src/assets/js/webcam.js", // Ajouté
+  "/src/assets/js/compose.js", // Ajouté
+  "/src/assets/js/autocompletes.js",
 ];
 
 export default scriptUrls;

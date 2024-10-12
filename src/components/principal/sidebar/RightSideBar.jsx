@@ -1,74 +1,35 @@
 import { useState } from "react";
+import NewTendance from "./NewTendance";
 
 function RightSideBar() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [storyType, setStoryType] = useState("image");
+  const [storyFile, setStoryFile] = useState(null);
+  const [storyText, setStoryText] = useState("");
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [storyType, setStoryType] = useState('image');
-    const [storyFile, setStoryFile] = useState(null);
-    const [storyText, setStoryText] = useState('');
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setStoryType("image");
+    setStoryFile(null);
+    setStoryText("");
+  };
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setStoryType('image');
-        setStoryFile(null);
-        setStoryText('');
-    };
+  const handleFileChange = (e) => setStoryFile(e.target.files[0]);
+  const handleStoryTypeChange = (e) => setStoryType(e.target.value);
 
-    const handleFileChange = (e) => setStoryFile(e.target.files[0]);
-    const handleStoryTypeChange = (e) => setStoryType(e.target.value);
-
-    const handlePostStory = (e) => {
-        e.preventDefault();
-        // Logique pour ajouter l'histoire (à adapter selon tes besoins)
-        console.log('Story added:', { storyType, storyFile, storyText });
-        closeModal(); // Ferme le modal après l'ajout
-    };
+  const handlePostStory = (e) => {
+    e.preventDefault();
+    // Logique pour ajouter l'histoire (à adapter selon tes besoins)
+    console.log("Story added:", { storyType, storyFile, storyText });
+    closeModal(); // Ferme le modal après l'ajout
+  };
 
   return (
     <div className="column is-3">
       <div className="card">
         <div className="card-heading is-bordered">
           <h4>Stories</h4>
-          <div className="dropdown is-spaced is-neutral is-right dropdown-trigger">
-            <div>
-              <div className="button">
-                <i data-feather="more-vertical"></i>
-              </div>
-            </div>
-            <div className="dropdown-menu" role="menu">
-              <div className="dropdown-content">
-                <a href="#" className="dropdown-item">
-                  <div className="media">
-                    <i data-feather="tv"></i>
-                    <div className="media-content">
-                      <h3>Browse stories</h3>
-                      <small>View all recent stories.</small>
-                    </div>
-                  </div>
-                </a>
-                <a className="dropdown-item">
-                  <div className="media">
-                    <i data-feather="settings"></i>
-                    <div className="media-content">
-                      <h3>Settings</h3>
-                      <small>Access widget settings.</small>
-                    </div>
-                  </div>
-                </a>
-                <hr className="dropdown-divider" />
-                <a href="#" className="dropdown-item">
-                  <div className="media">
-                    <i data-feather="trash-2"></i>
-                    <div className="media-content">
-                      <h3>Remove</h3>
-                      <small>Removes this widget from your feed.</small>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
         <div className="card-body no-padding">
           <div className="story-block">
@@ -86,7 +47,7 @@ function RightSideBar() {
             </div>
           </div>
           <div className="story-block">
-            <div className="img-wrapper">
+            <div className="img-wrapper hover:!border-2 hover:!border-[#3d70b2] hover:cursor-pointer">
               <img
                 src="../via.placeholder.com/300x300.png"
                 data-demo-src="assets/img/avatars/dan.jpg"
@@ -101,6 +62,8 @@ function RightSideBar() {
           </div>
         </div>
       </div>
+
+      <NewTendance />
 
       {/* Modal pour ajouter une histoire */}
       {isModalOpen && (

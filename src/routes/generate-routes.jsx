@@ -26,7 +26,22 @@ export const renderRoutes = (mainRoutes) => {
               <ProtectedRoute isPublic={isPublic} isAuthorized={isAuthorized} />
             }
           >
-            {subRoutes.map(({ component: Component, path, name }) => {
+            {subRoutes.map(({ component: Component, path, name, loader }) => {
+              if (loader) {
+                loader().then((data) => console.log(data));
+
+                return (
+                  Component &&
+                  path && (
+                    <Route
+                      key={name}
+                      element={<Component />}
+                      path={path}
+                      loader={loader}
+                    />
+                  )
+                );
+              }
               return (
                 Component &&
                 path && <Route key={name} element={<Component />} path={path} />

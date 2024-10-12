@@ -5,11 +5,6 @@ import HomePage from "../pages/HomePage";
 import ProfilPage from "../pages/ProfilPage.jsx";
 import { renderRoutes } from "./generate-routes.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
-
-import MesCommandes from "../components/principal/sidebar/MesCommandes";
-import Articles from "../components/principal/sidebar/Articles";
-import Approvisionnements from "../components/principal/sidebar/Approvisionnements";
-import AjouterArticle from "../components/principal/sidebar/AjouterArticle";
 import NotFound from "../pages/NotFoundPage"; // Mettez à jour le chemin selon votre structure de projet
 
 export const routes = [
@@ -47,7 +42,7 @@ export const routes = [
         title: "Home page",
         component: HomePage,
         path: "/home",
-        exact: true,
+        exact: true
       },
       {
         name: "users",
@@ -63,34 +58,6 @@ export const routes = [
             exact: true,
           },
         ],
-      },
-      {
-        name: "articles",
-        title: "Articles",
-        component: Articles,
-        path: "/articles",
-        exact: true, // Utilisé pour une correspondance exacte
-      },
-      {
-        name: "approvisionnements",
-        title: "Approvisionnements",
-        component: Approvisionnements,
-        path: "/approvisionnements",
-        exact: true,
-      },
-      {
-        name: "mes-commandes",
-        title: "Mes Commandes",
-        component: MesCommandes,
-        path: "/mes-commandes",
-        exact: true,
-      },
-      {
-        name: "ajouter-article",
-        title: "Ajouter Article",
-        component: AjouterArticle,
-        path: "/ajouter-article",
-        exact: true,
       },
       {
         name: "not-found",
