@@ -143,7 +143,7 @@ function RegisterPage() {
                     className="button is-fullwidth process-button"
                     data-step="step-dot-2"
                     onClick={() =>
-                      registerFormik.setFieldValue("role", "VENDEUR")
+                      registerFormik.setFieldValue("role", "vendeur")
                     }
                   >
                     Continuer
@@ -178,7 +178,7 @@ function RegisterPage() {
                     className="button is-fullwidth process-button"
                     data-step="step-dot-2"
                     onClick={() =>
-                      registerFormik.setFieldValue("role", "TAILLEUR")
+                      registerFormik.setFieldValue("role", "tailleur")
                     }
                   >
                     Continue
@@ -210,7 +210,9 @@ function RegisterPage() {
                   <a
                     className="button is-fullwidth process-button"
                     data-step="step-dot-2"
-                    onClick={() => registerFormik.setFieldValue("role", "USER")}
+                    onClick={() =>
+                      registerFormik.setFieldValue("role", "client")
+                    }
                   >
                     Continue
                   </a>

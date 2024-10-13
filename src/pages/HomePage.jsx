@@ -15,7 +15,7 @@ function HomePage() {
       try {
         const data = await getFeedsInitData();
         setFeedData(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         if (!abortCont.signal.aborted) {
           console.error("Failed to fetch data:", error);
