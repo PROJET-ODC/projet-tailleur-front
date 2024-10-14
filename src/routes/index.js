@@ -6,6 +6,10 @@ import ProfilPage from "../pages/ProfilPage.jsx";
 import { renderRoutes } from "./generate-routes.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import NotFound from "../pages/NotFoundPage"; // Mettez à jour le chemin selon votre structure de projet
+import DashboardTailleur from "../layouts/DashboardTailleur.jsx";
+import CommandeTailleurPage from "../pages/CommandeTailleurPage.jsx";
+import ArticleTailleurPage from "../pages/ArticleTailleurPage.jsx";
+import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
 
 export const routes = [
   {
@@ -35,6 +39,42 @@ export const routes = [
     ],
   },
   {
+    layout: DashboardTailleur,
+    routes: [
+      {
+        name: "tailleur",
+        title: "Tailleurs",
+        hasSiderLink: true,
+        routes: [
+          {
+            name: "articles",
+            title: "Articles",
+            hasSiderLink: true,
+            component: ArticleTailleurPage,
+            path: "/tailleur/articles",
+            exact: true,
+          },
+          {
+            name: "commande",
+            title: "Commandes",
+            hasSiderLink: true,
+            component: ApproTailleurPage,
+            path: "/tailleur/appro",
+            exact: true,
+          },
+          {
+            name: "commande",
+            title: "Commandes",
+            hasSiderLink: true,
+            component: CommandeTailleurPage,
+            path: "/tailleur/commande",
+            exact: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
     layout: MainLayout,
     routes: [
       {
@@ -42,7 +82,7 @@ export const routes = [
         title: "Home page",
         component: HomePage,
         path: "/home",
-        exact: true
+        exact: true,
       },
       {
         name: "users",
