@@ -13,6 +13,21 @@ function RegisterPage() {
   const navigate = useNavigate();
   const isLoggedIn = isAuth();
 
+  const [preview, setPreview] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setProfileImage((prevState) => file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/home");
@@ -39,6 +54,7 @@ function RegisterPage() {
     },
     onSubmit: async (values) => {
       values.identifiant = generateUniqueId(values.firstname, values.lastname);
+      values.picture = profileImage;
 
       const result = await registerApi(values);
       if (result.status == "KO") {
@@ -334,29 +350,48 @@ function RegisterPage() {
             <div className="form-panel">
               <div className="photo-upload">
                 <div className="preview">
-                  <a className="upload-button">
-                    <i data-feather="plus"></i>
-                  </a>
-                  <img
-                    id="upload-preview"
-                    src="../via.placeholder.com/150x150.png"
-                    data-demo-src="assets/img/avatars/avatar-w.png"
-                    alt=""
-                  />
-                  {/* <form
-                    id="profile-pic-dz"
-                    className="dropzone is-hidden"
-                    action={urlUpload}
-                  >
-                    <input
-                      type="file"
-                      name="picture"
-                      id=""
-                      value={registerFormik.values.picture}
-                      onChange={registerFormik.handleChange}
-                      onBlur={registerFormik.handleBlur}
-                    />
-                  </form> */}
+                  <div className="flex items-center justify-center">
+                    <div className="relative">
+                      {/* Bouton d'upload */}
+                      <label className="block w-32 h-32 bg-gray-200 rounded-full overflow-hidden shadow-inner cursor-pointer relative group">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-10"
+                          onChange={handleImageChange}
+                        />
+
+                        {/* Icon Plus */}
+                        {!preview && (
+                          <div className="absolute inset-0 flex items-center justify-center z-0">
+                            <svg
+                              className="w-10 h-10 text-gray-400 group-hover:text-gray-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 4v16m8-8H4"
+                              ></path>
+                            </svg>
+                          </div>
+                        )}
+
+                        {/* Aperçu de l'image */}
+                        {preview && (
+                          <img
+                            src={preview}
+                            alt="Preview"
+                            className="absolute inset-0 object-cover !w-full !h-full"
+                          />
+                        )}
+                      </label>
+                    </div>
+                  </div>
                 </div>
                 <div className="limitation">
                   <small>
