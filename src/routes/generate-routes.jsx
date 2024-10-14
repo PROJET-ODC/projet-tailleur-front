@@ -18,7 +18,6 @@ export const renderRoutes = (mainRoutes) => {
     const layouts = mainRoutes.map(({ layout: Layout, routes }, index) => {
       const subRoutes = generateFlattenRoutes(routes);
       const isPublic = subRoutes[0].isPublic ?? false;
-      console.log();
       return (
         <Route key={index} element={<Layout />}>
           <Route
