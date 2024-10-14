@@ -42,12 +42,12 @@ function PostInput() {
                 <span>Publish</span>
               </a>
             </li>
-            <li onClick={handlePostClick}>
+            <li>
               <a className="modal-trigger" data-modal="albums-modal">
                 <span className="icon is-small">
                   <i data-feather="image"></i>
                 </span>
-                <span>Albums</span>
+                <span onClick={handlePostClick}>Albums</span>
               </a>
             </li>
 

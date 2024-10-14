@@ -15,7 +15,11 @@ const loginApi = async (data) => {
 
 const registerApi = async (data) => {
   const result = await apiBase
-    .post("/register", data)
+    .post("/register", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     .then((response) => {
       console.log(response);
 

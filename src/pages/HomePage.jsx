@@ -3,9 +3,12 @@ import useScriptLoader from "../hooks/useScriptLoader";
 import PostPage from "./PostPage";
 import { useEffect, useState } from "react";
 import { getFeedsInitData } from "../api/clients";
+import { useLoaderData } from "react-router-dom";
 
 function HomePage() {
   useScriptLoader(scriptUrls);
+  // const data = useLoaderData();
+  // console.log(data);
 
   const [feedData, setFeedData] = useState([]);
 

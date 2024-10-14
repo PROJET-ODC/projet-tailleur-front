@@ -4,11 +4,13 @@ import { getFeedsInitData } from "../../../api/clients";
 import Stories from "react-insta-stories";
 import { groupAndCalculateDelay } from "../../../utils/others.";
 import Modal from "../modal/Modal";
+import { createStatus } from "../../../api/tailleurs";
+import { toast } from "react-toastify";
 
 function RightSideBar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [storyType, setStoryType] = useState("image");
-  const [storyFile, setStoryFile] = useState(null);
+  const [storyFile, setStoryFile] = useState("");
   const [storyText, setStoryText] = useState("");
   const [isModalStoryOpen, setIsModalStoryOpen] = useState(false);
   const [story, setStory] = useState([]);
@@ -24,10 +26,27 @@ function RightSideBar() {
   const handleFileChange = (e) => setStoryFile(e.target.files[0]);
   const handleStoryTypeChange = (e) => setStoryType(e.target.value);
 
-  const handlePostStory = (e) => {
+  const handlePostStory = async (e) => {
     e.preventDefault();
-    // Logique pour ajouter l'histoire (à adapter selon tes besoins)
-    console.log("Story added:", { storyType, storyFile, storyText });
+    const data = {
+      image: storyFile,
+    };
+
+    const result = await createStatus(data);
+
+    if (result.status == "OK") {
+      toast.success(result.message);
+
+      // Récupère les nouvelles données pour mettre à jour le composant
+      getFeedsInitData().then((data) => {
+        setStatusData(groupAndCalculateDelay(data.recentStatus));
+      });
+      
+    } else {
+      toast.error(result.message);
+    }
+
+    // console.log("Story added:", { storyType, storyFile, storyText });
     closeModal(); // Ferme le modal après l'ajout
   };
 
@@ -43,23 +62,20 @@ function RightSideBar() {
   const [statusData, setStatusData] = useState([]);
 
   useEffect(() => {
-    const abortCont = new AbortController();
-    const fetchData = async () => {
-      try {
-        const data = await getFeedsInitData();
-        setStatusData(groupAndCalculateDelay(data.recentStatus));
-      } catch (error) {
-        if (!abortCont.signal.aborted) {
-          console.error("Failed to fetch data:", error);
-        }
-      }
-    };
-
+    // const abortCont = new AbortController();
     fetchData();
-    return () => abortCont.abort();
+    return () => {};
   }, []);
 
-  console.log(statusData);
+  const fetchData = async () => {
+    try {
+      const data = await getFeedsInitData();
+      const recentStatus = await data.recentStatus;
+      setStatusData(groupAndCalculateDelay(recentStatus));
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
 
   return (
     <>
@@ -124,7 +140,7 @@ function RightSideBar() {
                 ></button>
               </header>
               <section className="modal-card-body">
-                <form onSubmit={handlePostStory}>
+                <form onSubmit={handlePostStory} encType="multipart/form-data">
                   <div className="field">
                     <label className="label">Choisir le type de Story</label>
                     <div className="control">
@@ -147,11 +163,7 @@ function RightSideBar() {
                         Ajouter un fichier (image/vidéo)
                       </label>
                       <div className="control">
-                        <input
-                          type="file"
-                          accept="image/*,video/*"
-                          onChange={handleFileChange}
-                        />
+                        <input type="file" onChange={handleFileChange} />
                       </div>
                     </div>
                   )}
