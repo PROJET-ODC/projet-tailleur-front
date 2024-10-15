@@ -24,9 +24,13 @@ const groupAndCalculateDelay = (data) => {
       };
     }
 
+    // Determine if the file is a video or an image
+    const fileType = files.endsWith(".mp4") ? "video" : "image";
+
     acc[tailleur_id].files.push({
       url: files,
       delay: delay,
+      type: fileType, // Add the file type here
     });
 
     return acc;

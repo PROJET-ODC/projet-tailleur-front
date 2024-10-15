@@ -38,9 +38,13 @@ function LoginPage() {
         setIsPending(false);
       } else {
         toast.success(result.message);
+
         localStorage.setItem("token", result.token);
+        console.log(localStorage.getItem("token"));
+
         updateAuthStatus();
         setIsPending(false);
+        
         navigate("/home", { replace: true });
       }
     },
