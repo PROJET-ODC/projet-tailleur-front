@@ -45,7 +45,7 @@ const ProfilePost = ({ post }) => {
                         {post.files && post.files.images && post.files.images.length > 0 && (
                             <div className="post-image">
                                 <a href={post.files.images[0]}>
-                                    <img src={post.files.images[0]} alt="Post" />
+                                <img src={post.files.images[0]} alt="Post" />
                                 </a>
                                 <div className="like-wrapper">
                                     <button className="like-button">

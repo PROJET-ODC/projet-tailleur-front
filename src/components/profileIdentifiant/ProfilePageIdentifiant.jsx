@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom'; // Importez useParams
 import ProfileHeader from './ProfileHeader';
 import ProfileMenu from './ProfileMenu';
 import ProfileTimeline from './ProfileTimeline';
@@ -6,9 +7,10 @@ import Friends from './Friends';
 import Photos from './Photos';
 import useProfileData from './useProfileData'; 
 
-const ProfilePage = () => {
-  // Use the hook to fetch the data
-  const { profileData, loading, error } = useProfileData();
+const ProfilePageIdentifiant = () => {
+  // Récupérez l'ID du profil depuis les paramètres de l'URL
+  const { id } = useParams();
+  const { profileData, loading, error } = useProfileData(id); // Utilisez l'ID récupéré
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -23,8 +25,7 @@ const ProfilePage = () => {
           <div className="columns is-multiline no-margin">
             <div className="column is-paddingless">
               <ProfileHeader avatar={user.picture} />
-              {/* Pass the user's role to ProfileMenu */}
-              <ProfileMenu role={compte.role} />
+              <ProfileMenu />
               <div className="profile-subheader">
                 <div className="subheader-start is-hidden-mobile">
                   <span>{profileData.nbrAbonnee}</span>
@@ -49,7 +50,7 @@ const ProfilePage = () => {
               {tailleur && <Photos />}
             </div>
             <div className="column is-8">
-              {tailleur && <ProfileTimeline posts={posts} />}
+              {tailleur && <ProfileTimeline posts={posts} user={user} />}
             </div>
           </div>
         </div>
@@ -58,4 +59,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default ProfilePageIdentifiant;

@@ -1,20 +1,24 @@
 import ProfilePost from './ProfilePost';
 
-const ProfileTimeline = () => {
+
+const ProfileTimeline = ({ posts }) => {
   return (
     <div className="profile-timeline">
-      <div id="profile-timeline-posts" className="box-heading">
+      <div id="profile-timeline-posts" class="box-heading">
         <h4>Mes Posts</h4>
-        <div className="button-wrap">
-          <button type="button" className="button is-active">Recent</button>
-          <button type="button" className="button">Popular</button>
+        <div class="button-wrap">
+          <button type="button" class="button is-active">Recent</button>
+          <button type="button" class="button">Popular</button>
         </div>
       </div>
-
-      <ProfilePost />
-      {/* Ajoutez d'autres <ProfilePost /> ici si nécessaire */}
+      <div className="timeline-posts">
+        {posts.map(post => (
+          <ProfilePost key={post.id} post={post} />
+          
+        ))}
+        
+      </div>
     </div>
   );
 };
-
 export default ProfileTimeline;
