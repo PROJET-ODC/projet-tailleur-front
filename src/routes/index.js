@@ -2,10 +2,15 @@ import AnonymousLayout from "../layouts/AnonymousLayout";
 import LoginPage from "../pages/LoginPage";
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage";
-import ProfilPage from "../pages/ProfilPage.jsx";
+import CommandePage from "../pages/CommandePage.jsx";
 import { renderRoutes } from "./generate-routes.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import NotFound from "../pages/NotFoundPage"; // Mettez à jour le chemin selon votre structure de projet
+import ProfilePage from "../components/profile/ProfilePage.jsx";
+import HeadLayout from "../layouts/HeadLayout.jsx";
+import ProfilePageIdentifiant from "../components/profileIdentifiant/ProfilePageIdentifiant.jsx";
+import FollowerPage from "../components/Friends/FollowerPage.jsx";
+import PhotosPage from "../components/PhotosPage/PhotoPage.jsx";
 import ChatPage from "../pages/ChatPage";
 
 import DashboardTailleur from "../layouts/DashboardTailleur.jsx";
@@ -15,7 +20,6 @@ import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
 import DashboardVendeur from "../layouts/DashboardVendeur.jsx";
 import ArticleVendeurPage from "../pages/ArticleVendeurPage.jsx";
 import CommandeVendeurPage from "../pages/CommandeVendeurPage.jsx";
-
 
 
 export const routes = [
@@ -138,16 +142,7 @@ export const routes = [
         name: "users",
         title: "Users",
         hasSiderLink: true,
-        routes: [
-          {
-            name: "profil",
-            title: "Profil",
-            hasSiderLink: true,
-            component: ProfilPage,
-            path: "/profile",
-            exact: true,
-          },
-        ],
+        routes: [],
       },
       {
         name: "not-found",
@@ -159,7 +154,45 @@ export const routes = [
     ],
     
   },
-
+  {
+    layout: HeadLayout,
+    routes: [
+      {
+        name: "profile", // Route pour le profil de l'utilisateur connecté
+        title: "Profil",
+        hasSiderLink: true,
+        component: ProfilePage,
+        path: "/profile",
+        exact: true,
+      },
+      {
+        name: "profile-id", // Route pour le profil d'un utilisateur spécifique par ID
+        title: "Profil Identifiant",
+        hasSiderLink: true,
+        component: ProfilePageIdentifiant,
+        path: "/profile/:id",
+        exact: true,
+      },
+      {
+        name: "commande",
+        title: "Commande page",
+        component: CommandePage,
+        path: "/commande",
+      },
+      {
+        name: "Followers",
+        title: "follwers page",
+        component: FollowerPage,
+        path: "/followers",
+      },
+      {
+        name: "Followers",
+        title: "follwers page",
+        component: PhotosPage,
+        path: "/photos",
+      },
+    ],
+  },
 ];
 
 export const Routes = renderRoutes(routes);
