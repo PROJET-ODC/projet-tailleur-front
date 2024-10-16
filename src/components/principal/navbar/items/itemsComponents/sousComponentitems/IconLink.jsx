@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom";
 const IconLink = ({ href, children, className }) => {
   return (
-    <a className={`icon-link ${className}`} href={href}>
+
+    // <Link to="/messages" />
+ 
+    <Link className={`icon-link ${className}`} to="/messages">
       {children}
-    </a>
+  </Link>
   );
 };
 
