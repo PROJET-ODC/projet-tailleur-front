@@ -26,13 +26,14 @@ function LoginPage() {
         setIsPending(false);
       } else {
         toast.success(result.message);
-        const newToken = result.token;
-        localStorage.setItem("token", newToken);
-    setToken(newToken); // Mettez à jour l'état du token
-    const decoded = decodedToken(newToken); // Utilisation correcte de la fonction
-    console.log('Token décodé:', decoded); // Affichez le token décodé dans la console
+
+        localStorage.setItem("token", result.token);
+        console.log(localStorage.getItem("token"));
+
+        updateAuthStatus();
         setIsPending(false);
-        navigate("/home");
+        
+        navigate("/home", { replace: true });
       }
     },
     validationSchema: LoginSchemaValidation,

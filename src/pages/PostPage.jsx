@@ -177,6 +177,7 @@ function PostPage() {
       ...prevState,
       [postId]: !prevState[postId],
     }));
+
   };
 
   if (loading) {
@@ -186,7 +187,7 @@ function PostPage() {
   return (
     <>
       <div id="compose-card" className="card is-new-content">
-        <PostInput />
+        <PostInput onPostCreated={handlePostCreated} />
       </div>
 
       {posts.map((post) => (
@@ -257,6 +258,7 @@ function PostPage() {
                   >
                     <i data-feather="message-circle"></i>
                   </a>
+
                 </div>
                
 
@@ -316,6 +318,7 @@ function PostPage() {
                 <div className="comments-count">
                   <i data-feather="message-circle"></i>
                   <p>{post.comments.length}</p>
+
                 </div>
               </div>
             </div>
@@ -326,6 +329,7 @@ function PostPage() {
       <Modal isOpen={isModalOpen} closeModal={closeModal}>
         {/* Contenu du modal */}
       </Modal>
+
     </>
   );
 }
