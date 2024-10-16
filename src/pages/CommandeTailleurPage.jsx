@@ -1,22 +1,32 @@
+import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
+import { getCommandes } from "../api/Commande";
 
 function CommandeTailleurPage() {
+  const [commandes, setCommandes] = useState([]);
+
+  useEffect(() => {
+    const fetchCommandes = async () => {
+      const data = await getCommandes();
+      if (data.status === "OK") {
+        setCommandes(data.commandes);
+      } else {
+        console.error(data.message);
+      }
+    };
+
+    fetchCommandes();
+  }, []);
+
   return (
     <>
       <div className="search !w-[100%]">
         <div className="navbar-item !w-[100%]">
-          <div
-            id="global-search"
-            className=" flex flex-wrap gap-3 control !w-[100%]"
-          >
+          <div id="global-search" className="flex flex-wrap gap-3 control !w-[100%]">
             <div className="field !w-[40%]">
               <label>Rechercher un article</label>
               <div className="control has-icon">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="saisir pour rechercher un article"
-                />
+                <input type="text" className="input" placeholder="saisir pour rechercher un article" />
                 <div className="form-icon">
                   <FaSearch className="text-[#e0dcdc]" />
                 </div>
@@ -25,11 +35,7 @@ function CommandeTailleurPage() {
             <div className="field !w-[40%]">
               <label>Rechercher un article</label>
               <div className="control has-icon">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="saisir pour rechercher un article"
-                />
+                <input type="text" className="input" placeholder="saisir pour rechercher un article" />
                 <div className="form-icon">
                   <FaSearch className="text-[#e0dcdc]" />
                 </div>
@@ -41,68 +47,32 @@ function CommandeTailleurPage() {
 
       <div className="flex-table">
         <div className="flex-table-header">
-          <span className="product">
-            <span>Product</span>
-          </span>
-          <span className="quantity">Quantity</span>
-          <span className="price">Price</span>
-          <span className="discount">Discount</span>
+          <span className="product">Product</span>
+          <span className="quantity">Quantité</span>
+          <span className="price">Montant</span>
+          <span className="discount">Taille</span>
           <span className="total">Total</span>
         </div>
-        <div className="flex-table-item">
-          <div className="product">
-            <img src="/src/assets/img/products/2.svg" alt="" />
-            <span className="product-name">Cool Shirt</span>
+        {commandes.map((commande) => (
+          <div className="flex-table-item" key={commande.id}>
+            <div className="product">
+              <img src={commande.post.files} alt={commande.post.title} />
+              <span className="product-name">{commande.post.title}</span>
+            </div>
+            <div className="quantity">
+              <span className="has-price">{commande.qte}</span>
+            </div>
+            <div className="price">
+              <span className="has-price">{commande.paiement[0]?.montant}</span>
+            </div>
+            <div className="discount">
+              <span className="has-price">{commande.taille}</span>
+            </div>
+            <div className="total">
+              <span className="has-price">{commande.qte * commande.paiement[0]?.montant}</span>
+            </div>
           </div>
-          <div className="quantity">
-            <span className="has-price">1</span>
-          </div>
-          <div className="price">
-            <span className="has-price">29.00</span>
-          </div>
-          <div className="discount">
-            <span className="has-price">0</span>
-          </div>
-          <div className="total">
-            <span className="has-price">29.00</span>
-          </div>
-        </div>
-        <div className="flex-table-item">
-          <div className="product">
-            <img src="/src/assets/img/products/3.svg" alt="" />
-            <span className="product-name">Military Short</span>
-          </div>
-          <div className="quantity">
-            <span className="has-price">1</span>
-          </div>
-          <div className="price">
-            <span className="has-price">39.00</span>
-          </div>
-          <div className="discount">
-            <span className="has-price">0</span>
-          </div>
-          <div className="total">
-            <span className="has-price">39.00</span>
-          </div>
-        </div>
-        <div className="flex-table-item">
-          <div className="product">
-            <img src="/src/assets/img/products/4.svg" alt="" />
-            <span className="product-name">Cool Backpack</span>
-          </div>
-          <div className="quantity">
-            <span className="has-price">1</span>
-          </div>
-          <div className="price">
-            <span className="has-price">125.00</span>
-          </div>
-          <div className="discount">
-            <span className="has-price">0</span>
-          </div>
-          <div className="total">
-            <span className="has-price">125.00</span>
-          </div>
-        </div>
+        ))}
       </div>
     </>
   );
