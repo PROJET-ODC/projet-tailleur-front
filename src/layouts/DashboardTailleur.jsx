@@ -7,7 +7,7 @@ function DashboardTailleur() {
   useScriptLoader(scriptUrls);
 
   const authFromToken = decodedToken();
-  if (authFromToken.role != "vendeur") return <Navigate to="/home" />;
+  if (authFromToken.role != "tailleur") return <Navigate to="/home" />;
   return (
     <>
       <div className="dashboard-aside !w-[126px]">
@@ -58,7 +58,7 @@ function DashboardTailleur() {
           </NavLink>
 
           <NavLink
-            to="/tailleur/approvisions"
+            to="/tailleur/appro"
             className={({ isActive }) =>
               `dashboard-aside-link ${isActive ? "bg-[aliceblue]" : ""}`
             }

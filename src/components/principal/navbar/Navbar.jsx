@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const authFromToken = decodedToken();
+  console.log(authFromToken.role);
 
   return (
     <div className="navbar-menu">

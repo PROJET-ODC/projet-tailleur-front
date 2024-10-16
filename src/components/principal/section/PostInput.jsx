@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { UserApi } from "../../../api/UserApi";
+import { FaPhotoVideo } from "react-icons/fa";
 
 function PostInput({ onPostCreated }) {
   const [files, setFiles] = useState([]);
@@ -97,25 +98,19 @@ function PostInput({ onPostCreated }) {
     }
   };
 
+  // onClick={handlePostClick}
+
   return (
     <>
-      <div className="tabs-wrapper">
+      <div className="tabs-wrapper cursor-pointer" onClick={handlePostClick}>
         <div className="tabs is-boxed is-fullwidth">
           <ul>
-            <li className="is-active">
-              <a>
+            <li className="w-full">
+              <a className="modal-trigger w-full" data-modal="albums-modal">
                 <span className="icon is-small">
-                  <i data-feather="edit-3"></i>
+                  <FaPhotoVideo className="w-[100px]" />
                 </span>
-                <span>Publish</span>
-              </a>
-            </li>
-            <li>
-              <a className="modal-trigger" data-modal="albums-modal">
-                <span className="icon is-small">
-                  <i data-feather="image"></i>
-                </span>
-                <span onClick={handlePostClick}>Albums</span>
+                <span>Poster</span>
               </a>
             </li>
 
@@ -130,11 +125,6 @@ function PostInput({ onPostCreated }) {
         <div className="tab-content">
           <div className="compose">
             <div className="compose-htmlForm">
-              <img
-                src="../via.placeholder.com/300x300.png"
-                data-demo-src="assets/img/avatars/jenna.png"
-                alt=""
-              />
               <div
                 className="control"
                 style={{
@@ -157,6 +147,8 @@ function PostInput({ onPostCreated }) {
                     // marginBottom: "20px",
                     borderRadius: "4px",
                     marginRight: "40px",
+                    height: "50px",
+                    pointerEvents: "none",
                   }}
                 ></textarea>
               </div>

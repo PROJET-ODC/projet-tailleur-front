@@ -21,17 +21,10 @@ const MainLayout = () => {
           <div className="navbar-brand">
             <a href="index.html" className="navbar-item">
               <img
-                className="logo light-image"
-                src="assets/img/vector/logo/friendkit-bold.svg"
+                className="logo light-image !max-h-20 !max-w-16"
+                src="/src/assets/logo1-origin.png"
                 width="112"
-                height="28"
-                alt=""
-              />
-              <img
-                className="logo dark-image"
-                src="assets/img/vector/logo/friendkit-white.svg"
-                width="112"
-                height="28"
+                height="58"
                 alt=""
               />
             </a>

@@ -1,15 +1,28 @@
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, replace, useNavigate } from "react-router-dom";
 import LoginSchemaValidation from "../validations/LoginSchemaValidation.js";
 import { loginApi } from "../api/auth.js";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import decodedToken from "../utils/decryptJWT.js"; // Importez le nouveau composant
+import scriptUrls from "../utils/scriptsUrl";
+import useScriptLoader from "../hooks/useScriptLoader";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { isAuth } from "../utils/decryptJWT.js";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { updateAuthStatus } = useContext(AuthContext);
+  const isLoggedIn = isAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/home");
+    }
+  }, [isLoggedIn, navigate]);
+
+  useScriptLoader(scriptUrls);
+
   const [isPending, setIsPending] = useState(false);
-  const [token, setToken] = useState(null); // État pour stocker le token
 
   const loginFormik = useFormik({
     initialValues: {
@@ -19,9 +32,8 @@ function LoginPage() {
     onSubmit: async (values) => {
       setIsPending(true);
       const result = await loginApi(values);
-      console.log("Réponse complète de connexion:", result);
-      
-      if (result.status === "KO") {
+
+      if (result.status == "KO") {
         toast.error(result.message);
         setIsPending(false);
       } else {
@@ -32,7 +44,7 @@ function LoginPage() {
 
         updateAuthStatus();
         setIsPending(false);
-        
+
         navigate("/home", { replace: true });
       }
     },
@@ -48,7 +60,7 @@ function LoginPage() {
               <div className="hero-body">
                 <div className="container">
                   <div className="left-caption">
-                    <h2>Les nouvelles tendance de la mode</h2>
+                    <h2>Les nouvelles tendance de la mode </h2>
                   </div>
                 </div>
               </div>
@@ -56,10 +68,11 @@ function LoginPage() {
           </div>
           <div className="column is-6">
             <div className="hero form-hero is-fullheight">
-              <div className="logo-wrap">
-                <div className="wrap-inner">
+              <div className="logo-wrap !transform-none !bg-transparent">
+                <div className="wrap-inner !bg-none">
                   <img
-                    src="assets/img/vector/logo/friendkit-white.svg"
+                    src="/src/assets/logo1-origin.png"
+                    className="!max-w-52"
                     alt=""
                   />
                 </div>

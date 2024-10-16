@@ -70,6 +70,8 @@ function RightSideBar() {
     try {
       const data = await getFeedsInitData();
       const recentStatus = await data.recentStatus;
+      console.log("log", recentStatus);
+
       setStatusData(groupAndCalculateDelay(recentStatus));
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -117,7 +119,7 @@ function RightSideBar() {
                     />
                   </div>
                   <div className="story-meta">
-                    <span>Dan Walker</span>
+                    <span>{storyItem.user.firstname}</span>
                     <span>
                       {storyItem.files[storyItem.files.length - 1].delay}
                     </span>

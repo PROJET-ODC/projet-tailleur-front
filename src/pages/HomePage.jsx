@@ -1,4 +1,3 @@
-
 import scriptUrls from "../utils/scriptsUrl";
 import useScriptLoader from "../hooks/useScriptLoader";
 import PostPage from "./PostPage";
@@ -34,7 +33,6 @@ function HomePage() {
 
   return <PostPage />;
   // Add the chat component below the post page
- 
 }
 
-export default HomePage
+export default HomePage;

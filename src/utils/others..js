@@ -1,6 +1,12 @@
 const groupAndCalculateDelay = (data) => {
   const groupedData = data.reduce((acc, current) => {
-    const { tailleur_id, files, createdAt } = current;
+    const {
+      tailleur: {
+        compte: { bio, user: { firstname, lastname, picture, city } = {} } = {},
+      } = {},
+      files,
+      createdAt,
+    } = current;
 
     const createdAtTime = new Date(createdAt).getTime();
     const now = Date.now();
@@ -8,19 +14,29 @@ const groupAndCalculateDelay = (data) => {
 
     let delay;
     if (timeDifferenceInSeconds < 60) {
-      delay = `${timeDifferenceInSeconds} seconds`;
+      delay = `${timeDifferenceInSeconds} seconds ago`;
     } else if (timeDifferenceInSeconds < 3600) {
       const minutes = Math.floor(timeDifferenceInSeconds / 60);
-      delay = `${minutes} minutes`;
+      delay = `${minutes} minutes ago`;
     } else {
       const hours = Math.floor(timeDifferenceInSeconds / 3600);
-      delay = `${hours} hours`;
+      delay = `${hours} hours ago`;
     }
+
+    // Get tailleur ID from the compte (assuming it's from user_id or compte_id)
+    const tailleur_id = current.tailleur?.compte?.id;
 
     if (!acc[tailleur_id]) {
       acc[tailleur_id] = {
         tailleur_id,
         files: [],
+        user: {
+          firstname,
+          lastname,
+          picture,
+          city,
+          bio,
+        },
       };
     }
 

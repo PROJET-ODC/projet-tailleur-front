@@ -3,8 +3,11 @@ import Navbar from "../components/principal/navbar/Navbar";
 import LeftSideBar from "../components/principal/sidebar/LeftSideBar";
 import RightSideBar from "../components/principal/sidebar/RightSideBar";
 import { useState } from "react";
+import useScriptLoader from "../hooks/useScriptLoader";
+import scriptUrls from "../utils/scriptsUrl";
 
 const HeadLayout = () => {
+  useScriptLoader(scriptUrls);
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 
   const handleBurgerMenuToggle = () => {
