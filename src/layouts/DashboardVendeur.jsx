@@ -1,17 +1,28 @@
-import { Navigate, NavLink, Outlet } from "react-router-dom";
+import { Link, Navigate, NavLink, Outlet, useLocation } from "react-router-dom";
 import useScriptLoader from "../hooks/useScriptLoader";
 import scriptUrls from "../utils/scriptsUrl";
 import decodedToken from "../utils/decryptJWT";
+import {
+  Button,
+  Checkbox,
+  Label,
+  Modal,
+  TextInput,
+  Select,
+} from "flowbite-react";
+import { useState } from "react";
 
-function DashboardTailleur() {
+function DashboardVendeur() {
   useScriptLoader(scriptUrls);
-
+  const location = useLocation();
   const authFromToken = decodedToken();
+  const [openModal, setOpenModal] = useState(false);
   if (authFromToken.role != "vendeur") return <Navigate to="/home" />;
+
   return (
     <>
       <div className="dashboard-aside !w-[126px]">
-        <a className="dashboard-aside-brand">
+        <Link to="/home" className="dashboard-aside-brand">
           <img
             className="logo light-image"
             src="/src/assets/img/vector/logo/friendkit-bold.svg"
@@ -26,10 +37,10 @@ function DashboardTailleur() {
             height="28"
             alt=""
           />
-        </a>
+        </Link>
         <div className="dashboard-aside-body">
           <NavLink
-            to="/tailleur/articles"
+            to="/vendeur/articles"
             className={({ isActive }) =>
               `dashboard-aside-link ${isActive ? "bg-[aliceblue]" : ""}`
             }
@@ -53,41 +64,12 @@ function DashboardTailleur() {
                 ></path>
               </svg>
 
-              <span className="font-bold">Articles</span>
+              <span className="font-bold">Mes Articles</span>
             </div>
           </NavLink>
 
           <NavLink
-            to="/tailleur/appro"
-            className={({ isActive }) =>
-              `dashboard-aside-link ${isActive ? "bg-[aliceblue]" : ""}`
-            }
-          >
-            <div className="flex flex-col items-center">
-              <svg
-                className="!h-[47px] !w-[35px]"
-                width="68"
-                height="68"
-                viewBox="0 0 48 48"
-              >
-                {" "}
-                <path
-                  className="vi-primary"
-                  d="M41,11V41H7V11H5V7H43v4H41Z"
-                  style={{ fill: "rgb(61, 112, 178)" }}
-                ></path>{" "}
-                <path
-                  className="vi-accent"
-                  d="M38.5,18c-4.3,0-4.5-5-4.5-5a5,5,0,0,1-10,0,5,5,0,0,1-10,0s-0.2,5-4.5,5A4.5,4.5,0,0,1,5,13.5V11H43v2.5A4.5,4.5,0,0,1,38.5,18ZM22.01,35.01h-9V25.99h9v9.02ZM34.993,41h-8V25.99h8V41Z"
-                  style={{ fill: "rgb(12, 0, 88)" }}
-                ></path>
-              </svg>
-              <span className="font-bold">Approvisionnement</span>
-            </div>
-          </NavLink>
-
-          <NavLink
-            to="/tailleur/commande"
+            to="/vendeur/commande"
             className={({ isActive }) =>
               `dashboard-aside-link ${isActive ? "bg-[aliceblue]" : ""}`
             }
@@ -116,23 +98,15 @@ function DashboardTailleur() {
                   style={{ fill: "rgb(255, 255, 255)" }}
                 ></path>
               </svg>
-              <span className="font-bold">Commandes</span>
+              <span className="font-bold">Mes Commandes</span>
             </div>
           </NavLink>
         </div>
 
         <div className="dashboard-aside-end">
-          <a
-            href="navbar-v1-profile-main.html"
-            className="dashboard-aside-link"
-          >
-            <img
-              className="link-avatar"
-              src="../via.placeholder.com/400x400.png"
-              data-demo-src="/src/assets/img/avatars/jenna.png"
-              alt=""
-            />
-          </a>
+          <Link to="/home" className="dashboard-aside-link">
+            <img className="link-avatar" src={authFromToken.picture} alt="" />
+          </Link>
         </div>
       </div>
 
@@ -140,7 +114,20 @@ function DashboardTailleur() {
         <div id="creator-dashboard" className="dashboard-container">
           <div className="dashboard-toolbar">
             <h1 className="title is-4">Tableau de bord</h1>
-            <div className="actions">
+            <div className="actions !gap-3">
+              <div
+                className={`buttons ${
+                  location.pathname == "/vendeur/articles" ? "" : "hidden"
+                } !m-0`}
+              >
+                <Link
+                  onClick={() => setOpenModal(true)}
+                  className="button is-solid primary-button is-raised has-icon !m-0 "
+                >
+                  <i data-feather="plus"></i>
+                  <span>Ajouter Article</span>
+                </Link>
+              </div>
               <label className="theme-toggle">
                 <input type="checkbox" />
                 <span className="toggler">
@@ -164,8 +151,57 @@ function DashboardTailleur() {
           </div>
         </div>
       </div>
+
+      <Modal
+        show={openModal}
+        size="4xl"
+        popup
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="space-y-6">
+            <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+              Ajouter un article
+            </h3>
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+              <div className="">
+                <div className="mb-2 block">
+                  <Label htmlFor="libelle" value="Le libelle" />
+                </div>
+                <TextInput id="libelle" placeholder="" required />
+              </div>
+              <div className="">
+                couleurs
+              </div>
+              <div className="">
+                <div className="mb-2 block">
+                  <Label htmlFor="unite" value="Choisir unite" />
+                </div>
+                <Select id="custom-select" name="options">
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                  <option value="option3">Option 3</option>
+                </Select>{" "}
+              </div>
+              <div className="">
+                <div className="mb-2 block">
+                  <Label htmlFor="password" value="Your password" />
+                </div>
+                <TextInput id="password" type="password" required />
+              </div>
+            </div>
+            <div className="w-full">
+              <Button className="w-full">Créer</Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
 
-export default DashboardTailleur;
+export default DashboardVendeur;

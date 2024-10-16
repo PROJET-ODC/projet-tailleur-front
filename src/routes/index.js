@@ -10,6 +10,9 @@ import DashboardTailleur from "../layouts/DashboardTailleur.jsx";
 import CommandeTailleurPage from "../pages/CommandeTailleurPage.jsx";
 import ArticleTailleurPage from "../pages/ArticleTailleurPage.jsx";
 import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
+import DashboardVendeur from "../layouts/DashboardVendeur.jsx";
+import ArticleVendeurPage from "../pages/ArticleVendeurPage.jsx";
+import CommandeVendeurPage from "../pages/CommandeVendeurPage.jsx";
 
 export const routes = [
   {
@@ -55,8 +58,8 @@ export const routes = [
             exact: true,
           },
           {
-            name: "commande",
-            title: "Commandes",
+            name: "appro",
+            title: "Approvisionnement",
             hasSiderLink: true,
             component: ApproTailleurPage,
             path: "/tailleur/appro",
@@ -68,6 +71,34 @@ export const routes = [
             hasSiderLink: true,
             component: CommandeTailleurPage,
             path: "/tailleur/commande",
+            exact: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    layout: DashboardVendeur,
+    routes: [
+      {
+        name: "tailleur",
+        title: "Tailleurs",
+        hasSiderLink: true,
+        routes: [
+          {
+            name: "articles",
+            title: "Articles",
+            hasSiderLink: true,
+            component: ArticleVendeurPage,
+            path: "/vendeur/articles",
+            exact: true,
+          },
+          {
+            name: "commande",
+            title: "Commandes",
+            hasSiderLink: true,
+            component: CommandeVendeurPage,
+            path: "/vendeur/commande",
             exact: true,
           },
         ],
