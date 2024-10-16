@@ -1,32 +1,188 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getPosts, likePost,addComment  } from "../api/postApi"; // Assurez-vous d'importer la fonction likePost
+import CommentsSection from "./CommentsSection";
+import Modal from "./SharePage";
 import PostInput from "../components/principal/section/PostInput";
-import apiBase from "../api/apiBase";
+import decodedToken from "../utils/decryptJWT";
+
 
 function PostPage() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showComments, setShowComments] = useState({});
+  const [dropdownOpen, setDropdownOpen] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [popupVisible, setPopupVisible] = useState({}); // État pour gérer la visibilité du popup
+  const [accountId, setAccountId] = useState(null); // État pour stocker l'ID du compte
+  const [nameuser, setName] = useState(null); // État pour stocker l'ID du compte
+  const [userIcon, setUserIcon] = useState(""); // État pour stocker l'icône de l'utilisateur
 
-  // Fetch posts depuis le backend
+
+  const videoFormats = [".mp4", ".webm", ".ogg", ".avi", ".mov", ".mkv"]; // Ajoutez d'autres formats si nécessaire
+
+
+   const commentaires = [
+    {
+      nom: "Dan Walker",
+      temps: "28 minutes ago",
+      texte:
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      avatar: "../via.placeholder.com/300x300.png",
+      likes: 4,
+    },
+  ];
+
   useEffect(() => {
+    // Récupérer et décoder le token pour obtenir le compte_id
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = decodedToken(token);
+      console.log('decode', decoded);  // Affichage du token décodé
+      if (decoded && decoded.id) {
+        setAccountId(decoded.id);
+        setName(decoded.identifiant);
+        console.log("Account ID récupéré :", decoded.id);
+        console.log("name :", decoded.identifiant);
+      } else {
+        console.warn("Impossible de récupérer le compte_id du token décodé");
+      }
+    } else {
+      console.warn("Aucun token trouvé dans le localStorage");
+    }
+  
     const fetchPosts = async () => {
-      const token = localStorage.getItem("token");
       try {
-        const response = await apiBase.get("/tailleur/posts", {
-          headers: { Authorization: `Bearer ${token}` },
+        const postsData = await getPosts(); // Récupérer les posts depuis l'API
+        const postsWithLikes = postsData.posts.map((post) => {
+          // Vérifiez si l'utilisateur connecté a liké ce post
+          const hasLiked = post.likes.some((like) => like.compte_id === accountId);
+          
+          return {
+            ...post,
+            liked: hasLiked, // Mettre à jour l'état liked pour chaque post
+            comments: post.comments || [], // Assurez-vous que les commentaires sont récupérés
+
+          };
         });
-        setPosts(response.data.posts); // Stocke les posts dans le state
+        setPosts(postsWithLikes);
+        console.log(postsData);
       } catch (error) {
-        console.error("Erreur lors de la récupération des posts :", error);
+        console.error("Erreur lors de la récupération des posts:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchPosts();
-  }, []);
-
-  // Fonction pour ajouter un nouveau post
-  const handlePostCreated = (newPost) => {
-    // Ajouter le nouveau post en haut de la liste
-    setPosts((prevPosts) => [newPost, ...prevPosts]);
+  
+    if (accountId) {
+      fetchPosts(); // Exécute la récupération des posts après que l'accountId a été défini
+    }
+  }, [accountId]); // Déclenchez cet effet après que l'ID du compte est défini
+  
+  const handleLikeClick = async (postId) => {
+    if (!accountId) {
+      console.error("Account ID manquant !");
+      return;
+    }
+  
+    try {
+      const postIndex = posts.findIndex((post) => post.id === postId);
+      if (postIndex === -1) {
+        console.error("Post non trouvé !");
+        return;
+      }
+  
+      // Appel à l'API pour liker le post
+      const likedPostData = await likePost(postId, accountId);
+  
+      // Mettre à jour le tableau des posts localement
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => {
+          if (post.id === postId) {
+            // Vérifier si l'utilisateur a déjà liké ce post
+            const hasLiked = post.likes.some((like) => like.compte_id === accountId);
+  
+            // Si l'utilisateur a déjà liké, on retire le like, sinon on l'ajoute
+            const updatedLikes = hasLiked
+              ? post.likes.filter((like) => like.compte_id !== accountId)
+              : [...post.likes, { compte_id: accountId }];
+  
+            return {
+              ...post,
+              liked: !post.liked,
+              likes: updatedLikes, // Mettre à jour le tableau des likes
+            };
+          }
+          return post;
+        })
+      );
+    } catch (error) {
+      console.error("Erreur lors du like du post:", error);
+    }
   };
+
+
+  const ajouterCommentaire = async (postId, content) => {
+    if (!accountId) {
+      console.error("Account ID manquant !");
+      return;
+    }
+    if (!content || content.trim() === "") {
+      console.error("Le contenu du commentaire est vide.");
+      return;
+    }
+  
+    try {
+       // Appeler l'API pour récupérer les détails du post
+
+    // Afficher les détails du post
+      // Appeler l'API pour ajouter un commentaire
+      const newComment = await addComment(postId, accountId, content,);
+
+  
+      // On retourne le commentaire ajouté
+      return newComment; // Assurez-vous que newComment a toutes les informations nécessaires
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du commentaire :", error);
+    }
+  };
+  
+
+  const toggleComments = (postId) => {
+    setShowComments((prevState) => ({
+      ...prevState,
+      [postId]: !prevState[postId],
+    }));
+  };
+
+  const toggleDropdown = (postId) => {
+    setDropdownOpen((prevState) => ({
+      ...prevState,
+      [postId]: !prevState[postId],
+    }));
+  };
+
+  const openModal = (post) => {
+    setSelectedPost(post);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedPost(null);
+  };
+
+  const togglePopup = (postId) => {
+    setPopupVisible((prevState) => ({
+      ...prevState,
+      [postId]: !prevState[postId],
+    }));
+
+  };
+
+  if (loading) {
+    return <div>Chargement des posts...</div>;
+  }
 
   return (
     <>
@@ -34,102 +190,146 @@ function PostPage() {
         <PostInput onPostCreated={handlePostCreated} />
       </div>
 
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <div
-            key={post.id}
-            id={`feed-post-${post.id}`}
-            className="card is-post"
-          >
-            <div className="content-wrap">
-              {/* En-tête du post */}
-              <div className="card-heading">
-                <div className="user-block">
-                  <div className="image">
-                    <img
-                      src={
-                        post.user.profilePicture ||
-                        "../via.placeholder.com/300x300.png"
-                      }
-                      alt={`${post.user.firstname} ${post.user.lastname}`}
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "50%",
-                      }} // Style pour la photo de profil
-                    />
-                  </div>
-                  <div className="user-info">
-                    <a href="#">{`${post.user.firstname} ${post.user.lastname}`}</a>
-                    <span className="time">
-                      {new Date(post.createdAt).toLocaleString()}
-                    </span>
-                  </div>
+      {posts.map((post) => (
+        <div key={post.id} id={`feed-post-${post.id}`} className="card is-post">
+          <div className="content-wrap">
+            <div className="card-heading">
+              <div className="user-block">
+                <div className="image">
+                  <img src="../via.placeholder.com/300x300.png" alt="Avatar" />
+                </div>
+                <div className="user-info">
+                  <p>{post.user.firstname}</p>
+                  <p>{ new Date(post.createdAt).toLocaleString() }</p>
                 </div>
               </div>
 
-              {/* Contenu du post */}
-              <div className="card-body">
-                <h3>{post.title}</h3>
-                <div className="post-text">
-                  <p>{post.content}</p>
+              <div
+                className="dropdown is-spaced is-right is-neutral dropdown-trigger"
+                onClick={() => togglePopup(post.id)} // Afficher le popup au clic
+              >
+                <div className="button">
+                  <i data-feather="more-vertical"></i>
                 </div>
+              </div>
 
-                {post.files && (
-                  <div className="post-media" style={{ textAlign: "center" }}>
-                    {post.categorie === "IMAGE" ? (
-                      <img
-                        src={post.files}
-                        alt="Média du post"
-                        style={{ maxWidth: "100%", height: "auto" }}
-                      />
-                    ) : (
-                      // <video controls style={{ maxWidth: "100%", height: "auto" }}>
-                      //   <source src={post.files} type="video/mp4" />
-                      //   Your browser does not support the video tag.
-                      // </video>
-                      <video controls style={{ width: "100%", height: "auto" }}>
-                        <source src={post.files} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-
-                    )}
+              {/* Popup qui s'affiche sur le bouton */}
+              {popupVisible[post.id] && (
+                <div className="popup">
+                  <div className="popup-content">
+                    <a href="#" className="popup-item">
+                      <h3>Bookmark</h3>
+                      <small>Add this post to your bookmarks.</small>
+                    </a>
+                    <a className="popup-item">
+                      <h3>Notify me</h3>
+                      <small>Send me the updates.</small>
+                    </a>
+                    <hr />
+                    <a href="#" className="popup-item">
+                      <h3>Flag</h3>
+                      <small>In case of inappropriate content.</small>
+                    </a>
                   </div>
+                </div>
+              )}
+            </div>
+
+            <div className="card-body">
+              <div className="post-text">
+                <p>{post.content}</p>
+              </div>
+              <div className="post-image">
+              {videoFormats.some(format => post.files.endsWith(format)) ? ( // Vérifier si le fichier est une vidéo
+                  <video controls>
+                  <source src={post.files} type={`video/${post.files.split('.').pop()}`} />
+                  Votre navigateur ne supporte pas la lecture de vidéo.
+                  </video>
+                ) : (
+                  <a href={post.files} data-lightbox-type="comments">
+                    <img src={post.files} alt="Post" />
+                  </a>
                 )}
+                <div className="fab-wrapper is-comment">
+                  <a
+                    href="javascript:void(0);"
+                    className="small-fab"
+                    onClick={() => toggleComments(post.id)}
+                  >
+                    <i data-feather="message-circle"></i>
+                  </a>
+
+                </div>
+               
+
+                {post.comments &&(
+                <CommentsSection
+                  showComments={showComments[post.id]}
+                  commentaires={post.comments} // Utilisez les commentaires du post
+                  ajouterCommentaire={ajouterCommentaire} // Passer la fonction ici
+                  postId={post.id}  // Passer l'ID du post
+                />
+              )}
 
 
-                
+                <div className="fab-wrapper is-share">
+                  <a
+                    href="javascript:void(0);"
+                    className="small-fab share-fab modal-trigger"
+                    onClick={() => openModal(post)}
+                  >
+                    <i data-feather="link-2"></i>
+                  </a>
+                </div>
+
+                <div className="like-wrapper">
+                    <a
+                    href="javascript:void(0);"
+                    className={`like-button ${post.liked ? "is-active red-button" : ""}`}
+                    onClick={() => handleLikeClick(post.id)}
+                  >
+                    <i className="mdi mdi-heart not-liked bouncy"></i>
+                    <i className="mdi mdi-heart is-liked bouncy"></i>
+                    <span className="like-overlay"></span>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+
+            <div className="card-footer">
+              <div className="likers-text">
+                <div className="right">
+                  <a className="btn button is-solid accent-button raised">
+                    <i className="mdi mdi-cart-plus"></i>
+                  </a>
+                </div>
               </div>
 
-                  
+              <div className="social-count">
+                <div className="likes-count">
+                  <i data-feather="heart"></i>
+                  <p>{post.likes.length}</p>
+                </div>
+                <div className="shares-count">
+                  <i data-feather="link-2"></i>
+                  <p>{post.viewNb}</p>
+                </div>
+                <div className="comments-count">
+                  <i data-feather="message-circle"></i>
+                  <p>{post.comments.length}</p>
 
-              {/* Pied du post avec les interactions */}
-              <div className="card-footer">
-                <div className="social-count">
-                  <div className="likes-count">
-                    <i className="mdi mdi-heart"></i>
-                    <span>{post.likes.length}</span>
-                  </div>
-                  <div className="shares-count">
-                    <i className="mdi mdi-share"></i>
-                    <span>{post.shareNb}</span>
-                  </div>
-                  <div className="comments-count">
-                    <i className="mdi mdi-comment"></i>
-                    <span>{post.comments.length}</span>
-                  </div>
-                  <div className="views-count">
-                    <i className="mdi mdi-eye"></i>
-                    <span>{post.viewNb}</span>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-        ))
-      ) : (
-        <p>Aucun post disponible.</p>
-      )}
+        </div>
+      ))}
+
+      <Modal isOpen={isModalOpen} closeModal={closeModal}>
+        {/* Contenu du modal */}
+      </Modal>
+
     </>
   );
 }
