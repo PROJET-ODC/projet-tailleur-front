@@ -1,8 +1,10 @@
+
 import scriptUrls from "../utils/scriptsUrl";
 import useScriptLoader from "../hooks/useScriptLoader";
 import PostPage from "./PostPage";
 import { useEffect, useState } from "react";
 import { getFeedsInitData } from "../api/clients";
+// import Chat from "/home/aissata/projet-tailleur-front/src/components/chat/Chat.jsx";
 
 function HomePage() {
   useScriptLoader(scriptUrls);
@@ -28,6 +30,8 @@ function HomePage() {
   }, []);
 
   return <PostPage />;
+  // Add the chat component below the post page
+ 
 }
 
-export default HomePage;
+export default HomePage

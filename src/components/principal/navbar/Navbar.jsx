@@ -14,16 +14,15 @@ const Navbar =()=>{
           <Bellcon />
           <EnvelopeIcon />
           <FaTh />
-          
-
         <div className="navbar-end">
           <SearchBar/>
           <FaShoppingCart/>
           <ProfileIcon/>
-
         </div>
       </div>
     )
 };
 
 export default Navbar;
+
+
