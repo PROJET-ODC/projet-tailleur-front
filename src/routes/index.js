@@ -9,6 +9,8 @@ import NotFound from "../pages/NotFoundPage"; // Mettez à jour le chemin selon 
 import ProfilePage from "../components/profile/ProfilePage.jsx";
 import HeadLayout from "../layouts/HeadLayout.jsx";
 import ProfilePageIdentifiant from "../components/profileIdentifiant/ProfilePageIdentifiant.jsx";
+import FollowerPage from "../components/Friends/FollowerPage.jsx";
+import PhotosPage from "../components/PhotosPage/PhotoPage.jsx";
 
 export const routes = [
   {
@@ -85,6 +87,18 @@ export const routes = [
         title: "Commande page",
         component: CommandePage,
         path: "/commande",
+      },
+      {
+        name: "Followers",
+        title: "follwers page",
+        component: FollowerPage,
+        path: "/followers",
+      },
+      {
+        name: "Followers",
+        title: "follwers page",
+        component: PhotosPage,
+        path: "/photos",
       },
     ],
   },

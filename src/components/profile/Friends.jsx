@@ -20,7 +20,7 @@ const Friends = () => {
         fetchFollowers(); // Call the fetch function
     }, []);
 
-    console.log(followers); 
+
 
     return (
         <div className="friend-cards-list">
@@ -40,7 +40,7 @@ const Friends = () => {
                             <Link to={`/profile/${follower.follower.id}`}> {/* Link for the user's name */}
                                 {`${follower.follower.user.firstname} ${follower.follower.user.lastname}`}
                             </Link>
-                            <span>0 mutual friend(s)</span> {/* Placeholder for mutual friends logic */}
+                            <span>{`${follower.follower.user.city}`}</span> {/* Placeholder for mutual friends logic */}
                         </div>
                         <div className="star-friend">
                             <i data-feather="star"></i> {/* Star icon for favorites or highlighting */}
