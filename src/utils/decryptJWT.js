@@ -1,29 +1,44 @@
-import { jwtDecode } from "jwt-decode";
+import * as jwtDecode from 'jwt-decode';
 
-const decodedToken = () => {
-  const token = localStorage.getItem("token"); // Retrieve your token from storage
-
-  if (token) {
-    try {
-      return jwtDecode(token);
-      // Access the decoded payload data
-    } catch (error) {
-      return error;
-    }
+const decodedToken = (token) => {
+  if (!token) {
+    console.warn("Aucun jeton fourni à la fonction decodedToken");
+    return null;
   }
-  return null;
+
+  try {
+    const decoded = jwtDecode.jwtDecode(token);
+    console.log("Jeton décodé avec succès:", decoded);
+    return decoded;
+  } catch (error) {
+    console.error("Erreur lors du décodage du jeton:", error.message);
+    console.error("Jeton qui n'a pas pu être décodé:", token);
+    return null;
+  }
 };
 
 export const isAuth = () => {
-  return decodedToken() !== null;
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("Aucun jeton trouvé dans le localStorage");
+    return false;
+  }
+  return decodedToken(token) !== null;
 };
 
 export const getRole = () => {
-  const decoded = decodedToken();
-  if (decoded) {
-    return decoded.role;
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("Aucun jeton trouvé dans le localStorage pour getRole");
+    return null;
   }
-  return null;
+  const decoded = decodedToken(token);
+  if (decoded && decoded.role) {
+    return decoded.role;
+  } else {
+    console.warn("Aucun rôle trouvé dans le jeton décodé");
+    return null;
+  }
 };
 
 export default decodedToken;

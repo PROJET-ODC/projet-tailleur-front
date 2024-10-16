@@ -1,11 +1,13 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet } from "react-router-dom";
 import useScriptLoader from "../hooks/useScriptLoader";
 import scriptUrls from "../utils/scriptsUrl";
-// display: flex;
-// flex-direction: column;
-// align-items: center;
+import decodedToken from "../utils/decryptJWT";
+
 function DashboardTailleur() {
   useScriptLoader(scriptUrls);
+
+  const authFromToken = decodedToken();
+  if (authFromToken.role != "vendeur") return <Navigate to="/home" />;
   return (
     <>
       <div className="dashboard-aside !w-[126px]">
