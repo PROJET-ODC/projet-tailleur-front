@@ -2,7 +2,7 @@ import apiBase from './apiBase';
 
 export const getArticles = async () => {
     try {
-        const response = await apiBase.get('/articles'); // Appel vers le backend Laravel
+        const response = await apiBase.get('tailleur/articles');
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération des articles:', error);

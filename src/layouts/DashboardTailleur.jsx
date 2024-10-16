@@ -58,7 +58,7 @@ function DashboardTailleur() {
           </NavLink>
 
           <NavLink
-            to="/tailleur/appro"
+            to="/tailleur/approvisions"
             className={({ isActive }) =>
               `dashboard-aside-link ${isActive ? "bg-[aliceblue]" : ""}`
             }
