@@ -1,14 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
-import AvatarComponent from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/AvatarComponent';
-import NavEnd from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/NavEnd.jsx';
-import HeaderItem from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/HeaderItem';
-import UserList from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/UserList';
-import FooterItem from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/FooterItem';
- import Message from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/Message'; // Assurez-vous que le chemin d'importation est correct
-import DateDivider from '/home/aissata/projet-tailleur-front/src/components/chat/ChatComponent/DateDivider'; // Assurez-vous que le chemin d'importation est correct
+import AvatarComponent from './ChatComponent/AvatarComponent';
+import NavEnd from './ChatComponent/NavEnd';
+import HeaderItem from './ChatComponent/HeaderItem';
+import UserList from './ChatComponent/UserList';
+import FooterItem from './ChatComponent/FooterItem';
+ import Message from './ChatComponent/Message'; // Assurez-vous que le chemin d'importation est correct
+import DateDivider from './ChatComponent/DateDivider'; // Assurez-vous que le chemin d'importation est correct
 import io from 'socket.io-client';
 import { FaPaperPlane } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 
 const socket = io.connect('http://localhost:5000');
 

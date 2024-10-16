@@ -1,4 +1,3 @@
-import React from 'react';
 
 const DropdownItem = ({ icon, title, description }) => {
     return (

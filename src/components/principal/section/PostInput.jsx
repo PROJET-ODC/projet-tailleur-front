@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import { UserApi } from "/home/elzo/Documents/Sonatel Academy/ODC-1/react/projet-tailleur-front/src/api/UserApi.js";
+import { UserApi } from "../../../api/UserApi";
 
 function PostInput({ onPostCreated }) {
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const [showPostModal, setShowPostModal] = useState(false);
   const [useCredit, setUseCredit] = useState(false); // Default to false
   const [status, setStatus] = useState("PUBLIE"); // Default value
@@ -42,7 +42,6 @@ function PostInput({ onPostCreated }) {
     setStatus("PUBLIE"); // Reset status to default
     setCategorie("IMAGE"); // Reset category to default
   };
-  
 
   const handleRemoveFile = (index) => {
     const newFiles = [...files];
@@ -233,7 +232,6 @@ function PostInput({ onPostCreated }) {
                 onChange={handleFileChange}
               />
 
-
               <div className="left-section">
                 <div className="product-form">
                   <div className="control">
@@ -304,10 +302,10 @@ function PostInput({ onPostCreated }) {
                     </div>
                   </div>
 
-                         {/* Show loading indicator */}
-              {isLoading && (
-                <div className="loading-message">Chargement...</div>
-              )}
+                  {/* Show loading indicator */}
+                  {isLoading && (
+                    <div className="loading-message">Chargement...</div>
+                  )}
 
                   {/* Display success or error messages */}
                   {errorMessage && (
