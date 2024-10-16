@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FaSearch } from "react-icons/fa";
-import { getArticles } from '../api/articles';
+import { getArticles } from '../api/articles'; // Assurez-vous que le chemin est correct
 
 function ArticleTailleurPage() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-
 
   // Récupérer les articles depuis le backend
   useEffect(() => {
@@ -16,9 +14,9 @@ function ArticleTailleurPage() {
       try {
         const fetchedArticles = await getArticles();
         setArticles(fetchedArticles);
-        setLoading(false);
       } catch (err) {
         setError(err.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -29,8 +27,7 @@ function ArticleTailleurPage() {
   // Filtrer les articles en fonction du terme de recherche
   const filteredArticles = articles.filter(article => {
     const matchesLibelle = article.libelle.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory ? article.categorie === selectedCategory : true;
-    return matchesLibelle && matchesCategory;
+    return matchesLibelle;
   });
 
   // Affichage en fonction de l'état
@@ -41,9 +38,6 @@ function ArticleTailleurPage() {
   if (error) {
     return <div>Erreur: {error}</div>;
   }
-
-  // Récupérer les catégories uniques
-  const categories = [...new Set(articles.map(article => article.categorie))];
 
   return (
     <>
@@ -70,21 +64,45 @@ function ArticleTailleurPage() {
       </div>
 
       {/* Affichage des articles sous forme de cartes */}
-      <div className="articles-list mt-5">
-        <h2>Liste des Articles</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredArticles.map(article => (
-            <div key={article.id} className="card border p-4 rounded shadow">
-              <img src={article.image} className="w-full h-auto rounded" />
-              <h1 className="text-lg font-bold">{article.libelle}</h1>
-              <p>Unité: {article.unite}</p>
-              <p>Couleur: {article.couleur_article?.couleur_id || 'Non spécifié'}</p>
-              <p>Prix par unité: {article.prixUnite} fcfa</p>
-              <p>Id Vendeur: {article.vendeur_id} fcfa</p>
-              <p>Categorie: {article.categorie_id}</p>
-              <p>Créé le: {new Date(article.createdAt).toLocaleDateString()}</p>
-            </div>
-          ))}
+      <div id="products-tab" className="store-tab-pane is-active mt-20">
+        <div className="columns is-multiline">
+          {filteredArticles.map((article) => {
+            // Extraire l'URL de l'image
+            const imageUrl = Object.keys(article.image)[0]; // Récupère la première clé de l'objet image
+
+            return (
+              <div className="column is-one-fifth-fullhd is-one-quarter-widescreen is-one-third-desktop is-one-third-tablet is-half-mobile ">
+            <div className="product-card bg-white border p-1" data-name="Spring Red Dress" data-price="44.00" data-colors="true" data-variants="true" data-path="/src/assets/img/products/1">
+                  <div className="product-image">
+                    <img
+                      src={imageUrl}
+                      alt={article.libelle}
+                      className="w-full h-48 rounded"
+                      onError={(e) => { e.target.onerror = null; e.target.src = 'url_de_l_image_par_defaut.jpg'; }} // Gestion d'erreur d'image
+                    />
+                  </div>
+                  <div className="product-info mt-2">
+                    <h3 className="text-lg font-bold">{article.libelle}</h3>
+                    <p>Unité: {article.article_unite[0]?.unite_id || 'Non spécifié'}</p>
+                    <p>Id Vendeur: {article.vendeur_id}</p>
+                    <p>Catégorie: {article.categorie_id}</p>
+                  </div>
+                  <div className="product-actions flex justify-between items-center mt-4">
+                    <div class="left">
+                      <i data-feather="heart"></i>
+                      <span>147</span>
+                    </div>
+                    <div class="right">
+                      <a class="button is-solid accent-button raised">
+                        <i data-feather="shopping-cart"></i>
+                        <span>{ article.article_unite[0]?.prix} fcfa</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
