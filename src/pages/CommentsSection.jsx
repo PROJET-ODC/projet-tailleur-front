@@ -1,81 +1,52 @@
 import React, { useEffect, useState } from 'react';
 
-const StickerPicker = ({ onStickerSelect, position }) => {
-  const stickers = [
-    'https://media.giphy.com/media/3oEjI6SIIHBdRx3Xo0/giphy.gif', // Sticker 1
-    'https://media.giphy.com/media/5xaOcL2H7jR1GVcD1Ma/giphy.gif', // Sticker 2
-    'https://media.giphy.com/media/26AOTmWEA4j8hczfG/giphy.gif', // Sticker 3
-  ];
-
-  return (
-    <div 
-      className="sticker-picker" 
-      style={{ 
-        position: 'absolute', 
-        top: position.top, 
-        left: position.left, 
-        border: '1px solid #ccc',
-        backgroundColor: '#fff',
-        zIndex: 1000,
-        padding: '10px',
-        borderRadius: '5px'
-      }}
-    >
-      {stickers.map((sticker, index) => (
-        <img 
-          key={index} 
-          src={sticker} 
-          alt={`Sticker ${index + 1}`} 
-          onClick={() => onStickerSelect(sticker)} 
-          style={{ cursor: 'pointer', width: '50px', margin: '5px' }}
-        />
-      ))}
-    </div>
-  );
-};
-
-const CommentsSection = ({ showComments, setShowComments, commentaires, ajouterCommentaire }) => {
+const CommentsSection = ({ showComments, postId, ajouterCommentaire, commentaires: initialCommentaires,updatedPost }) => {
   const [nouveauCommentaire, setNouveauCommentaire] = useState('');
-  const [showStickerPicker, setShowStickerPicker] = useState(false);
-  const [pickerPosition, setPickerPosition] = useState({ top: 0, left: 0 });
+  const [commentaires, setCommentaires] = useState(initialCommentaires || []); // État pour les commentaires
 
   useEffect(() => {
-    feather.replace();
-  }, [showComments, commentaires]);
+    setCommentaires(initialCommentaires); // Mettre à jour les commentaires initiaux
+  }, [initialCommentaires]);
 
-  const handleSubmit = (e) => {
+
+  useEffect(() => {
+    if (updatedPost) {
+      console.log("Détails du post :", updatedPost);
+      // Vous pouvez également afficher ces informations dans l'interface utilisateur si nécessaire
+    }
+  }, [updatedPost]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!nouveauCommentaire.trim()) {
+      return; // Ne rien faire si le commentaire est vide
+    }
+  
+    try {
+      const nouveauCommentaireAjoute = await ajouterCommentaire(postId, nouveauCommentaire);
+      console.log("Commentaire ajouté :", nouveauCommentaireAjoute); // Vérifiez ici
+  
+      // Vérifiez la structure de l'objet
+      console.log("Structure de nouveauCommentaireAjoute :", nouveauCommentaireAjoute);
 
-    ajouterCommentaire({
-      nom: 'Utilisateur',
-      temps: 'Just now',
-      texte: nouveauCommentaire,
-      avatar: 'https://via.placeholder.com/300x300.png', // Utiliser une URL valide pour l'avatar
-      likes: 0,
-    });
-
-    setNouveauCommentaire('');
-  };
-
-  const handleStickerSelect = (sticker) => {
-    setNouveauCommentaire(nouveauCommentaire + `![Sticker](${sticker}) `);
-    setShowStickerPicker(false);
-  };
-
-  const toggleStickerPicker = (e) => {
-    e.preventDefault();
-    setShowStickerPicker((prev) => !prev);
-    console.log('Picker Position:', { top: rect.bottom + window.scrollY + 5, left: rect.left + window.scrollX });
-
-
-    if (!showStickerPicker) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      setPickerPosition({
-        top: rect.bottom + window.scrollY + 5,
-        left: rect.left + window.scrollX,
-      });
+      // Mettre à jour l'état des commentaires
+      setCommentaires((prevCommentaires) => [
+        ...prevCommentaires,
+        {
+          createdAt: nouveauCommentaireAjoute.comment.createdAt,
+          content: nouveauCommentaireAjoute.comment.content,
+          avatar: nouveauCommentaireAjoute.avatar || 'default-avatar.png',
+          likes: 0,
+        },
+      ]);
+    
+      setNouveauCommentaire(''); // Réinitialiser le champ de commentaire
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du commentaire :", error);
     }
   };
+  
 
   return (
     <>
@@ -94,38 +65,27 @@ const CommentsSection = ({ showComments, setShowComments, commentaires, ajouterC
               value={nouveauCommentaire}
               onChange={(e) => setNouveauCommentaire(e.target.value)}
             />
-            <button type="button" className="send-icon" onClick={toggleStickerPicker} style={{ marginTop: '2px', marginLeft: '-40px' }}>
-              <i data-feather="smile"></i>
-            </button>
             <button type="submit" className="send-icon">
               <i data-feather="send"></i>
             </button>
           </form>
-
-          {showStickerPicker && <StickerPicker onStickerSelect={handleStickerSelect} position={pickerPosition} />}
 
           <div className="comments-body">
             {commentaires.map((commentaire, index) => (
               <div key={index} className="media is-comment">
                 <div className="media-left">
                   <div className="image">
-                    <img src={commentaire.avatar} alt={commentaire.nom} />
+                    <img src={commentaire.avatar} alt={commentaire.nom} /> {/* Assurez-vous que c'est correct */}
                   </div>
                 </div>
                 <div className="media-content">
                   <a href="#">{commentaire.nom}</a>
-                  <span className="time">{commentaire.temps}</span>
-                  <p>{commentaire.texte}</p>
+                  <span className="time">{ new Date(commentaire.createdAt).toLocaleString()}</span>
+                  <p dangerouslySetInnerHTML={{ __html: commentaire.content }}></p>
                   <div className="controls">
                     <div className="like-count">
                       <i data-feather="thumbs-up"></i>
                       <span>{commentaire.likes}</span>
-                    </div>
-                    <div className="reply">
-                      <a href="#">Reply</a>
-                    </div>
-                    <div className="edit">
-                      <a href="#">Edit</a>
                     </div>
                   </div>
                 </div>
