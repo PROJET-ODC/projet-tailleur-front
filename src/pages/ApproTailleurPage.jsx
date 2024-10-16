@@ -10,7 +10,7 @@ function ApproTailleurPage() {
             className=" flex flex-wrap gap-3 control !w-[100%]"
           >
             <div className="field !w-[40%]">
-              <label>Rechercher un Appro</label>
+              <label>Rechercher un article</label>
               <div className="control has-icon">
                 <input
                   type="text"

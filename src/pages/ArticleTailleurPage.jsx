@@ -1,5 +1,50 @@
+import React, { useEffect, useState } from 'react';
 import { FaSearch } from "react-icons/fa";
+import { getArticles } from '../api/articles';
+
 function ArticleTailleurPage() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+
+  // Récupérer les articles depuis le backend
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const fetchedArticles = await getArticles();
+        setArticles(fetchedArticles);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  // Filtrer les articles en fonction du terme de recherche
+  const filteredArticles = articles.filter(article => {
+    const matchesLibelle = article.libelle.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory ? article.categorie === selectedCategory : true;
+    return matchesLibelle && matchesCategory;
+  });
+
+  // Affichage en fonction de l'état
+  if (loading) {
+    return <div>Chargement des articles...</div>;
+  }
+
+  if (error) {
+    return <div>Erreur: {error}</div>;
+  }
+
+  // Récupérer les catégories uniques
+  const categories = [...new Set(articles.map(article => article.categorie))];
+
   return (
     <>
       <div className="search !w-[100%]">
@@ -12,6 +57,8 @@ function ArticleTailleurPage() {
                   type="text"
                   className="input"
                   placeholder="saisir pour rechercher un article"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)} // Mettre à jour le terme de recherche
                 />
                 <div className="form-icon">
                   <FaSearch className="text-[#e0dcdc]" />
@@ -21,43 +68,23 @@ function ArticleTailleurPage() {
           </div>
         </div>
       </div>
-      <div id="products-tab" className="store-tab-pane is-active mt-20">
-        <div className="columns is-multiline">
-          <div className="column is-one-fifth-fullhd is-one-quarter-widescreen is-one-third-desktop is-one-third-tablet is-half-mobile bg-white">
-            <div
-              className="product-card"
-              data-name="Spring Red Dress"
-              data-price="44.00"
-              data-colors="true"
-              data-variants="true"
-              data-path="/src/assets/img/products/1"
-            >
-              <a className="quickview-trigger">
-                <i data-feather="more-horizontal"></i>
-              </a>
-              <div className="product-image">
-                <img src="/src/assets/img/products/1.svg" alt="" />
-              </div>
-              <div className="product-info">
-                <h3>Spring Red Dress</h3>
-                <p>
-                  A beautiful dress for you best evenings and important dates
-                </p>
-              </div>
-              <div className="product-actions">
-                <div className="left">
-                  <i data-feather="heart"></i>
-                  <span>147</span>
-                </div>
-                <div className="right">
-                  <a className="button is-solid accent-button raised">
-                    <i data-feather="shopping-cart"></i>
-                    <span>$44.00</span>
-                  </a>
-                </div>
-              </div>
+
+      {/* Affichage des articles sous forme de cartes */}
+      <div className="articles-list mt-5">
+        <h2>Liste des Articles</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredArticles.map(article => (
+            <div key={article.id} className="card border p-4 rounded shadow">
+              <img src={article.image} className="w-full h-auto rounded" />
+              <h1 className="text-lg font-bold">{article.libelle}</h1>
+              <p>Unité: {article.unite}</p>
+              <p>Couleur: {article.couleur_article?.couleur_id || 'Non spécifié'}</p>
+              <p>Prix par unité: {article.prixUnite} fcfa</p>
+              <p>Id Vendeur: {article.vendeur_id} fcfa</p>
+              <p>Categorie: {article.categorie_id}</p>
+              <p>Créé le: {new Date(article.createdAt).toLocaleDateString()}</p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </>

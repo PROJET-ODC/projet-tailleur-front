@@ -5,6 +5,7 @@ import FaTh from './items/FaTh';
 import SearchBar from './items/SearchBar';
 import FaShoppingCart from './items/FaShoppingCart';
 import ProfileIcon from './items/ProfileIcon';
+import ButtonDashboard from './items/ButtonDashboard';
 
 
 const Navbar =()=>{
@@ -18,6 +19,7 @@ const Navbar =()=>{
 
         <div className="navbar-end">
           <SearchBar/>
+          <ButtonDashboard/>
           <FaShoppingCart/>
           <ProfileIcon/>
 

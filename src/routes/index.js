@@ -11,6 +11,7 @@ import CommandeTailleurPage from "../pages/CommandeTailleurPage.jsx";
 import ArticleTailleurPage from "../pages/ArticleTailleurPage.jsx";
 import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
 
+
 export const routes = [
   {
     layout: AnonymousLayout,
@@ -46,6 +47,13 @@ export const routes = [
         title: "Tailleurs",
         hasSiderLink: true,
         routes: [
+          {
+            name: "DashboardTailleur",
+            title: "DashboardTailleur",
+            component: DashboardTailleur,
+            path: "/tailleur",
+            exact: true,
+          },
           {
             name: "articles",
             title: "Articles",
@@ -110,3 +118,4 @@ export const routes = [
 ];
 
 export const Routes = renderRoutes(routes);
+
