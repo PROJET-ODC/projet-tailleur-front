@@ -6,10 +6,13 @@ import ProfilPage from "../pages/ProfilPage.jsx";
 import { renderRoutes } from "./generate-routes.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import NotFound from "../pages/NotFoundPage"; // Mettez à jour le chemin selon votre structure de projet
+import ChatPage from "../pages/ChatPage";
+
 import DashboardTailleur from "../layouts/DashboardTailleur.jsx";
 import CommandeTailleurPage from "../pages/CommandeTailleurPage.jsx";
 import ArticleTailleurPage from "../pages/ArticleTailleurPage.jsx";
 import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
+
 
 export const routes = [
   {
@@ -35,6 +38,14 @@ export const routes = [
         component: RegisterPage,
         path: "/register",
         isPublic: true,
+      },
+      {
+        name: "messages",
+        title: "Messages",
+        component: ChatPage,
+        path: "/messages", 
+        exact: true,
+        isPublic: true,  
       },
     ],
   },
@@ -105,8 +116,11 @@ export const routes = [
         component: NotFound, // Un composant pour la page 404
         path: "*",
       },
+
     ],
+    
   },
+
 ];
 
 export const Routes = renderRoutes(routes);

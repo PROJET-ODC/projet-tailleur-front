@@ -1,8 +1,10 @@
+
 import scriptUrls from "../utils/scriptsUrl";
 import useScriptLoader from "../hooks/useScriptLoader";
 import PostPage from "./PostPage";
 import { useEffect, useState } from "react";
 import { getFeedsInitData } from "../api/clients";
+
 import { useLoaderData } from "react-router-dom";
 
 function HomePage() {
@@ -31,6 +33,8 @@ function HomePage() {
   }, []);
 
   return <PostPage />;
+  // Add the chat component below the post page
+ 
 }
 
-export default HomePage;
+export default HomePage
