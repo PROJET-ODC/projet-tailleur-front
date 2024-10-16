@@ -2949,7 +2949,7 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   padding: 1px;
   color: #6ba4e9;
   position: absolute;
-  left:740px;
+  left:520px;
   background-color: white;
 }
 
@@ -2957,4 +2957,67 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   width: 16px;
   height: 16px;
   color: black;
+}
+.red-button {
+  color: red;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.modal-background{
+  background-color: red;
+}
+
+.popup {
+  position: absolute; /* Position absolue pour placer le popup */
+  background: white; /* Fond blanc */
+  border: 1px solid #ccc; /* Bordure grise */
+  border-radius: 4px; /* Coins arrondis */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  z-index: 1000; /* S'assurer que le popup est au-dessus des autres éléments */
+  padding: 10px; /* Espacement intérieur */
+  left: 62%;
+  top: 25px;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column; /* Disposition verticale des éléments */
+}
+
+.popup-item {
+  padding: 5px 0; /* Espacement vertical des éléments du popup */
+  cursor: pointer; /* Curseur en main */
+}
+
+
+.post-image video{
+  width:100%;
 }

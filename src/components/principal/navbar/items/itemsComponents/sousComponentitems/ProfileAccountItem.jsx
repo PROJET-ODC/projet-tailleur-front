@@ -1,17 +1,11 @@
-
-const ProfileAccountItem = () => {
+const ProfileAccountItem = ({ tokenObject }) => {
   return (
-    <a
-      id="profile-link"
-      href="profile-main.html"
-      className="account-item"
-    >
+    <a id="profile-link" href="profile-main.html" className="account-item">
       <div className="media">
         <div className="media-left">
           <div className="image">
             <img
-              src="../via.placeholder.com/400x400.png"
-              data-demo-src="assets/img/avatars/jenna.png"
+              src={tokenObject?.picture || "https://placehold.co/50"}
               alt=""
             />
           </div>

@@ -20,7 +20,7 @@ const scriptUrls = [
   "/src/assets/js/feed.js", // Ajouté
   "/src/assets/js/webcam.js", // Ajouté
   "/src/assets/js/compose.js", // Ajouté
-  "/src/assets/js/autocompletes.js",
+  "/src/assets/js/autocompletes.js"
 ];
 
 export default scriptUrls;

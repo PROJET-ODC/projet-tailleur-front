@@ -11,6 +11,16 @@ import HeadLayout from "../layouts/HeadLayout.jsx";
 import ProfilePageIdentifiant from "../components/profileIdentifiant/ProfilePageIdentifiant.jsx";
 import FollowerPage from "../components/Friends/FollowerPage.jsx";
 import PhotosPage from "../components/PhotosPage/PhotoPage.jsx";
+import ChatPage from "../pages/ChatPage";
+
+import DashboardTailleur from "../layouts/DashboardTailleur.jsx";
+import CommandeTailleurPage from "../pages/CommandeTailleurPage.jsx";
+import ArticleTailleurPage from "../pages/ArticleTailleurPage.jsx";
+import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
+import DashboardVendeur from "../layouts/DashboardVendeur.jsx";
+import ArticleVendeurPage from "../pages/ArticleVendeurPage.jsx";
+import CommandeVendeurPage from "../pages/CommandeVendeurPage.jsx";
+
 
 export const routes = [
   {
@@ -37,6 +47,85 @@ export const routes = [
         path: "/register",
         isPublic: true,
       },
+      {
+        name: "messages",
+        title: "Messages",
+        component: ChatPage,
+        path: "/messages", 
+        exact: true,
+        isPublic: true,  
+      },
+    ],
+  },
+  {
+    layout: DashboardTailleur,
+    routes: [
+      {
+        name: "tailleur",
+        title: "Tailleurs",
+        hasSiderLink: true,
+        routes: [
+          {
+            name: "DashboardTailleur",
+            title: "DashboardTailleur",
+            component: DashboardTailleur,
+            path: "/tailleur",
+            exact: true,
+          },
+          {
+            name: "articles",
+            title: "Articles",
+            hasSiderLink: true,
+            component: ArticleTailleurPage,
+            path: "/tailleur/articles",
+            exact: true,
+          },
+          {
+            name: "appro",
+            title: "Approvisionnement",
+            hasSiderLink: true,
+            component: ApproTailleurPage,
+            path: "/tailleur/appro",
+            exact: true,
+          },
+          {
+            name: "commande",
+            title: "Commandes",
+            hasSiderLink: true,
+            component: CommandeTailleurPage,
+            path: "/tailleur/commande",
+            exact: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    layout: DashboardVendeur,
+    routes: [
+      {
+        name: "tailleur",
+        title: "Tailleurs",
+        hasSiderLink: true,
+        routes: [
+          {
+            name: "articles",
+            title: "Articles",
+            hasSiderLink: true,
+            component: ArticleVendeurPage,
+            path: "/vendeur/articles",
+            exact: true,
+          },
+          {
+            name: "commande",
+            title: "Commandes",
+            hasSiderLink: true,
+            component: CommandeVendeurPage,
+            path: "/vendeur/commande",
+            exact: true,
+          },
+        ],
+      },
     ],
   },
   {
@@ -61,7 +150,9 @@ export const routes = [
         component: NotFound, // Un composant pour la page 404
         path: "*",
       },
+
     ],
+    
   },
   {
     layout: HeadLayout,
@@ -105,3 +196,4 @@ export const routes = [
 ];
 
 export const Routes = renderRoutes(routes);
+
