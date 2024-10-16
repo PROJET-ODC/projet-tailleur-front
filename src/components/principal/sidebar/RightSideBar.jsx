@@ -41,7 +41,6 @@ function RightSideBar() {
       getFeedsInitData().then((data) => {
         setStatusData(groupAndCalculateDelay(data.recentStatus));
       });
-      
     } else {
       toast.error(result.message);
     }
@@ -108,7 +107,11 @@ function RightSideBar() {
                 >
                   <div className="img-wrapper hover:!border-2 hover:!border-[#3d70b2] hover:cursor-pointer">
                     <img
-                      src={storyItem.files[storyItem.files.length - 1].url}
+                      src={
+                        storyItem.type == "image"
+                          ? storyItem.files[storyItem.files.length - 1].url
+                          : "/src/assets/img/default.png"
+                      }
                       data-user-popover="1"
                       alt=""
                     />
