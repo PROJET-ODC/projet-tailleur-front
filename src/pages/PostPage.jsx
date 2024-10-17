@@ -430,7 +430,7 @@ const [selectedProduct, setSelectedProduct] = useState(null);
             <div className="shop-popup">
   <div className="popup-content">
   <button onClick={closeShopPopup} className="close-popup">X</button>
-  <div className="product-card">
+  <div className="product-cards">
     <div className="product-image imgshop">
       <img src={selectedProduct.files} alt="" />
     </div>
