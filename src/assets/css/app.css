@@ -2978,7 +2978,7 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   padding: 20px;
   border-radius: 8px;
   max-width: 500px;
-  width: 100%;
+  width: 40% !important;
 }
 
 .close-button {
@@ -2989,10 +2989,6 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   top: 10px;
   right: 10px;
   cursor: pointer;
-}
-
-.modal-background{
-  background-color: red;
 }
 
 .popup {
@@ -3020,4 +3016,97 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
 
 .post-image video{
   width:100%;
+}
+
+.shop-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Assurez-vous qu'il est au-dessus des autres éléments */
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  width: 300px; /* Ajustez la largeur selon vos besoins */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ajoutez une ombre pour le style */
+}
+
+.close-popup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px; /* Ajustez la taille du bouton de fermeture */
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.size-selection,
+.quantity-selection {
+  margin-bottom: 15px;
+  
+}
+
+.quantity-selection #quantity{
+ padding: 5px;
+  
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+select,
+input[type="number"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.product-actions{
+  display: flex;
+  gap: 150px;
+}
+.buttons{
+  border-radius: 6px  ;
+  background-color: blue ;
+  color:white;
+  padding: 10px;
+  
+}
+.buttone{
+  border-radius: 10px  ;
+  background-color: white ;
+  height: 20px;
+  font-weight: bold;
+}
+
+
+.imgshop{
+  padding: 3px;
+}
+
+.color-selection {
+  margin-bottom: 15px;
+}
+
+.color-selection label {
+  margin-bottom: 5px;
+  font-weight: bold;
 }
