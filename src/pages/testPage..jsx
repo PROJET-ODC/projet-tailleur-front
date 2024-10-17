@@ -1,57 +1,97 @@
-import { useState, useEffect } from 'react';
-import { FaSearch } from "react-icons/fa";
-import { getApprovisionnements } from './api'; // Import your API function
 
-function ApproTailleurPage() {
-  const [approvisionnements, setApprovisionnements] = useState([]);
-  const [filterLibelle, setFilterLibelle] = useState('');
+
+
+import { useEffect, useState } from "react";
+import { FaSearch } from "react-icons/fa";
+import { getCommandesVendeur } from "../api/commandeVendeur";
+
+
+function CommandeVendeurPage() {
+  const [commandes, setCommandes] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await getApprovisionnements(filterLibelle);
-      if (result.error) {
-        console.error('Error fetching data:', result.error);
+    const fetchCommandes = async () => {
+      const result = await getCommandesVendeur();
+      if (result.status === "OK") {
+        setCommandes(result.data);
       } else {
-        setApprovisionnements(result);
+        console.error("Erreur lors de la récupération des commandes", result.message);
       }
     };
 
-    fetchData();
-  }, [filterLibelle]);
+    fetchCommandes();
+  }, []);
 
   return (
     <>
-                       <div className="left-header">
-                            <div className="header-inner">
-                                <img className="avatar" src="assets/img/vector/icons/logos/store.svg" alt="image"/>
-                                <div className="separator"></div>
-                                <div className="title-wrap">
-                                    <h3 className="payment-title">Pay your order</h3>
-                                    <p className="payment-subtitle">Enter your credit card information</p>
-                                </div>
-                            </div>
-                            <div className="header-coupon">
-                                <div className="field is-grouped">
-                                    <div className="control">
-                                        <input type="text" className="input" placeholder="Gift card or discount code"/>
-                                    </div>
-                                    <div className="control">
-                                        <button className="button is-solid primary-button raised">
-                                            Apply
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="header-foot">
-                                <span className="label">Total</span>
-                                <span className="amount" data-currency="USD">$216.92</span>
-                            </div>
-                        </div>
+      <div className="search !w-[100%]">
+        <div className="navbar-item !w-[100%]">
+          <div
+            id="global-search"
+            className="flex flex-wrap gap-3 control !w-[100%]"
+          >
+            <div className="field !w-[40%]">
+              <label>Rechercher un article</label>
+              <div className="control has-icon">
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="saisir pour rechercher un article"
+                />
+                <div className="form-icon">
+                  <FaSearch className="text-[#e0dcdc]" />
+                </div>
+              </div>
+            </div>
+            <div className="field !w-[40%]">
+              <label>Rechercher un article</label>
+              <div className="control has-icon">
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="saisir pour rechercher un article"
+                />
+                <div className="form-icon">
+                  <FaSearch className="text-[#e0dcdc]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div className="flex-table">
+        <div className="flex-table-header">
+          <span className="product">
+            <span>Product</span>
+          </span>
+          <span className="quantity">Libelle</span>
+          <span className="price">Quantité</span>
+          <span className="discount">Numéro commande</span>
+          <span className="total">Montant Total</span>
+        </div>
 
-                        
+        {commandes.map((commande, index) => (
+          <div key={index} className="flex-table-item">
+            <div className="product">
+              <img src={commande.image} alt={commande.libelle} />
+              <span className="product-name">{commande.libelle}</span>
+            </div>
+            <div className="quantity">
+              <span className="has-price">{commande.qte}</span>
+            </div>
+            <div className="price">
+              <span className="has-price">{commande.numero}</span>
+            </div>
+            <div className="discount">
+              <span className="has-price">{commande.montantTotal}</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </>
   );
 }
 
-export default ApproTailleurPage;
+export default CommandeVendeurPage;
+
