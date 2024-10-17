@@ -119,6 +119,55 @@ function DashboardTailleur() {
               <span className="font-bold">Commandes</span>
             </div>
           </NavLink>
+
+          <NavLink
+                  to="/tailleur/achatCredit"
+                  className={({ isActive }) =>
+                    `dashboard-aside-link ${isActive ? "bg-[aliceblue]" : ""}`
+                  }
+                >
+                  <div className="flex flex-col items-center">
+                    <svg
+                      className="!h-[47px] !w-[35px]"
+                      width="68"
+                      height="68"
+                      viewBox="0 0 48 48"
+                    >
+                      <rect
+                        x="6"
+                        y="12"
+                        width="36"
+                        height="24"
+                        rx="3"
+                        ry="3"
+                        style={{ fill: "rgb(61, 112, 178)" }} // Background color of the card
+                      ></rect>
+                      <rect
+                        x="6"
+                        y="20"
+                        width="36"
+                        height="4"
+                        style={{ fill: "rgb(255, 255, 255)" }} // White stripe
+                      ></rect>
+                      <rect
+                        x="10"
+                        y="28"
+                        width="16"
+                        height="2"
+                        style={{ fill: "rgb(255, 255, 255)" }} // Placeholder for card number
+                      ></rect>
+                      <circle
+                        cx="32"
+                        cy="29"
+                        r="2"
+                        style={{ fill: "rgb(255, 255, 255)" }} // Small icon or chip
+                      ></circle>
+                    </svg>
+                    <span className="font-bold">Acheter Crédit</span>
+                  </div>
+                </NavLink>
+
+          
         </div>
 
         <div className="dashboard-aside-end">

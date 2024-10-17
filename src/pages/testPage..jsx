@@ -21,62 +21,35 @@ function ApproTailleurPage() {
 
   return (
     <>
-      <div className="search !w-[100%]">
-        <div className="navbar-item !w-[100%]">
-          <div
-            id="global-search"
-            className="flex flex-wrap gap-3 control !w-[100%]"
-          >
-            <div className="field !w-[40%]">
-              <label>Rechercher un article</label>
-              <div className="control has-icon">
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="saisir pour rechercher un article"
-                  value={filterLibelle}
-                  onChange={(e) => setFilterLibelle(e.target.value)}
-                />
-                <div className="form-icon">
-                  <FaSearch className="text-[#e0dcdc]" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                       <div className="left-header">
+                            <div className="header-inner">
+                                <img className="avatar" src="assets/img/vector/icons/logos/store.svg" alt="image"/>
+                                <div className="separator"></div>
+                                <div className="title-wrap">
+                                    <h3 className="payment-title">Pay your order</h3>
+                                    <p className="payment-subtitle">Enter your credit card information</p>
+                                </div>
+                            </div>
+                            <div className="header-coupon">
+                                <div className="field is-grouped">
+                                    <div className="control">
+                                        <input type="text" className="input" placeholder="Gift card or discount code"/>
+                                    </div>
+                                    <div className="control">
+                                        <button className="button is-solid primary-button raised">
+                                            Apply
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="header-foot">
+                                <span className="label">Total</span>
+                                <span className="amount" data-currency="USD">$216.92</span>
+                            </div>
+                        </div>
 
-      <div className="flex-table">
-        <div className="flex-table-header">
-          <span className="product">
-            <span>Product</span>
-          </span>
-          <span className="quantity">Quantity</span>
-          <span className="price">Price</span>
-          <span className="discount">Discount</span>
-          <span className="total">Total</span>
-        </div>
-        {approvisionnements.map((approvisionnement) => (
-          <div className="flex-table-item" key={approvisionnement.id}>
-            <div className="product">
-              <img src={approvisionnement.article.image} alt="" />
-              <span className="product-name">{approvisionnement.article.libelle}</span>
-            </div>
-            <div className="quantity">
-              <span className="has-price">{approvisionnement.qte}</span>
-            </div>
-            <div className="price">
-              <span className="has-price">{approvisionnement.prix}</span>
-            </div>
-            <div className="discount">
-              <span className="has-price">0</span>
-            </div>
-            <div className="total">
-              <span className="has-price">{approvisionnement.qte * approvisionnement.prix}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+
+                        
     </>
   );
 }
