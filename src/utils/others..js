@@ -55,4 +55,43 @@ const groupAndCalculateDelay = (data) => {
   return Object.values(groupedData);
 };
 
-export { groupAndCalculateDelay };
+function removeInverseDuplicates(messages) {
+  const seenPairs = new Set();
+
+  return messages.filter((message) => {
+    const sortedIds = [message.messager_id, message.messaged_id].sort(
+      (a, b) => a - b
+    );
+    const key = `${sortedIds[0]}-${sortedIds[1]}`;
+
+    if (seenPairs.has(key)) {
+      return false;
+    }
+    seenPairs.add(key);
+    return true;
+  });
+}
+
+function formatMessages(messages, userId) {
+  return messages.map((message) => {
+    // Vérifier si l'utilisateur est le messager ou le messaged
+    if (message.messager_id === userId) {
+      return {
+        id: message.id,
+        createdAt: message.createdAt,
+        texte: message.texte,
+        user: message.messaged, // l'autre utilisateur (destinataire)
+        type: "receiver", // l'utilisateur est celui qui a envoyé
+      };
+    } else {
+      return {
+        id: message.id,
+        createdAt: message.createdAt,
+        texte: message.texte,
+        user: message.messager, // l'autre utilisateur (expéditeur)
+        type: "sender", // l'utilisateur est celui qui a reçu
+      };
+    }
+  });
+}
+export { groupAndCalculateDelay, removeInverseDuplicates, formatMessages };

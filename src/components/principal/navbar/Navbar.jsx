@@ -1,4 +1,4 @@
-import HeartIcon from "./items/HeartIcon";
+// import HeartIcon from "./items/HeartIcon";
 import Bellcon from "./items/BellIcon";
 import EnvelopeIcon from "./items/EnvelopeIcon";
 import FaTh from "./items/FaTh";
@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <div className="navbar-menu">
-      <HeartIcon />
+      {/* <HeartIcon /> */}
       <Bellcon />
       <EnvelopeIcon />
       <FaTh />

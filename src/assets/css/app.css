@@ -3083,13 +3083,13 @@ input[type="number"] {
   display: flex;
   gap: 150px;
 }
-.buttons{
+/* .buttons{
   border-radius: 6px  ;
   background-color: blue ;
   color:white;
   padding: 10px;
   
-}
+} */
 .buttone{
   border-radius: 10px  ;
   background-color: white ;

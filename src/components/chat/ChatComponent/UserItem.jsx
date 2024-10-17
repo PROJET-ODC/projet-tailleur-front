@@ -1,12 +1,41 @@
+import { useEffect, useState } from "react";
+import decodedToken from "../../../utils/decryptJWT";
 
-const UserItem = ({ chatUser, name, status, imgSrc, handleUserChat }) => {
+const UserItem = ({ handleUserChat, recentDiscussion }) => {
+  const authFromToken = decodedToken();
+  const messager = recentDiscussion.messager;
+  const messaged = recentDiscussion.messaged;
+  const [userChat, setUserChat] = useState(null);
+
+  useEffect(() => {
+    if (authFromToken.id == messager.id) {
+      console.log(1);
+
+      setUserChat(messaged);
+    }
+    if (authFromToken.id == messaged.id) {
+      console.log(messager);
+
+      setUserChat(messager);
+    }
+  }, []);
+
   return (
-    <div className={`user-item ${status === 'Online' ? 'is-active' : ''}`} onClick={handleUserChat} data-chat-user={chatUser} data-full-name={name} data-status={status}>
-      <div className="avatar-container">
-        <img className="user-avatar" src={imgSrc} alt={`${name}'s Avatar`} />
-        <div className={`user-status is-${status.toLowerCase()}`}></div>
+    userChat && (
+      <div
+        className="user-item is-active"
+        onClick={() => handleUserChat(userChat)}
+      >
+        <div className="avatar-container">
+          <img
+            className="user-avatar"
+            src={userChat.user.picture}
+            alt="User Avatar"
+          />
+          <div className="user-status is-active"></div>
+        </div>
       </div>
-    </div>
+    )
   );
 };
 

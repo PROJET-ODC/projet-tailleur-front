@@ -1,9 +1,16 @@
-
 const HeaderItem = () => {
   return (
     <div className="header-item">
-      <img className="light-image" src="assets/img/vector/logo/friendkit-bold.svg" alt="Friendkit Logo" />
-      <img className="dark-image" src="assets/img/vector/logo/friendkit-white.svg" alt="Friendkit Logo" />
+      <img
+        className="light-image"
+        src="/src/assets/logo1-origin.png"
+        alt="Friendkit Logo"
+      />
+      <img
+        className="dark-image"
+        src="/src/assets/logo1-origin.png"
+        alt="Friendkit Logo"
+      />
     </div>
   );
 };

@@ -19,8 +19,7 @@ function PostPage() {
   const [userIcon, setUserIcon] = useState(""); // État pour stocker l'icône de l'utilisateur
   const [comment, setComment] = useState(""); // Ajoutez cette ligne
   const [isShopPopupOpen, setIsShopPopupOpen] = useState(false);
-const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const videoFormats = [".mp4", ".webm", ".ogg", ".avi", ".mov", ".mkv"]; // Ajoutez d'autres formats si nécessaire
 
@@ -83,17 +82,20 @@ const [selectedProduct, setSelectedProduct] = useState(null);
   }, [accountId]); // Déclenchez cet effet après que l'ID du compte est défini
 
   const incrementViewCount = async (postId) => {
-    console.log("Tentative d'incrémentation des vues pour le post ID :", postId);
-  
+    console.log(
+      "Tentative d'incrémentation des vues pour le post ID :",
+      postId
+    );
+
     if (!postId || typeof postId !== "number") {
       console.error("ID du post invalide :", postId);
       return;
     }
-  
+
     try {
-      console.log("Enregistrement de la vue pour le post ID :", postId); 
+      console.log("Enregistrement de la vue pour le post ID :", postId);
       await recordView(postId); // Appel de l'API pour enregistrer la vue
-  
+
       setPosts((prevPosts) =>
         prevPosts.map((post) => {
           if (post.id === postId) {
@@ -109,7 +111,6 @@ const [selectedProduct, setSelectedProduct] = useState(null);
       }
     }
   };
-  
 
   const handleLikeClick = async (postId) => {
     if (!accountId) {
@@ -214,15 +215,15 @@ const [selectedProduct, setSelectedProduct] = useState(null);
   };
 
   /* shop */
- 
+
   const handleShopClick = (post) => {
-    setSelectedProduct(post); 
-    setIsShopPopupOpen(true); 
+    setSelectedProduct(post);
+    setIsShopPopupOpen(true);
   };
 
   const closeShopPopup = () => {
-    setIsShopPopupOpen(false); 
-    setSelectedProduct(null); 
+    setIsShopPopupOpen(false);
+    setSelectedProduct(null);
   };
   const [cart, setCart] = useState([]); // État pour le panier
 
@@ -313,7 +314,9 @@ const [selectedProduct, setSelectedProduct] = useState(null);
                 <p>{post.content}</p>
               </div>
               <div className="post-image">
-                {videoFormats.some((format) => post.files.endsWith(format)) ? (
+                {videoFormats.some(
+                  (format) => post.files && post.files.endsWith(format)
+                ) ? (
                   <a
                     data-fancybox="post1"
                     href={post.files}
@@ -394,9 +397,10 @@ const [selectedProduct, setSelectedProduct] = useState(null);
             <div className="card-footer">
               <div className="likers-text">
                 <div className="right">
-                  <a className="btn button is-solid accent-button raised"
-                   onClick={() => handleShopClick(post)}>
-
+                  <a
+                    className="btn button is-solid accent-button raised"
+                    onClick={() => handleShopClick(post)}
+                  >
                     <i className="mdi mdi-cart-plus"></i>
                   </a>
                 </div>
@@ -423,74 +427,70 @@ const [selectedProduct, setSelectedProduct] = useState(null);
             </div>
           </div>
 
-
-
           {/* //card shop */}
           {isShopPopupOpen && selectedProduct && (
             <div className="shop-popup">
-  <div className="popup-content">
-  <button onClick={closeShopPopup} className="close-popup">X</button>
-  <div className="product-cards">
-    <div className="product-image imgshop">
-      <img src={selectedProduct.files} alt="" />
-    </div>
-    <div className="product-info">
-      <h3>{selectedProduct.name}</h3>
-      <p>robe</p>
-    </div>
-    <form className="product-form" onSubmit={handleAddToCart}>
-    <div className="size-selection">
-        <label htmlFor="size">Choisissez une taille:</label>
-        <select id="size" name="size" required>
-          <option value="">Sélectionnez une taille</option>
-          <option value="S">S</option>
-          <option value="M">M</option>
-          <option value="XL">XL</option>
-        </select>
-      </div>
-      <div className="color-selection">
-        <label htmlFor="color">Choisissez une couleur:</label>
-        <select id="color" name="color" required>
-          <option value="">Sélectionnez une couleur</option>
-          <option value="rouge">Rouge</option>
-          <option value="bleu">Bleu</option>
-          <option value="vert">Vert</option>
-          <option value="noir">Noir</option>
-        </select>
-      </div>
-      <div className="quantity-selection">
-        <label htmlFor="quantity">Quantité:</label>
-        <input
-          type="number"
-          id="quantity"
-          name="quantity"
-          min="1"
-          max="100"
-          defaultValue="1"
-          required
-        />
-      </div>
-      <div className="product-actions">
-        <button className="buttone btn is-solid accent-button raised">
-          1200 f
-        </button>
-        <button type="submit" className="buttons is-solid accent-button raised">
-          <i className="mdi mdi-cart-plus"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
-   </div>
-)}
-
+              <div className="popup-contents">
+                <button onClick={closeShopPopup} className="close-popup">
+                  X
+                </button>
+                <div className="product-cards">
+                  <div className="product-image imgshop">
+                    <img src={selectedProduct.files} alt="" />
+                  </div>
+                  <div className="product-info">
+                    <h3>{selectedProduct.name}</h3>
+                    <p>robe</p>
+                  </div>
+                  <form className="product-form" onSubmit={handleAddToCart}>
+                    <div className="size-selection">
+                      <label htmlFor="size">Choisissez une taille:</label>
+                      <select id="size" name="size" required>
+                        <option value="">Sélectionnez une taille</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="XL">XL</option>
+                      </select>
+                    </div>
+                    <div className="color-selection">
+                      <label htmlFor="color">Choisissez une couleur:</label>
+                      <select id="color" name="color" required>
+                        <option value="">Sélectionnez une couleur</option>
+                        <option value="rouge">Rouge</option>
+                        <option value="bleu">Bleu</option>
+                        <option value="vert">Vert</option>
+                        <option value="noir">Noir</option>
+                      </select>
+                    </div>
+                    <div className="quantity-selection">
+                      <label htmlFor="quantity">Quantité:</label>
+                      <input
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        max="100"
+                        defaultValue="1"
+                        required
+                      />
+                    </div>
+                    <div className="product-actions">
+                      <button className="buttone btn is-solid accent-button raised">
+                        1200 f
+                      </button>
+                      <button
+                        type="submit"
+                        className="buttons is-solid accent-button raised"
+                      >
+                        <i className="mdi mdi-cart-plus"></i>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-
-       
-      
       ))}
 
       {/* share */}
