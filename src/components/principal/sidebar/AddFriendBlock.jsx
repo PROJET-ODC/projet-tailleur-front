@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { followApi } from "../../../api/clients";
 import decodedToken from "../../../utils/decryptJWT";
+import { Link } from "react-router-dom";
 
 function AddFriendBlock({ suggestion, handleUpdateFriendState }) {
   const handleFollow = async (followed_id) => {
@@ -19,7 +20,7 @@ function AddFriendBlock({ suggestion, handleUpdateFriendState }) {
   };
 
   return (
-    <>
+    <Link to={`/profile/${suggestion.identifiant}`}>
       <div className="add-friend-block transition-block">
         <img src={suggestion.user.picture} data-user-popover="9" alt="" />
         <div className="page-meta">
@@ -37,7 +38,7 @@ function AddFriendBlock({ suggestion, handleUpdateFriendState }) {
           <i data-feather="user-plus"></i>
         </div>
       </div>
-    </>
+    </Link>
   );
 }
 

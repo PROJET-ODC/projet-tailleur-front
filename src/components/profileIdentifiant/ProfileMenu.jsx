@@ -1,18 +1,27 @@
 // ProfileMenu.jsx
-import React from 'react';
+import { Link } from "react-router-dom";
 
 const ProfileMenu = () => {
   return (
-    <div class="profile-menu is-hidden-mobile">
-    <div class="menu-start">
-        <a href="profile-about.html" class="button has-min-width">About</a>
+    <div className="profile-menu is-hidden-mobile">
+      <div className="menu-start">
+        <a href="profile-about.html" className="button has-min-width">
+          About
+        </a>
+      </div>
+      <div className="menu-end !flex !flex-row !gap-4">
+        <Link
+          id="profile-friends-link"
+          to=""
+          className="button has-min-width"
+        >
+          Friends
+        </Link>
+        <Link to="/" className="button has-min-width">
+          Follow
+        </Link>
+      </div>
     </div>
-    <div class="menu-end">
-        <a id="profile-friends-link" href="profile-friends.html"
-            class="button has-min-width">Friends</a>
-        <a href="profile-photos.html" class="button has-min-width">Photos</a>
-    </div>
-</div>
   );
 };
 

@@ -4,35 +4,50 @@ import scriptUrls from "../utils/scriptsUrl";
 import decodedToken from "../utils/decryptJWT";
 import {
   Button,
-  Checkbox,
   Label,
   Modal,
   TextInput,
   Select,
+  Textarea,
+  FileInput,
 } from "flowbite-react";
 import { useState } from "react";
+import { useFormik } from "formik";
+import ArticleSchemaValidation from "../validations/ArticleSchemaValidation";
 
 function DashboardVendeur() {
   useScriptLoader(scriptUrls);
   const location = useLocation();
   const authFromToken = decodedToken();
   const [openModal, setOpenModal] = useState(false);
+
+  const articleFromik = useFormik({
+    initialValues: {},
+    onSubmit: async (values) => {
+      // Add the article to the database
+      console.log("Submitting form with values:", values);
+    },
+    validationSchema: ArticleSchemaValidation,
+  });
+
   if (authFromToken.role != "vendeur") return <Navigate to="/home" />;
+
+
 
   return (
     <>
       <div className="dashboard-aside !w-[126px]">
         <Link to="/home" className="dashboard-aside-brand">
           <img
-            className="logo light-image"
-            src="/src/assets/img/vector/logo/friendkit-bold.svg"
+            className="logo light-image !max-h-24 !max-w-16"
+            src="/src/assets/logo1-origin.png"
             width="112"
             height="28"
             alt=""
           />
           <img
             className="logo dark-image"
-            src="/src/assets/img/vector/logo/friendkit-white.svg"
+            src="/src/assets/logo1-origin.png"
             width="112"
             height="28"
             alt=""
@@ -104,7 +119,7 @@ function DashboardVendeur() {
         </div>
 
         <div className="dashboard-aside-end">
-          <Link to="/home" className="dashboard-aside-link">
+          <Link to="/profile" className="dashboard-aside-link">
             <img className="link-avatar" src={authFromToken.picture} alt="" />
           </Link>
         </div>
@@ -160,7 +175,7 @@ function DashboardVendeur() {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="space-y-6">
+          <form onSubmit={articleFromik.handleSubmit} className="space-y-6">
             <h3 className="text-xl font-medium text-gray-900 dark:text-white">
               Ajouter un article
             </h3>
@@ -169,35 +184,123 @@ function DashboardVendeur() {
                 <div className="mb-2 block">
                   <Label htmlFor="libelle" value="Le libelle" />
                 </div>
-                <TextInput id="libelle" placeholder="" required />
+                <TextInput
+                  id="libelle"
+                  value={articleFromik.values.libelle}
+                  onChange={articleFromik.handleChange}
+                  onBlur={articleFromik.handleBlur}
+                  placeholder=""
+                  required
+                />
+                {articleFromik.touched.libelle &&
+                  articleFromik.errors.libelle && (
+                    <span className="text-red-500">
+                      {articleFromik.errors.libelle}
+                    </span>
+                  )}
               </div>
               <div className="">
-                couleurs
+                <div className="mb-2 block">
+                  <Label htmlFor="couleur" value="Choisir une couleur" />
+                </div>
+                <Select
+                  id="custom-select"
+                  value={articleFromik.values.couleur}
+                  onChange={articleFromik.handleChange}
+                  onBlur={articleFromik.handleBlur}
+                  name="couleur"
+                >
+                  <option value="" disabled>
+                    Select an option
+                  </option>
+                  <option value="1">rouge</option>
+                  <option value="2">bleue</option>
+                  <option value="3">blanc</option>
+                  <option value="4">noir</option>
+                </Select>
+
+                {articleFromik.touched.couleur &&
+                  articleFromik.errors.couleur && (
+                    <span className="text-red-500">
+                      {articleFromik.errors.couleur}
+                    </span>
+                  )}
               </div>
               <div className="">
                 <div className="mb-2 block">
                   <Label htmlFor="unite" value="Choisir unite" />
                 </div>
-                <Select id="custom-select" name="options">
-                  <option value="" disabled>
-                    Select an option
+                <Select
+                  id="unite"
+                  value={articleFromik.values.unite}
+                  onChange={articleFromik.handleChange}
+                  onBlur={articleFromik.handleBlur}
+                  name="unite"
+                >
+                  <option value=""
+                   disabled>
+                    Selectinner l'unité
                   </option>
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </Select>{" "}
+                  <option value="option1">yard</option>
+                  <option value="option2">metre</option>
+                  <option value="option3">boite</option>
+                </Select>
+                {articleFromik.touched.unite &&
+                  articleFromik.errors.unite && (
+                    <span className="text-red-500">
+                      {articleFromik.errors.unite}
+                    </span>
+                  )}
               </div>
               <div className="">
                 <div className="mb-2 block">
-                  <Label htmlFor="password" value="Your password" />
+                  <Label htmlFor="qte" value="La quantité" />
                 </div>
-                <TextInput id="password" type="password" required />
+                <TextInput id="qte"
+                 value={articleFromik.values.qte}
+                 onChange={articleFromik.handleChange}
+                 onBlur={articleFromik.handleBlur}
+                type="texte" required />
+                 {articleFromik.touched.qte &&
+                  articleFromik.errors.qte && (
+                    <span className="text-red-500">
+                      {articleFromik.errors.qte}
+                    </span>
+                  )}
+              </div>
+              <div className="">
+                <div className="mb-2 block">
+                  <Label htmlFor="prixU" value="Le prix unitaire" />
+                </div>
+                <TextInput id="prixU"
+                   value={articleFromik.values.prixU}
+                   onChange={articleFromik.handleChange}
+                   onBlur={articleFromik.handleBlur}
+                type="texte" required />
+                 {articleFromik.touched.prixU &&
+                  articleFromik.errors.prixU && (
+                    <span className="text-red-500">
+                      {articleFromik.errors.prixU}
+                    </span>
+                  )}
+              </div>
+              <div className="">
+                <div className="mb-2 block">
+                  <Label htmlFor="image" value="ajouter une image" />
+                </div>
+                <FileInput id="file-upload" />
+              </div>
+              <div className="">
+                <div className="mb-2 block">
+                  <Label htmlFor="description" value="la description" />
+                </div>
+                <Textarea id="description" type="texte" required />
               </div>
             </div>
             <div className="w-full">
               <Button className="w-full">Créer</Button>
             </div>
-          </div>
+          </form>
         </Modal.Body>
       </Modal>
     </>

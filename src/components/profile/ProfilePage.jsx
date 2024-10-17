@@ -1,12 +1,15 @@
-import React from 'react';
-import ProfileHeader from './ProfileHeader';
-import ProfileMenu from './ProfileMenu';
-import ProfileTimeline from './ProfileTimeline';
-import Friends from './Friends';
-import Photos from './Photos';
-import useProfileData from './useProfileData'; 
+import React from "react";
+import ProfileHeader from "./ProfileHeader";
+import ProfileMenu from "./ProfileMenu";
+import ProfileTimeline from "./ProfileTimeline";
+import Friends from "./Friends";
+import Photos from "./Photos";
+import useProfileData from "./useProfileData";
+import useScriptLoader from "../../hooks/useScriptLoader";
+import scriptUrls from "../../utils/scriptsUrl";
 
 const ProfilePage = () => {
+  useScriptLoader(scriptUrls);
   // Use the hook to fetch the data
   const { profileData, loading, error } = useProfileData();
 
