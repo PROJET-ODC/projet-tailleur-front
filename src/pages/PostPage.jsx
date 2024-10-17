@@ -18,6 +18,9 @@ function PostPage() {
   const [nameuser, setName] = useState(null); // État pour stocker l'ID du compte
   const [userIcon, setUserIcon] = useState(""); // État pour stocker l'icône de l'utilisateur
   const [comment, setComment] = useState(""); // Ajoutez cette ligne
+  const [isShopPopupOpen, setIsShopPopupOpen] = useState(false);
+const [selectedProduct, setSelectedProduct] = useState(null);
+
 
   const videoFormats = [".mp4", ".webm", ".ogg", ".avi", ".mov", ".mkv"]; // Ajoutez d'autres formats si nécessaire
 
@@ -80,35 +83,33 @@ function PostPage() {
   }, [accountId]); // Déclenchez cet effet après que l'ID du compte est défini
 
   const incrementViewCount = async (postId) => {
-    if (!accountId) {
-      console.error("Account ID manquant !");
-      return;
-    }
-
-    // Vérifiez si postId est valide
+    console.log("Tentative d'incrémentation des vues pour le post ID :", postId);
+  
     if (!postId || typeof postId !== "number") {
       console.error("ID du post invalide :", postId);
       return;
     }
-
+  
     try {
-      // Enregistrer la vue via l'API
-      console.log("Enregistrement de la vue pour le post ID :", postId); // Debugging
-      await recordView(postId, accountId);
-
-      // Mettre à jour le nombre de vues localement
+      console.log("Enregistrement de la vue pour le post ID :", postId); 
+      await recordView(postId); // Appel de l'API pour enregistrer la vue
+  
       setPosts((prevPosts) =>
         prevPosts.map((post) => {
           if (post.id === postId) {
-            return { ...post, viewNb: post.viewNb + 1 };
+            return { ...post, viewNb: post.viewNb + 1 }; // Incrémenter la vue localement
           }
           return post;
         })
       );
     } catch (error) {
       console.error("Erreur lors de l'incrémentation des vues :", error);
+      if (error.message.includes("Post non trouvé")) {
+        alert("Le post que vous essayez de consulter n'existe pas.");
+      }
     }
   };
+  
 
   const handleLikeClick = async (postId) => {
     if (!accountId) {
@@ -194,7 +195,9 @@ function PostPage() {
 
   const openModal = (post) => {
     setSelectedPost(post);
-    setComment(`Voici le lien du post : ${post.link}`); // Remplacez `post.link` par la propriété appropriée qui contient le lien du post
+    const postLink = `https://votre-site.com/posts/${post.id}`; // Remplacez par l'URL réelle du post
+    setComment(`cliquer ici pour voir le model  : ${postLink}`);
+
     setIsModalOpen(true);
   };
   const closeModal = () => {
@@ -208,6 +211,44 @@ function PostPage() {
       ...prevState,
       [postId]: !prevState[postId],
     }));
+  };
+
+  /* shop */
+ 
+  const handleShopClick = (post) => {
+    setSelectedProduct(post); 
+    setIsShopPopupOpen(true); 
+  };
+
+  const closeShopPopup = () => {
+    setIsShopPopupOpen(false); 
+    setSelectedProduct(null); 
+  };
+  const [cart, setCart] = useState([]); // État pour le panier
+
+  const addToCart = (productData) => {
+    setCart((prevCart) => [...prevCart, productData]);
+    console.log("Produit ajouté au panier :", productData);
+  };
+
+  const handleAddToCart = (event) => {
+    event.preventDefault();
+    const size = event.target.size.value;
+    const color = event.target.color.value;
+    const quantity = event.target.quantity.value;
+
+    const productData = {
+      id: selectedProduct.id,
+      name: selectedProduct.name,
+      size,
+      color,
+      quantity,
+    };
+
+    // Ajoutez le produit au panier
+    addToCart(productData);
+
+    closeShopPopup();
   };
 
   if (loading) {
@@ -353,7 +394,9 @@ function PostPage() {
             <div className="card-footer">
               <div className="likers-text">
                 <div className="right">
-                  <a className="btn button is-solid accent-button raised">
+                  <a className="btn button is-solid accent-button raised"
+                   onClick={() => handleShopClick(post)}>
+
                     <i className="mdi mdi-cart-plus"></i>
                   </a>
                 </div>
@@ -364,9 +407,13 @@ function PostPage() {
                   <i data-feather="heart"></i>
                   <p>{post.likes.length}</p>
                 </div>
+                <div className="likes-count">
+                  <i data-feather="eye"></i>
+                  <p>{post.viewNb}</p>
+                </div>
                 <div className="shares-count">
                   <i data-feather="link-2"></i>
-                  <p>{post.viewNb}</p>
+                  <p>{post.shareNb}</p>
                 </div>
                 <div className="comments-count">
                   <i data-feather="message-circle"></i>
@@ -375,7 +422,75 @@ function PostPage() {
               </div>
             </div>
           </div>
+
+
+
+          {/* //card shop */}
+          {isShopPopupOpen && selectedProduct && (
+            <div className="shop-popup">
+  <div className="popup-content">
+  <button onClick={closeShopPopup} className="close-popup">X</button>
+  <div className="product-cards">
+    <div className="product-image imgshop">
+      <img src={selectedProduct.files} alt="" />
+    </div>
+    <div className="product-info">
+      <h3>{selectedProduct.name}</h3>
+      <p>robe</p>
+    </div>
+    <form className="product-form" onSubmit={handleAddToCart}>
+    <div className="size-selection">
+        <label htmlFor="size">Choisissez une taille:</label>
+        <select id="size" name="size" required>
+          <option value="">Sélectionnez une taille</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="XL">XL</option>
+        </select>
+      </div>
+      <div className="color-selection">
+        <label htmlFor="color">Choisissez une couleur:</label>
+        <select id="color" name="color" required>
+          <option value="">Sélectionnez une couleur</option>
+          <option value="rouge">Rouge</option>
+          <option value="bleu">Bleu</option>
+          <option value="vert">Vert</option>
+          <option value="noir">Noir</option>
+        </select>
+      </div>
+      <div className="quantity-selection">
+        <label htmlFor="quantity">Quantité:</label>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          min="1"
+          max="100"
+          defaultValue="1"
+          required
+        />
+      </div>
+      <div className="product-actions">
+        <button className="buttone btn is-solid accent-button raised">
+          1200 f
+        </button>
+        <button type="submit" className="buttons is-solid accent-button raised">
+          <i className="mdi mdi-cart-plus"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+   </div>
+)}
+
         </div>
+
+       
+      
       ))}
 
       {/* share */}
