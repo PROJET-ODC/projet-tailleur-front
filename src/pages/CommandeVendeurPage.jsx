@@ -1,13 +1,30 @@
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { getCommandeVendeur } from "../api/commandeVendeur";
 
 function CommandeVendeurPage() {
+  const [commandes, setCommandes] = useState([]);
+
+  useEffect(() => {
+    const fetchCommandes = async () => {
+      const result = await getCommandeVendeur();
+      if (result && result.status === "OK") {
+        setCommandes(result);
+      } else {
+        console.error("Erreur lors de la récupération des commandes", result.message);
+      }
+    };
+
+    fetchCommandes();
+  }, []);
+
   return (
     <>
       <div className="search !w-[100%]">
         <div className="navbar-item !w-[100%]">
           <div
             id="global-search"
-            className=" flex flex-wrap gap-3 control !w-[100%]"
+            className="flex flex-wrap gap-3 control !w-[100%]"
           >
             <div className="field !w-[40%]">
               <label>Rechercher un article</label>
@@ -44,68 +61,32 @@ function CommandeVendeurPage() {
           <span className="product">
             <span>Product</span>
           </span>
-          <span className="quantity">Quantity</span>
-          <span className="price">Price</span>
-          <span className="discount">Discount</span>
-          <span className="total">Total</span>
+          <span className="quantity">Libelle</span>
+          <span className="price">Quantité</span>
+          <span className="discount">Numéro commande</span>
+          <span className="total">Montant Total</span>
         </div>
-        <div className="flex-table-item">
-          <div className="product">
-            <img src="/src/assets/img/products/2.svg" alt="" />
-            <span className="product-name">Cool Shirt</span>
+
+        {commandes.map((commande, index) => (
+          <div key={index} className="flex-table-item">
+            <div className="product">
+              <img src={commande.image} alt={commande.libelle} />
+              <span className="product-name">{commande.libelle}</span>
+            </div>
+            <div className="quantity">
+              <span className="has-price">{commande.qte}</span>
+            </div>
+            <div className="price">
+              <span className="has-price">{commande.numero}</span>
+            </div>
+            <div className="discount">
+              <span className="has-price">{commande.montantTotal}</span>
+            </div>
           </div>
-          <div className="quantity">
-            <span className="has-price">1</span>
-          </div>
-          <div className="price">
-            <span className="has-price">29.00</span>
-          </div>
-          <div className="discount">
-            <span className="has-price">0</span>
-          </div>
-          <div className="total">
-            <span className="has-price">29.00</span>
-          </div>
-        </div>
-        <div className="flex-table-item">
-          <div className="product">
-            <img src="/src/assets/img/products/3.svg" alt="" />
-            <span className="product-name">Military Short</span>
-          </div>
-          <div className="quantity">
-            <span className="has-price">1</span>
-          </div>
-          <div className="price">
-            <span className="has-price">39.00</span>
-          </div>
-          <div className="discount">
-            <span className="has-price">0</span>
-          </div>
-          <div className="total">
-            <span className="has-price">39.00</span>
-          </div>
-        </div>
-        <div className="flex-table-item">
-          <div className="product">
-            <img src="/src/assets/img/products/4.svg" alt="" />
-            <span className="product-name">Cool Backpack</span>
-          </div>
-          <div className="quantity">
-            <span className="has-price">1</span>
-          </div>
-          <div className="price">
-            <span className="has-price">125.00</span>
-          </div>
-          <div className="discount">
-            <span className="has-price">0</span>
-          </div>
-          <div className="total">
-            <span className="has-price">125.00</span>
-          </div>
-        </div>
+        ))}
       </div>
     </>
   );
 }
 
-export default CommandeVendeurPage;
+export default CommandeVendeurPage;  //export la fonction 

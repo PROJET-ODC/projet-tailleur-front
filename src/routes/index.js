@@ -20,6 +20,8 @@ import ApproTailleurPage from "../pages/ApproTailleurPage.jsx";
 import DashboardVendeur from "../layouts/DashboardVendeur.jsx";
 import ArticleVendeurPage from "../pages/ArticleVendeurPage.jsx";
 import CommandeVendeurPage from "../pages/CommandeVendeurPage.jsx";
+import AchatCreditTailleurPage from "../pages/AchatCreditTailleurPage.jsx";
+
 
 
 export const routes = [
@@ -96,6 +98,15 @@ export const routes = [
             path: "/tailleur/commande",
             exact: true,
           },
+          {
+            name:"achatCredit",
+            title:"achatCredit",
+            hasSiderLink: true,
+            component: AchatCreditTailleurPage,
+            path: "tailleur/achatCredit",
+            exact: true,
+
+          }
         ],
       },
     ],
