@@ -1,4 +1,4 @@
-import { Navigate, NavLink, Outlet } from "react-router-dom";
+import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 import useScriptLoader from "../hooks/useScriptLoader";
 import scriptUrls from "../utils/scriptsUrl";
 import decodedToken from "../utils/decryptJWT";
@@ -11,22 +11,22 @@ function DashboardTailleur() {
   return (
     <>
       <div className="dashboard-aside !w-[126px]">
-        <a className="dashboard-aside-brand">
+        <Link to="/home" className="dashboard-aside-brand">
           <img
-            className="logo light-image"
-            src="/src/assets/img/vector/logo/friendkit-bold.svg"
+            className="logo light-image !max-h-24 !max-w-16"
+            src="/src/assets/logo1-origin.png"
             width="112"
             height="28"
             alt=""
           />
           <img
             className="logo dark-image"
-            src="/src/assets/img/vector/logo/friendkit-white.svg"
+            src="/src/assets/logo1-origin.png"
             width="112"
             height="28"
             alt=""
           />
-        </a>
+        </Link>
         <div className="dashboard-aside-body">
           <NavLink
             to="/tailleur/articles"
@@ -171,17 +171,9 @@ function DashboardTailleur() {
         </div>
 
         <div className="dashboard-aside-end">
-          <a
-            href="navbar-v1-profile-main.html"
-            className="dashboard-aside-link"
-          >
-            <img
-              className="link-avatar"
-              src="../via.placeholder.com/400x400.png"
-              data-demo-src="/src/assets/img/avatars/jenna.png"
-              alt=""
-            />
-          </a>
+          <Link to="/profile" className="dashboard-aside-link">
+            <img className="link-avatar" src={authFromToken.picture} alt="" />
+          </Link>
         </div>
       </div>
 

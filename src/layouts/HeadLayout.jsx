@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import Navbar from "../components/principal/navbar/Navbar";
 import LeftSideBar from "../components/principal/sidebar/LeftSideBar";
 import RightSideBar from "../components/principal/sidebar/RightSideBar";
@@ -22,22 +22,15 @@ const HeadLayout = () => {
       >
         <div className="container is-fluid">
           <div className="navbar-brand">
-            <a href="index.html" className="navbar-item">
+            <Link to="/home" className="navbar-item">
               <img
-                className="logo light-image"
-                src="assets/img/vector/logo/friendkit-bold.svg"
+                className="logo light-image !max-h-20 !max-w-16"
+                src="/src/assets/logo1-origin.png"
                 width="112"
-                height="28"
+                height="58"
                 alt=""
               />
-              <img
-                className="logo dark-image"
-                src="assets/img/vector/logo/friendkit-white.svg"
-                width="112"
-                height="28"
-                alt=""
-              />
-            </a>
+            </Link>
           </div>
 
           <Navbar />

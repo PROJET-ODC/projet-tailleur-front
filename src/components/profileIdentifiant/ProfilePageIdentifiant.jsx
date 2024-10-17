@@ -1,22 +1,25 @@
-import React from 'react';
-import { useParams } from 'react-router-dom'; // Importez useParams
-import ProfileHeader from './ProfileHeader';
-import ProfileMenu from './ProfileMenu';
-import ProfileTimeline from './ProfileTimeline';
-import Friends from './Friends';
-import Photos from './Photos';
-import useProfileData from './useProfileData'; 
+import { useParams } from "react-router-dom"; // Importez useParams
+import ProfileHeader from "./ProfileHeader";
+import ProfileMenu from "./ProfileMenu";
+import ProfileTimeline from "./ProfileTimeline";
+import Friends from "./Friends";
+import Photos from "./Photos";
+import useProfileData from "./useProfileData";
+import useScriptLoader from "../../hooks/useScriptLoader";
+import scriptUrls from "../../utils/scriptsUrl";
 
 const ProfilePageIdentifiant = () => {
+  useScriptLoader(scriptUrls);
   // Récupérez l'ID du profil depuis les paramètres de l'URL
   const { id } = useParams();
+
   const { profileData, loading, error } = useProfileData(id); // Utilisez l'ID récupéré
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!profileData) return null;
 
-  const { user, compte, tailleur, posts } = profileData;
+  const { compte, posts } = profileData;
 
   return (
     <div className="view-wrapper">
@@ -24,7 +27,7 @@ const ProfilePageIdentifiant = () => {
         <div id="profile-main" className="view-wrap is-headless">
           <div className="columns is-multiline no-margin">
             <div className="column is-paddingless">
-              <ProfileHeader avatar={user.picture} />
+              <ProfileHeader avatar={compte.user.picture} />
               <ProfileMenu />
               <div className="profile-subheader">
                 <div className="subheader-start is-hidden-mobile">
@@ -32,7 +35,7 @@ const ProfilePageIdentifiant = () => {
                   <span>Abonnés</span>
                 </div>
                 <div className="subheader-middle">
-                  <h2>{`${user.firstname} ${user.lastname}`}</h2>
+                  <h2>{`${compte.user.firstname} ${compte.user.lastname}`}</h2>
                   <span>{compte.bio}</span>
                 </div>
                 <div className="subheader-end is-hidden-mobile">
@@ -45,12 +48,15 @@ const ProfilePageIdentifiant = () => {
             </div>
           </div>
           <div className="columns">
-            <div id="profile-timeline-widgets" className="column is-4">
-              {tailleur && <Friends />}
-              {tailleur && <Photos />}
+            <div
+              id="profile-timeline-widgets"
+              className="column is-4"
+            >
+              {compte && <Friends />}
+              {compte && <Photos />}
             </div>
             <div className="column is-8">
-              {tailleur && <ProfileTimeline posts={posts} user={user} />}
+              {compte && <ProfileTimeline posts={posts} user={compte.user} />}
             </div>
           </div>
         </div>

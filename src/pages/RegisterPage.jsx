@@ -8,8 +8,10 @@ import scriptUrls from "../utils/scriptsUrl";
 import useScriptLoader from "../hooks/useScriptLoader";
 import generateUniqueId from "../utils/generateUniqueId";
 import { isAuth } from "../utils/decryptJWT";
+import useRemoveScripts from "../hooks/useRemoveScripts";
 
 function RegisterPage() {
+  useRemoveScripts();
   const navigate = useNavigate();
   const isLoggedIn = isAuth();
 
@@ -36,7 +38,7 @@ function RegisterPage() {
 
   useScriptLoader(scriptUrls);
 
-  const urlUpload = import.meta.env.VITE_API_URL + "/uploadProfile";
+  // const urlUpload = import.meta.env.VITE_API_URL + "/uploadProfile";
 
   const registerFormik = useFormik({
     initialValues: {
@@ -55,7 +57,6 @@ function RegisterPage() {
     onSubmit: async (values) => {
       values.identifiant = generateUniqueId(values.firstname, values.lastname);
       values.picture = profileImage;
-
       const result = await registerApi(values);
       if (result.status == "KO") {
         toast.error(result.message);

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import apiBase from '../../api/apiBase';
+import { useState, useEffect } from "react";
+import apiBase from "../../api/apiBase";
 
 const useProfileData = (id) => {
   const [profileData, setProfileData] = useState(null);
@@ -12,9 +12,11 @@ const useProfileData = (id) => {
         // Utilisation dynamique de l'ID dans la requête
         const response = await apiBase.get(`/client/profile/${id}`);
         setProfileData(response.data);
+        console.log(response.data);
+
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch profile data');
+        setError("Failed to fetch profile data");
         setLoading(false);
       }
     };
