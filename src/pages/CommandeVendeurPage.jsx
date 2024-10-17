@@ -89,4 +89,4 @@ function CommandeVendeurPage() {
   );
 }
 
-export default CommandeVendeurPage;
+export default CommandeVendeurPage;  //export la fonction 
