@@ -36,3 +36,54 @@ export const followApi = async (idFollowedCompte) => {
     });
   return result;
 };
+
+export const getNotificationsByUser = async () => {
+  const result = await apiBase
+    .get(`/client/notifications`)
+
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+export const getAllFollowers = async () => {
+  const result = await apiBase
+    .get(`/client/followers`)
+
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+export const getDiscussionData = async () => {
+  const result = await apiBase
+    .get(`/client/discussions`)
+
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+export const sendMessages = async (data) => {
+  const result = await apiBase
+    .post("/client/sendMessage", data)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};

@@ -2,7 +2,7 @@ import MessageList from "./itemsComponents/sousComponentitems/MessageList";
 
 const EnvelopeIcon = () => {
   return (
-    <div className="navbar-item is-icon drop-trigger"> 
+    <div className="navbar-item is-icon drop-trigger">
       <a className="icon-link is-active" href="#">
         <i data-feather="mail"></i>
         <span className="indicator"></span>
@@ -12,7 +12,7 @@ const EnvelopeIcon = () => {
         <div className="inner">
           <div className="nav-drop-header">
             <span>Messages</span>
-            <a href="messages-inbox.html">Inbox</a>
+            <a href="messages-inbox.htm">Inbox</a>
           </div>
 
           {/* Liste des messages */}

@@ -72,14 +72,14 @@ function RegisterPage() {
   return (
     <div className="signup-wrapper">
       <div className="fake-nav">
-        <a href="index.html" className="logo">
+        <Link to="/" className="logo">
           <img
-            src="assets/img/vector/logo/friendkit-bold.svg"
+            src="/src/assets/logo1-origin.png"
             width="112"
             height="28"
             alt=""
           />
-        </a>
+        </Link>
       </div>
 
       <div className="process-bar-wrap">
@@ -336,7 +336,7 @@ function RegisterPage() {
               </div>
             </div>
 
-            <div className="buttons">
+            <div className="buttons !bg-transparent">
               <a className="button process-button" data-step="step-dot-1">
                 Précédent
               </a>

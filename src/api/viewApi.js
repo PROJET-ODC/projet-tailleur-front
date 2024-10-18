@@ -1,18 +1,14 @@
 // src/api/viewApi.js
 import apiBase from "./apiBase"; // Assurez-vous que le chemin est correct
 
-const recordView = async (postId, accountId) => {
-  const data = { postId, accountId }; // Inclure postId dans l'objet de données à envoyer
-
+const recordView = async (postId) => {
   try {
-    return await apiBase.post(`/client/view`, data); // Appelez l'API pour enregistrer la vue
+    const response = await apiBase.post("/client/view", { postId });
+    return response.data;
   } catch (error) {
-    // Gérer les erreurs
-    throw new Error(
-      error.response?.data?.message ||
-        "Erreur lors de l'enregistrement de la vue"
-    );
+    console.error("Erreur lors de l'enregistrement de la vue :", error.response ? error.response.data : error.message);
   }
 };
+
 
 export { recordView };

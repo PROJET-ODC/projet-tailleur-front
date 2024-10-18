@@ -20,25 +20,23 @@ function AddFriendBlock({ suggestion, handleUpdateFriendState }) {
   };
 
   return (
-    <Link to={`/profile/${suggestion.identifiant}`}>
-      <div className="add-friend-block transition-block">
+    <div className="add-friend-block transition-block">
+      <Link to={`/profile/${suggestion.identifiant}`}>
         <img src={suggestion.user.picture} data-user-popover="9" alt="" />
-        <div className="page-meta">
-          <span>
-            {suggestion.user.firstname + "" + suggestion.user.lastname}
-          </span>
-          <span>{suggestion.identifiant}</span>
-        </div>
-        <div
-          className="add-friend add-transition"
-          onClick={() =>
-            handleFollow(suggestion.id).then(() => handleUpdateFriendState())
-          }
-        >
-          <i data-feather="user-plus"></i>
-        </div>
+      </Link>
+      <div className="page-meta">
+        <span>{suggestion.user.firstname + "" + suggestion.user.lastname}</span>
+        <span>{suggestion.identifiant}</span>
       </div>
-    </Link>
+      <div
+        className="add-friend add-transition"
+        onClick={() =>
+          handleFollow(suggestion.id).then(() => handleUpdateFriendState())
+        }
+      >
+        <i data-feather="user-plus"></i>
+      </div>
+    </div>
   );
 }
 
