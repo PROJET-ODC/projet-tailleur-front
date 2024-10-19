@@ -3,6 +3,8 @@ import Navbar from "../components/principal/navbar/Navbar";
 import LeftSideBar from "../components/principal/sidebar/LeftSideBar";
 import RightSideBar from "../components/principal/sidebar/RightSideBar";
 import { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const MainLayout = () => {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
@@ -232,6 +234,17 @@ const MainLayout = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

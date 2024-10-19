@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import NewTendance from "./NewTendance";
 import { getFeedsInitData } from "../../../api/clients";
 import Stories from "react-insta-stories";
-import { groupAndCalculateDelay } from "../../../utils/others.";
+import { groupAndCalculateDelay } from "../../../utils/others";
 import Modal from "../modal/Modal";
 import { createStatus } from "../../../api/tailleurs";
 import { toast } from "react-toastify";

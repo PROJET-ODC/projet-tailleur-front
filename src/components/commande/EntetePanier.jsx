@@ -1,5 +1,5 @@
 // pour les commandes
-const EntetePanier = ({ total, onPayerClick }) => (
+const EntetePanier = ({ total, showPopup }) => (
     <div className="cart-header">
         <div className="header-inner">
             <h2>Mon Panier</h2>
@@ -7,9 +7,9 @@ const EntetePanier = ({ total, onPayerClick }) => (
                 <div className="buttons">
                     <button
                         className="button is-solid accent-button raised"
-                        onClick={onPayerClick}
+                        onClick={showPopup}
                     >
-                        Payer {total}€
+                        Payer {total}cfa
                     </button>
                 </div>
             </div>

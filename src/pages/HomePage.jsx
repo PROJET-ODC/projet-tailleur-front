@@ -7,6 +7,7 @@ import { getFeedsInitData } from "../api/clients";
 import { useLoaderData } from "react-router-dom";
 
 function HomePage() {
+  // useScriptLoader();
   useScriptLoader(scriptUrls);
   // const data = useLoaderData();
   // console.log(data);
