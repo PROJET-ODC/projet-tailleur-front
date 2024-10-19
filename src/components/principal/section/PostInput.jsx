@@ -13,6 +13,7 @@ function PostInput({ onPostCreated }) {
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -39,6 +40,7 @@ function PostInput({ onPostCreated }) {
     fileInputRef.current.value = ""; // Clear file input
     setContent(""); // Clear content
     setTitle(""); // Clear title
+    setPrice(""); // Clear title
     setUseCredit(false); // Reset useCredit
     setStatus("PUBLIE"); // Reset status to default
     setCategorie("IMAGE"); // Reset category to default
@@ -57,8 +59,10 @@ function PostInput({ onPostCreated }) {
   const handleSubmit = async () => {
     // const response = await UserApi(formData);
     setIsLoading(true); // Start loading when submitting
+    setShowPostModal(false);
     setErrorMessage("");
     setSuccessMessage("");
+
 
     if (!content || !title || files.length === 0) {
       setErrorMessage(
@@ -70,6 +74,7 @@ function PostInput({ onPostCreated }) {
     const formData = new FormData();
     formData.append("content", content);
     formData.append("title", title);
+    formData.append("price", price);
     formData.append("useCredit", useCredit);
     formData.append("status", status);
     formData.append("categorie", categorie);
@@ -83,16 +88,22 @@ function PostInput({ onPostCreated }) {
     // Appeler l'API pour poster les données
     const response = await UserApi(formData);
 
+    
+
     if (response.status === "OK") {
+
       setSuccessMessage("Post créé avec succès !");
-      onPostCreated(response.data.post);
       // Réinitialiser les champs du formulaire si nécessaire
       handleClearAll();
       setContent("");
       setTitle("");
+      setPrice("");
       setUseCredit(false);
       setStatus("PUBLIE");
       setCategorie("IMAGE");
+      onPostCreated(response)
+      
+
     } else {
       setErrorMessage(response.message || "Une erreur est survenue.");
     }
@@ -234,6 +245,17 @@ function PostInput({ onPostCreated }) {
                       className="input is-sm no-radius is-fade"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Entrez le titre de votre produit"
+                    />
+                  </div>
+                  <div className="control">
+                    <label htmlFor="title">prix</label>
+                    <input
+                      type="text"
+                      id="title"
+                      className="input is-sm no-radius is-fade"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
                       placeholder="Entrez le titre de votre produit"
                     />
                   </div>
@@ -438,8 +460,7 @@ function PostInput({ onPostCreated }) {
               <button
                 type="button"
                 className="button is-solid accent-button"
-                onClick={handleSubmit}
-              >
+                onClick={handleSubmit} >
                 Publier
               </button>
             </div>
