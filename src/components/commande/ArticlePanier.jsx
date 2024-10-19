@@ -1,32 +1,53 @@
-import React from 'react';
+import { FaTrash } from "react-icons/fa";
+
 // pour les commandes
 const ArticlePanier = ({ article, mettreAJourQuantite }) => (
-  <div className="flex-table-item">
-    <div className="product">
-      <img src={article.img} alt={article.nom} />
-      <span className="product-name">{article.nom}</span>
+  <div className="flex-table-item max-h-[80px] ">
+    <div className="discount">
+      <img src={article.post.files} alt={article.post.title}
+       style={{
+        maxHeight: "80px",
+        width: "100%",
+      }}
+className="!object-contain !object-top" />
     </div>
-    <div className="quantity has-spinner" style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="discount">
+      <span className="product-name">{article.post.title}</span>
+    </div>
+    <div className="discount">
+      <span className={`product-name w-[50px] h-[50px] `} style={{backgroundColor:`${article.color}`}}></span>
+
+    </div>
+    <div className="discount">
+      <span className="product-name">{article.taille}</span>
+    </div>
+    <div className="discount has-spinner" style={{ display: 'flex', alignItems: 'center' }}>
       <div className="spinner">
-        <button className="remove" onClick={() => mettreAJourQuantite(article.id, Math.max(0, article.quantite - 1))}>
+        <button className="remove" onClick={() => mettreAJourQuantite(article.post.id, Math.max(0, parseInt(article.quantity) - 1))}>
           <i data-feather="minus"></i>
         </button>
-        <span className="value">{article.quantite}</span>
-        <button className="add" onClick={() => mettreAJourQuantite(article.id, article.quantite + 1)}>
+        <span className="value">{article.quantity}</span>
+        <button className="add" onClick={() => mettreAJourQuantite(article.post.id, Math.max(0, parseInt(article.quantity) + 1))}>
           <i data-feather="plus"></i>
         </button>
       </div>
     </div>
-    <div className="price">
-      <span className="has-price">{article.prix.toFixed(2)}€</span>
+    <div className="discount">
+    <span className="product-name">{article.post.price}</span>
+    </div>
+    
+   
+  
+    <div className="discount">
+      <span className="has-price">{(article.post.price * article.quantity)}fcfa</span>
     </div>
     <div className="discount">
-      <span className="has-price">0,00€</span>
-    </div>
-    <div className="total">
-      <span className="has-price">{(article.prix * article.quantite).toFixed(2)}€</span>
+      <button>
+        <FaTrash className="text-red-600"/>
+      </button>
     </div>
   </div>
+  
 );
 
 export default ArticlePanier;

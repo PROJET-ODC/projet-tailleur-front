@@ -13,7 +13,7 @@ import {
   getMessageByUser,
   sendMessages,
 } from "../../api/clients";
-import { formatMessages, removeInverseDuplicates } from "../../utils/others.";
+import { formatMessages, removeInverseDuplicates } from "../../utils/others";
 import decodedToken from "../../utils/decryptJWT";
 import { toast } from "react-toastify";
 

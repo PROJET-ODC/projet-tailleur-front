@@ -39,6 +39,7 @@ function LoginPage() {
       } else {
         toast.success(result.message);
 
+        localStorage.setItem("panier", JSON.stringify([]));
         localStorage.setItem("token", result.token);
         console.log(localStorage.getItem("token"));
 
