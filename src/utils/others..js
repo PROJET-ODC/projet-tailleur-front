@@ -1,5 +1,7 @@
 const groupAndCalculateDelay = (data) => {
-  const groupedData = data.reduce((acc, current) => {
+  const groupedData = [];
+  if(data){
+   groupedData = data.reduce((acc, current) => {
     const {
       tailleur: {
         compte: { bio, user: { firstname, lastname, picture, city } = {} } = {},
@@ -51,7 +53,7 @@ const groupAndCalculateDelay = (data) => {
 
     return acc;
   }, {});
-
+}
   return Object.values(groupedData);
 };
 

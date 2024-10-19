@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { getPosts, likePost, addComment } from "../api/postApi"; // Assurez-vous d'importer la fonction likePost
+import { getTaille} from "../api/clients"; // Assurez-vous d'importer la fonction likePost
+
 import CommentsSection from "./CommentsSection";
 import Modal from "./SharePage";
 import PostInput from "../components/principal/section/PostInput";
 import decodedToken from "../utils/decryptJWT";
 import { recordView } from "../api/viewApi"; // Importez l'API pour enregistrer la vue
+import InputColor from 'react-input-color';
+
 
 function PostPage() {
   const [posts, setPosts] = useState([]);
@@ -20,6 +24,10 @@ function PostPage() {
   const [comment, setComment] = useState(""); // Ajoutez cette ligne
   const [isShopPopupOpen, setIsShopPopupOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [color, setColor] = useState({});
+  const [taille, setTaille] = useState(null);
+  const [card, setCard] = useState({color: '', taille: ' ', quantity: '',id_post:''});
+
 
   const videoFormats = [".mp4", ".webm", ".ogg", ".avi", ".mov", ".mkv"]; // Ajoutez d'autres formats si nécessaire
 
@@ -55,7 +63,12 @@ function PostPage() {
     const fetchPosts = async () => {
       try {
         const postsData = await getPosts(); // Récupérer les posts depuis l'API
-        const postsWithLikes = postsData.posts.map((post) => {
+        const tailleData = await getTaille(); 
+
+        let postsWithLikes= null;
+        if(postsData.posts) {
+          setTaille(tailleData.taille)
+          postsWithLikes = postsData.posts.map((post) => {
           // Vérifiez si l'utilisateur connecté a liké ce post
           const hasLiked = post.likes.some(
             (like) => like.compte_id === accountId
@@ -67,6 +80,7 @@ function PostPage() {
             comments: post.comments || [], // Assurez-vous que les commentaires sont récupérés
           };
         });
+      }
         setPosts(postsWithLikes);
         console.log(postsData);
       } catch (error) {
@@ -179,6 +193,25 @@ function PostPage() {
       console.error("Erreur lors de l'ajout du commentaire :", error);
     }
   };
+  const handleChangeColor = (value) => {
+    setCard((prevState) => ({ ...prevState, color: value }));
+
+    console.log("couleur",value);
+
+  }
+  const handleTaille = (value) => {
+    setCard((prevState) => ({ ...prevState, taille: value }));
+    console.log("taillle",value);
+
+  }
+  const handleAddQuantity = (value) => {
+    setCard((prevState) => ({ ...prevState, quantity: value }));
+    console.log("quantité",value);
+
+  }
+
+
+
 
   const toggleComments = (postId) => {
     setShowComments((prevState) => ({
@@ -232,20 +265,17 @@ function PostPage() {
     console.log("Produit ajouté au panier :", productData);
   };
 
-  const handleAddToCart = (event) => {
-    event.preventDefault();
-    const size = event.target.size.value;
-    const color = event.target.color.value;
-    const quantity = event.target.quantity.value;
-
+  const handleAddToCart = (value) => {
+  
     const productData = {
       id: selectedProduct.id,
-      name: selectedProduct.name,
-      size,
-      color,
-      quantity,
+      name: selectedProduct.title,
+      color: card.color,
+      taille: card.taille,
+      quantity: card.quantity,
     };
 
+    console.log(productData);
     // Ajoutez le produit au panier
     addToCart(productData);
 
@@ -258,13 +288,20 @@ function PostPage() {
 
   console.log(posts);
 
+  const handleNewPost= (data) => {
+
+    console.log("data",data);
+    setPosts([ data.post,...posts]);
+  }
+
   return (
     <>
       <div id="compose-card" className="card is-new-content">
-        <PostInput />
+        <PostInput onPostCreated={handleNewPost} />
       </div>
 
-      {posts.map((post) => (
+
+      {posts && posts.map((post) => (
         <div key={post.id} id={`feed-post-${post.id}`} className="card is-post">
           <div className="content-wrap">
             <div className="card-heading">
@@ -312,6 +349,8 @@ function PostPage() {
             <div className="card-body">
               <div className="post-text">
                 <p>{post.content}</p>
+                <p>{post.title}</p>
+                <p>{post.price}</p>
               </div>
               <div className="post-image">
                 {videoFormats.some(
@@ -429,65 +468,124 @@ function PostPage() {
 
           {/* //card shop */}
           {isShopPopupOpen && selectedProduct && (
-            <div className="shop-popup">
+            <div className="shop-popup bg-[rgba(22,16,16,0.1)]">
               <div className="popup-contents">
-                <button onClick={closeShopPopup} className="close-popup">
+                <button onClick={closeShopPopup} className="close-popup !text-white !z-[100]">
                   X
                 </button>
-                <div className="product-cards">
-                  <div className="product-image imgshop">
-                    <img src={selectedProduct.files} alt="" />
-                  </div>
-                  <div className="product-info">
-                    <h3>{selectedProduct.name}</h3>
-                    <p>robe</p>
-                  </div>
-                  <form className="product-form" onSubmit={handleAddToCart}>
-                    <div className="size-selection">
-                      <label htmlFor="size">Choisissez une taille:</label>
-                      <select id="size" name="size" required>
-                        <option value="">Sélectionnez une taille</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="XL">XL</option>
-                      </select>
+              <div id="product-quickview" className="product-quickview is-large">
+            <div className="modal-background quickview-background !bg-transparent"></div>
+            <div className="modal-content">
+                <div className="card">
+                   
+                    <div className="left">
+                        <div className="product-image is-active">
+                            <img src={selectedProduct.files} alt="" />
+                        </div>
                     </div>
-                    <div className="color-selection">
-                      <label htmlFor="color">Choisissez une couleur:</label>
-                      <select id="color" name="color" required>
-                        <option value="">Sélectionnez une couleur</option>
-                        <option value="rouge">Rouge</option>
-                        <option value="bleu">Bleu</option>
-                        <option value="vert">Vert</option>
-                        <option value="noir">Noir</option>
-                      </select>
-                    </div>
-                    <div className="quantity-selection">
-                      <label htmlFor="quantity">Quantité:</label>
-                      <input
-                        type="number"
-                        id="quantity"
-                        name="quantity"
-                        min="1"
-                        max="100"
-                        defaultValue="1"
-                        required
-                      />
-                    </div>
-                    <div className="product-actions">
-                      <button className="buttone btn is-solid accent-button raised">
-                        1200 f
-                      </button>
-                      <button
-                        type="submit"
-                        className="buttons is-solid accent-button raised"
-                      >
-                        <i className="mdi mdi-cart-plus"></i>
-                      </button>
-                    </div>
-                  </form>
+                    <div className="right">
+                        <div className="header">
+                            <div className="product-info">
+                                <h3 id="quickview-name">{selectedProduct.title} </h3>
+                                <p>{selectedProduct.title} </p>
+                            </div>
+                            <div id="quickview-price" className="price">{selectedProduct.price} </div>
+                        </div>
+                        <div className="properties">
+                            
+                         <div  >
+
+                    
+                    <InputColor
+                      initialValue="#5e72e4"
+                      onChange={(value) => {
+                        setColor(value); 
+                        handleChangeColor(value);  
+                      }}
+                      placement="right"
+                    />
+                    <div
+                      style={{
+                        width: 50,
+                        height: 50,
+                        marginTop: 20,
+                        backgroundColor: color.rgba,
+                      }}
+                    />
                 </div>
-              </div>
+
+                            
+                            <div id="size-properties" className="property-group">
+                                <h4>Sizes</h4>
+                                <div className="property-box is-sizes">
+                                  {taille && taille.map( (size) =>  {
+                                    return (
+                                      <div className="property-item">
+                                        <input type="radio" name="quickview_sizes" value={size.libelle} id="S" onChange={(e) => {handleTaille(e.target.value)} } />
+                                        <div className="item-inner">
+                                            <span className="size-label">{size.libelle}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    )
+                                  }
+
+                                  )}
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div className="quickview-description content has-slimscroll">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.Scrupulum,
+                                inquam, abeunti; Ubi ut eam caperet aut quando? Erat enim Polemonis.
+                                Utram tandem linguam nescio? Duo Reges: constructio interrete.
+                            </p>
+
+                            <p>
+                                Alio modo Non est igitur voluptas bonum. Estne, quaeso, inquam,
+                                sitienti in bibendo voluptas? Erat enim Polemonis. Minime vero,
+                                inquit ille, consentit. Hic ambiguo ludimur. Numquam facies. Ea
+                                possunt paria non esse.
+                            </p>
+
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scrupulum,
+                                inquam, abeunti; Ubi ut eam caperet aut quando? Erat enim Polemonis.
+                                Utram tandem linguam nescio? Duo Reges: constructio interrete.
+                            </p>
+                        </div>
+
+                        <div className="quickview-controls">
+                            <div className="spinnere">
+                                <button className="remove">
+
+                                </button>
+                                <input
+                                  onChange={(e) => {handleAddQuantity(e.target.value)} }
+
+                                type="number"
+                                id="quantity"
+                                name="quantity"
+                                min="1"
+                                max="100"
+                                defaultValue="1"
+                                required
+                              />                                <button className="add">
+                                </button>
+                                <input className="spinner-input" type="hidden" value="1" />
+                            </div>
+                            <button  type="submit" onClick={(value) => handleAddToCart(value)} className="button is-solid accent-button raised">
+                                <span>Add To Cart</span>
+                                <var id="quickview-button-price">27.00</var>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
             </div>
           )}
         </div>

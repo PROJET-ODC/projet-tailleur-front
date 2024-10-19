@@ -36,7 +36,7 @@ function FriendCard() {
         <h4>Suggestion d'amis</h4>
       </div>
       <div className="card-body no-padding">
-        {suggestions.length > 0 ? (
+        { suggestions && suggestions.length > 0 ? (
           suggestions.map((suggestion) => (
             <AddFriendBlock
               suggestion={suggestion}

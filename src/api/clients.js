@@ -76,6 +76,19 @@ export const getDiscussionData = async () => {
   return result;
 };
 
+export const getTaille = async() => {
+  const result = await apiBase
+    .get(`/client/taille`)
+
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
 export const sendMessages = async (data) => {
   const result = await apiBase
     .post("/client/sendMessage", data)
