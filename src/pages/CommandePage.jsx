@@ -59,9 +59,24 @@ const CommandePage = () => {
     localStorage.setItem("panier", JSON.stringify(updatePanier));
   };
 
-  const supprimerArticle = (value) => {
-    console.log(value);
+  // const supprimerArticle = (value) => {
+  //   console.log(value);
+  // };
+  
+  const supprimerArticle = (id_post) => {
+    const panierActu = JSON.parse(localStorage.getItem("panier"));
+    if (!panierActu) return;
+
+    // Filtrer l'article à supprimer
+    const updatedPanier = panierActu.filter(article => article.post.id !== id_post);
+
+    // Mettre à jour le localStorage
+    localStorage.setItem("panier", JSON.stringify(updatedPanier));
+
+    // Mettre à jour l'état du panier
+    setPanier(groupByTailleurId(updatedPanier));
   };
+
   const showPopup = (tailleur_id) => {
     setShowPopupPaiement((pr) => !pr);
     setPopUpTotal(calculerTotal(tailleur_id));

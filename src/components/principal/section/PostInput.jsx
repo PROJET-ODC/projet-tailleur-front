@@ -56,6 +56,12 @@ function PostInput({ onPostCreated }) {
     fileInputRef.current.click();
   };
 
+  // Fonction pour valider le prix
+  const isPriceValid = (price) => {
+    const parsedPrice = parseFloat(price);
+    return !isNaN(parsedPrice) && parsedPrice > 0 && Number.isInteger(parsedPrice);
+  };
+
   const handleSubmit = async () => {
     // const response = await UserApi(formData);
     setIsLoading(true); // Start loading when submitting
@@ -68,6 +74,12 @@ function PostInput({ onPostCreated }) {
       setErrorMessage(
         "Tous les champs doivent être remplis, y compris le fichier."
       );
+      return;
+    }
+
+    // Validation du prix
+    if (!isPriceValid(price)) {
+      setErrorMessage("Le prix doit être un nombre entier positif et ne doit pas etre vide.");
       return;
     }
 
@@ -88,7 +100,8 @@ function PostInput({ onPostCreated }) {
     // Appeler l'API pour poster les données
     const response = await UserApi(formData);
 
-    
+
+
 
     if (response.status === "OK") {
 
@@ -102,7 +115,6 @@ function PostInput({ onPostCreated }) {
       setStatus("PUBLIE");
       setCategorie("IMAGE");
       onPostCreated(response)
-      
 
     } else {
       setErrorMessage(response.message || "Une erreur est survenue.");
@@ -191,9 +203,8 @@ function PostInput({ onPostCreated }) {
       {/* Modal */}
       <div
         id="albums-modal"
-        className={`modal albums-modal is-xxl has-light-bg ${
-          showPostModal ? " is-active" : ""
-        }`}
+        className={`modal albums-modal is-xxl has-light-bg ${showPostModal ? " is-active" : ""
+          }`}
       >
         <div className="modal-background"></div>
         <div className="modal-content">
@@ -256,7 +267,7 @@ function PostInput({ onPostCreated }) {
                       className="input is-sm no-radius is-fade"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      placeholder="Entrez le titre de votre produit"
+                      placeholder="Entrez le prix de votre produit"
                     />
                   </div>
 
@@ -401,62 +412,13 @@ function PostInput({ onPostCreated }) {
             </div>
 
             <div className="card-footer">
-              {/* Menu Dropdown */}
               <div className="dropdown is-up is-spaced is-modern is-neutral is-right dropdown-trigger">
-                <div>
-                  <button className="button" aria-haspopup="true">
-                    <i className="main-icon" data-feather="smile"></i>
-                    <span>Amis</span>
-                    <i className="caret" data-feather="chevron-down"></i>
+                <div className="close-wrap">
+                  <button className="button close-modal" aria-haspopup="true">
+                    <span>Annuler</span>
                   </button>
                 </div>
-                <div className="dropdown-menu" role="menu">
-                  <div className="dropdown-content">
-                    <a href="#" className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="globe"></i>
-                        <div className="media-content">
-                          <h3>Public</h3>
-                          <small>
-                            Tout le monde peut voir cette publication.
-                          </small>
-                        </div>
-                      </div>
-                    </a>
-                    <a className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="users"></i>
-                        <div className="media-content">
-                          <h3>Amies</h3>
-                          <small>
-                            Seuls les amis peuvent voir cette publication.
-                          </small>
-                        </div>
-                      </div>
-                    </a>
-                    <a className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="user"></i>
-                        <div className="media-content">
-                          <h3>Amis spécifiques</h3>
-                          <small>Ne le montre pas à certains amis.</small>
-                        </div>
-                      </div>
-                    </a>
-                    <hr className="dropdown-divider" />
-                    <a className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="lock"></i>
-                        <div className="media-content">
-                          <h3>Seulement moi</h3>
-                          <small>Seul moi peut voir cette publication.</small>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
               </div>
-
               <button
                 type="button"
                 className="button is-solid accent-button"
