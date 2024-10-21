@@ -76,7 +76,7 @@ export const getDiscussionData = async () => {
   return result;
 };
 
-export const getTaille = async() => {
+export const getTaille = async () => {
   const result = await apiBase
     .get(`/client/taille`)
 
@@ -92,6 +92,30 @@ export const getTaille = async() => {
 export const sendMessages = async (data) => {
   const result = await apiBase
     .post("/client/sendMessage", data)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+export const updateLikeStatus = async (data) => {
+  const result = await apiBase
+    .post("/client/statuslikes", data)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+export const getAllLikesStatus = async (status_id) => {
+  const result = await apiBase
+    .get(`/client/statuslikes/${status_id}`)
     .then((response) => {
       return response.data;
     })
