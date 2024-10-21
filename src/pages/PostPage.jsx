@@ -9,6 +9,8 @@ import decodedToken from "../utils/decryptJWT";
 import { recordView } from "../api/viewApi"; // Importez l'API pour enregistrer la vue
 import InputColor from "react-input-color";
 import { toast } from "react-toastify";
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 function PostPage() { // Recevez posts en prop
   const [posts, setPosts] = useState([]);
@@ -35,6 +37,8 @@ function PostPage() { // Recevez posts en prop
 
   const [cardStorage, setCardStorage] = useState([]); // État pour le <panier></panier>
   const [delte, setDelte] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
 
   const videoFormats = [".mp4", ".webm", ".ogg", ".avi", ".mov", ".mkv"]; // Ajoutez d'autres formats si nécessaire
 
@@ -70,6 +74,9 @@ function PostPage() { // Recevez posts en prop
     const fetchPosts = async () => {
       try {
         const postsData = await getPosts(); // Récupérer les posts depuis l'API
+        if (postsData.posts.length === 0) {
+          setHasMore(false); // Pas plus de posts à charger
+        }
         const tailleData = await getTaille();
 /*         const delete= await deletePosts();
  */
@@ -89,7 +96,7 @@ function PostPage() { // Recevez posts en prop
             };
           });
         }
-        setPosts(postsWithLikes);
+        setPosts((prevPosts) => [...prevPosts, ...postsWithLikes]); // Ajouter les nouveaux posts
         console.log(postsData);
       } catch (error) {
         console.error("Erreur lors de la récupération des posts:", error);
@@ -101,7 +108,18 @@ function PostPage() { // Recevez posts en prop
     if (accountId) {
       fetchPosts(); // Exécute la récupération des posts après que l'accountId a été défini
     }
-  }, [accountId]); // Déclenchez cet effet après que l'ID du compte est défini
+  }, [accountId, page]); // Dépendre également de la page
+
+
+  const loadMorePosts = () => {
+    if (hasMore) {
+      setPage((prevPage) => prevPage + 1); // Incrémenter la page
+    }
+  };
+
+  if (loading) {
+    return <div>Chargement des posts...</div>;
+  }
 
   const incrementViewCount = async (postId) => {
     console.log(
@@ -369,6 +387,15 @@ function PostPage() { // Recevez posts en prop
         <PostInput onPostCreated={handleNewPost} />
       </div>
 
+
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={loadMorePosts}
+        hasMore={hasMore}
+        loader={<h4>Chargement...</h4>}
+        endMessage={<p style={{ textAlign: 'center' }}>Vous avez tout vu !</p>}
+      >
+
       {posts &&
         posts.map((post) => (
           <div
@@ -420,9 +447,9 @@ function PostPage() { // Recevez posts en prop
                       <a className="popup-item " onClick={() => handleFavoriteClick(post.id)}>
                         <h3>Favorite
                         <i
-      className={`mdi mdi-bookmark bouncy ${post.favorite ? "favorited" : "not-favorited"}`}
-      style={{ color: post.favorite ? "gold" : "tan" }} // Changez la couleur ici
-    ></i>                        </h3> <br />
+                          className={`mdi mdi-bookmark bouncy ${post.favorite ? "favorited" : "not-favorited"}`}
+                          style={{ color: post.favorite ? "gold" : "tan" }} // Changez la couleur ici
+                        ></i>                        </h3> <br />
                       </a>
                       <hr />
                       <a href="#" className="popup-item">
@@ -432,7 +459,6 @@ function PostPage() { // Recevez posts en prop
                   </div>
                 )}
               </div>
-
               <div className="card-body">
                 <div className="post-text">
                   <p>{post.content}</p>
@@ -694,6 +720,8 @@ function PostPage() { // Recevez posts en prop
             )}
           </div>
         ))}
+              </InfiniteScroll>
+
 
       {/* share */}
       <Modal
