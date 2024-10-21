@@ -3,8 +3,10 @@ import { UserApi } from "../../../api/UserApi";
 import { FaPhotoVideo } from "react-icons/fa";
 import InputColor from "react-input-color";
 import { toast } from "react-toastify";
+import decodedToken from "../../../utils/decryptJWT";
 
 function PostInput({ onPostCreated }) {
+  const authFromToken = decodedToken();
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +63,9 @@ function PostInput({ onPostCreated }) {
   // Fonction pour valider le prix
   const isPriceValid = (price) => {
     const parsedPrice = parseFloat(price);
-    return !isNaN(parsedPrice) && parsedPrice > 0 && Number.isInteger(parsedPrice);
+    return (
+      !isNaN(parsedPrice) && parsedPrice > 0 && Number.isInteger(parsedPrice)
+    );
   };
 
   const handleSubmit = async () => {
@@ -70,7 +74,6 @@ function PostInput({ onPostCreated }) {
     setShowPostModal(false);
     setErrorMessage("");
     setSuccessMessage("");
-
 
     if (!content || !title || files.length === 0) {
       setErrorMessage(
@@ -81,7 +84,9 @@ function PostInput({ onPostCreated }) {
 
     // Validation du prix
     if (!isPriceValid(price)) {
-      setErrorMessage("Le prix doit être un nombre entier positif et ne doit pas etre vide.");
+      setErrorMessage(
+        "Le prix doit être un nombre entier positif et ne doit pas etre vide."
+      );
       return;
     }
 
@@ -102,11 +107,7 @@ function PostInput({ onPostCreated }) {
     // Appeler l'API pour poster les données
     const response = await UserApi(formData);
 
-
-
-
     if (response.status === "OK") {
-
       // Réinitialiser les champs du formulaire si nécessaire
       handleClearAll();
       setContent("");
@@ -115,23 +116,25 @@ function PostInput({ onPostCreated }) {
       setUseCredit(false);
       setStatus("PUBLIE");
       setCategorie("IMAGE");
-      onPostCreated(response)
+      onPostCreated(response);
 
       toast.success("Post crée avec succès !");
-
     } else {
       setErrorMessage(response.message || "Une erreur est survenue.");
       toast.error("echec de l'ajout du post  !");
-
     }
-
   };
 
   // onClick={handlePostClick}
 
   return (
     <>
-      <div className="tabs-wrapper cursor-pointer" onClick={handlePostClick}>
+      <div
+        className={`tabs-wrapper cursor-pointer ${
+          authFromToken.role == "tailleur" ? "" : "hidden"
+        }`}
+        onClick={handlePostClick}
+      >
         <div className="tabs is-boxed is-fullwidth">
           <ul>
             <li className="w-full">
@@ -209,8 +212,9 @@ function PostInput({ onPostCreated }) {
       {/* Modal */}
       <div
         id="albums-modal"
-        className={`modal albums-modal is-xxl has-light-bg ${showPostModal ? " is-active" : ""
-          }`}
+        className={`modal albums-modal is-xxl has-light-bg ${
+          showPostModal ? " is-active" : ""
+        }`}
       >
         <div className="modal-background"></div>
         <div className="modal-content">
@@ -419,7 +423,6 @@ function PostInput({ onPostCreated }) {
 
             <div className="card-footer">
               <div className="dropdown is-up is-spaced is-modern is-neutral is-right dropdown-trigger">
-
                 <div>
                   <button className="button" aria-haspopup="true">
                     <span onClick={handlePostClick}>Annuler</span>
@@ -429,7 +432,8 @@ function PostInput({ onPostCreated }) {
               <button
                 type="button"
                 className="button is-solid accent-button"
-                onClick={handleSubmit} >
+                onClick={handleSubmit}
+              >
                 Publier
               </button>
             </div>

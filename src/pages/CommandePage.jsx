@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import EntetePanier from "../components/commande/EntetePanier";
 import ArticlePanier from "../components/commande/ArticlePanier";
 import PopupPaiement from "../components/commande/PopupPaiement";
@@ -40,10 +40,13 @@ const CommandePage = () => {
   }, []);
 
   const calculerTotal = (tailleur_id) => {
-    const tailleurPanier = panier.find(group => group[0].post.tailleur_id === tailleur_id);
+    const tailleurPanier = panier.find(
+      (group) => group[0].post.tailleur_id === tailleur_id
+    );
     if (tailleurPanier) {
       return tailleurPanier.reduce(
-        (total, article) => total + parseInt(article.post.price) * parseInt(article.quantity),
+        (total, article) =>
+          total + parseInt(article.post.price) * parseInt(article.quantity),
         0
       );
     }
@@ -54,7 +57,7 @@ const CommandePage = () => {
     const panierActu = JSON.parse(localStorage.getItem("panier"));
     if (!panierActu) return;
 
-    const updatePanier = panierActu.map((article) => 
+    const updatePanier = panierActu.map((article) =>
       article.post.id === id_post ? { ...article, quantity } : article
     );
 
@@ -67,7 +70,9 @@ const CommandePage = () => {
     const panierActu = JSON.parse(localStorage.getItem("panier"));
     if (!panierActu) return;
 
-    const updatePanier = panierActu.filter((article) => article.post.id !== id_post);
+    const updatePanier = panierActu.filter(
+      (article) => article.post.id !== id_post
+    );
 
     const combinedArticles = groupAndCombineArticles(updatePanier);
     setPanier(groupByTailleurId(combinedArticles));
@@ -101,24 +106,19 @@ const CommandePage = () => {
     localStorage.setItem("panier", JSON.stringify(updatePanier));
   };
 
-  // const supprimerArticle = (value) => {
-  //   console.log(value);
+  // const supprimerArticle = (id_post) => {
+  //   const panierActu = JSON.parse(localStorage.getItem("panier"));
+  //   if (!panierActu) return;
+
+  //   // Filtrer l'article à supprimer
+  //   const updatedPanier = panierActu.filter(article => article.post.id !== id_post);
+
+  //   // Mettre à jour le localStorage
+  //   localStorage.setItem("panier", JSON.stringify(updatedPanier));
+
+  //   // Mettre à jour l'état du panier
+  //   setPanier(groupByTailleurId(updatedPanier));
   // };
-  
-  const supprimerArticle = (id_post) => {
-    const panierActu = JSON.parse(localStorage.getItem("panier"));
-    if (!panierActu) return;
-
-    // Filtrer l'article à supprimer
-    const updatedPanier = panierActu.filter(article => article.post.id !== id_post);
-
-    // Mettre à jour le localStorage
-    localStorage.setItem("panier", JSON.stringify(updatedPanier));
-
-    // Mettre à jour l'état du panier
-    setPanier(groupByTailleurId(updatedPanier));
-  };
-
 
   const decrementerQuantite = (id_post) => {
     const panierActu = JSON.parse(localStorage.getItem("panier"));
@@ -141,57 +141,68 @@ const CommandePage = () => {
     <div className="is-white" style={{ width: "100%", padding: "20px" }}>
       <div className="view-wrapper">
         <div className="shop-wrapper">
-          <div className="cart-container" style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            {panier && Object.values(panier).map((commandeByTailleur, index) => (
-              <div key={index}>
-                <h2>
-                  Tailleur : {commandeByTailleur[0].post.user.firstname}
-                </h2>
+          <div
+            className="cart-container"
+            style={{ maxWidth: "1200px", margin: "0 auto" }}
+          >
+            {panier &&
+              Object.values(panier).map((commandeByTailleur, index) => (
+                <div key={index}>
+                  <h2>
+                    Tailleur : {commandeByTailleur[0].post.user.firstname}
+                  </h2>
 
-                <EntetePanier
-                  showPopup={() => showPopup(commandeByTailleur[0].post.tailleur_id)}
-                />
+                  <EntetePanier
+                    showPopup={() =>
+                      showPopup(commandeByTailleur[0].post.tailleur_id)
+                    }
+                  />
 
-                <div className="cart-content">
-                  <div className="columns">
-                    <div className="column is-8" style={{ width: "100%" }}>
-                      <div className="flex-table">
-                        <div className="flex-table-header">
-                          <span className="discount">Files</span>
-                          <span className="discount">Libelle</span>
-                          <span className="discount">Color</span>
-                          <span className="discount">Taille</span>
-                          <span className="discount">Quantité</span>
-                          <span className="discount">Prix</span>
-                          <span className="discount">Total</span>
-                          <span className="discount">Actions</span>
+                  <div className="cart-content">
+                    <div className="columns">
+                      <div className="column is-8" style={{ width: "100%" }}>
+                        <div className="flex-table">
+                          <div className="flex-table-header">
+                            <span className="discount">Files</span>
+                            <span className="discount">Libelle</span>
+                            <span className="discount">Color</span>
+                            <span className="discount">Taille</span>
+                            <span className="discount">Quantité</span>
+                            <span className="discount">Prix</span>
+                            <span className="discount">Total</span>
+                            <span className="discount">Actions</span>
+                          </div>
+
+                          {commandeByTailleur.map((article) => (
+                            <ArticlePanier
+                              key={article.post.id}
+                              article={article}
+                              mettreAJourQuantite={mettreAJourQuantite}
+                              supprimerArticle={supprimerArticle}
+                              incrementerQuantite={incrementerQuantite}
+                              decrementerQuantite={decrementerQuantite}
+                            />
+                          ))}
                         </div>
-
-                        {commandeByTailleur.map((article) => (
-                          <ArticlePanier
-                            key={article.post.id}
-                            article={article}
-                            mettreAJourQuantite={mettreAJourQuantite}
-                            supprimerArticle={supprimerArticle}
-                            incrementerQuantite={incrementerQuantite}
-                            decrementerQuantite={decrementerQuantite}
-                          />
-                        ))}
                       </div>
                     </div>
-                  </div>
-                  <div className="!text-end button !float-right mt-[-20px] !bg-slate-100">
-                    <span>Total : </span>
-                    <span>{calculerTotal(commandeByTailleur[0].post.tailleur_id)} fcfa</span>
+                    <div className="!text-end button !float-right mt-[-20px] !bg-slate-100">
+                      <span>Total : </span>
+                      <span>
+                        {calculerTotal(commandeByTailleur[0].post.tailleur_id)}{" "}
+                        fcfa
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
             {showPopupPaiement && (
-              <PopupPaiement 
-                showPopup={closePopup} 
-                total={popUpTotal}  
-                panier={panier.find(group => group[0].post.tailleur_id === currentTailleurId)}
+              <PopupPaiement
+                showPopup={closePopup}
+                total={popUpTotal}
+                panier={panier.find(
+                  (group) => group[0].post.tailleur_id === currentTailleurId
+                )}
               />
             )}
           </div>

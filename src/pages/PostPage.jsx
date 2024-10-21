@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { getPosts, likePost, addComment,Deletepost,favoritePost } from "../api/postApi"; // Assurez-vous d'importer la fonction likePost
+import {
+  getPosts,
+  likePost,
+  addComment,
+  Deletepost,
+  favoritePost,
+} from "../api/postApi"; // Assurez-vous d'importer la fonction likePost
 import { getTaille } from "../api/clients"; // Assurez-vous d'importer la fonction likePost
 
 import CommentsSection from "./CommentsSection";
@@ -10,7 +16,8 @@ import { recordView } from "../api/viewApi"; // Importez l'API pour enregistrer 
 import InputColor from "react-input-color";
 import { toast } from "react-toastify";
 
-function PostPage() { // Recevez posts en prop
+function PostPage() {
+  // Recevez posts en prop
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showComments, setShowComments] = useState({});
@@ -18,7 +25,7 @@ function PostPage() { // Recevez posts en prop
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [popupVisible, setPopupVisible] = useState({}); // État pour gérer la visibilité du popup
-  const [accountId, setAccountId] = useState(null); // État pour stocker l'ID du compte 
+  const [accountId, setAccountId] = useState(null); // État pour stocker l'ID du compte
   const [nameuser, setName] = useState(null); // État pour stocker l'ID du compte
   const [userIcon, setUserIcon] = useState(""); // État pour stocker l'icône de l'utilisateur
   const [comment, setComment] = useState(""); // Ajoutez cette ligne
@@ -70,17 +77,26 @@ function PostPage() { // Recevez posts en prop
     const fetchPosts = async () => {
       try {
         const postsData = await getPosts(); // Récupérer les posts depuis l'API
+        console.log("allpost", postsData);
+
         const tailleData = await getTaille();
-/*         const delete= await deletePosts();
- */
+        /*         const delete= await deletePosts();
+         */
         let postsWithLikes = null;
         if (postsData.posts) {
           setTaille(tailleData.taille);
           postsWithLikes = postsData.posts.map((post) => {
             // Vérifiez si l'utilisateur connecté a liké ce post
-            const hasLiked = post.likes.some(
-              (like) => like.compte_id === accountId
-            );
+            // const hasLiked = post.likes.some(
+            //   (like) => like.compte_id === accountId
+            // );
+
+            let hasLiked = null;
+            if (post.likes) {
+              hasLiked = post.likes.some(
+                (like) => like.compte_id === accountId
+              );
+            }
 
             return {
               ...post,
@@ -98,9 +114,9 @@ function PostPage() { // Recevez posts en prop
       }
     };
 
-    if (accountId) {
-      fetchPosts(); // Exécute la récupération des posts après que l'accountId a été défini
-    }
+    // if (accountId) {
+    fetchPosts(); // Exécute la récupération des posts après que l'accountId a été défini
+    // }
   }, [accountId]); // Déclenchez cet effet après que l'ID du compte est défini
 
   const incrementViewCount = async (postId) => {
@@ -205,19 +221,18 @@ function PostPage() { // Recevez posts en prop
   //delete post
 
   const handleDeletePost = async (postId) => {
-       console.log("podd",postId);
-      
+    console.log("podd", postId);
+
     if (!accountId) {
       console.error("Account ID manquant !");
       return;
     }
-    console.log("count",accountId);
+    console.log("count", accountId);
 
-  
     try {
       // Appel à l'API pour supprimer le post
       await Deletepost(postId, accountId);
-   
+
       // Mettre à jour l'état local pour retirer le post supprimé
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
       toast.success("Post supprimé avec succès !");
@@ -233,21 +248,21 @@ function PostPage() { // Recevez posts en prop
       console.error("Account ID manquant!");
       return;
     }
-  
+
     try {
       const postIndex = posts.findIndex((post) => post.id === postId);
       console.log("kk", postIndex);
-      
+
       if (postIndex === -1) {
         console.error("Post non trouvé!");
         return;
       }
-  
+
       const isFavorited = posts[postIndex].favorite; // Vérifiez si le post est déjà favori
-  
+
       // Appeler à l'API pour ajouter ou supprimer le post de la liste des favoris
       await favoritePost(postId, accountId, isFavorited); // Passer l'état actuel à l'API
-  
+
       // Mettre à jour le tableau des posts favoris localement
       setPosts((prevPosts) =>
         prevPosts.map((post) => {
@@ -257,19 +272,18 @@ function PostPage() { // Recevez posts en prop
           return post;
         })
       );
-  
+
       // Afficher le message toast en fonction de l'action
       if (isFavorited) {
         toast.error("Post supprimé des favoris!");
       } else {
         toast.success("Post ajouté aux favoris!");
       }
-  
     } catch (error) {
       console.error("Erreur lors de l'ajout/suppression du favori", error);
     }
-  }
-  
+  };
+
   const handleChangeColor = (value) => {
     setCard((prevState) => ({ ...prevState, color: value }));
 
@@ -388,41 +402,52 @@ function PostPage() { // Recevez posts en prop
                   </div>
                 </div>
                 <div
-  className="flex gap-10 dropdown is-spaced is-right is-neutral dropdown-trigger"
-  // Afficher le popup au clic
->
-  <div className="favorite-wrapper">
-    <a
-      href="javascript:void(0);"
-      className={`favorite-button ${
-        post.favorite ? "is-active white-button" : ""
-      }`}
-      onClick={() => handleFavoriteClick(post.id)}
-    >
-     
-      <span className="favorite-overlay"></span>
-    </a>
-  </div>
+                  className="flex gap-10 dropdown is-spaced is-right is-neutral dropdown-trigger"
+                  // Afficher le popup au clic
+                >
+                  <div className="favorite-wrapper">
+                    <a
+                      href="javascript:void(0);"
+                      className={`favorite-button ${
+                        post.favorite ? "is-active white-button" : ""
+                      }`}
+                      onClick={() => handleFavoriteClick(post.id)}
+                    >
+                      <span className="favorite-overlay"></span>
+                    </a>
+                  </div>
 
-  <div className="button" onClick={() => togglePopup(post.id)}>
-  <i className="mdi mdi-dots-vertical text-2xl"></i>
-  </div>
-</div>
-
+                  <div className="button" onClick={() => togglePopup(post.id)}>
+                    <i className="mdi mdi-dots-vertical text-2xl"></i>
+                  </div>
+                </div>
 
                 {/* Popup qui s'affiche sur le bouton */}
                 {popupVisible[post.id] && (
                   <div className="popup ml-20 p-5">
                     <div className="popup-contents">
-                      <a href="#" className="popup-item" onClick={() => handleDeletePost(post.id)}>
-                      <h3>Supprimer                </h3>
-                      </a> <br />
-                      <a className="popup-item " onClick={() => handleFavoriteClick(post.id)}>
-                        <h3>Favorite
-                        <i
-      className={`mdi mdi-bookmark bouncy ${post.favorite ? "favorited" : "not-favorited"}`}
-      style={{ color: post.favorite ? "gold" : "tan" }} // Changez la couleur ici
-    ></i>                        </h3> <br />
+                      <a
+                        href="#"
+                        className="popup-item"
+                        onClick={() => handleDeletePost(post.id)}
+                      >
+                        <h3>Supprimer </h3>
+                      </a>{" "}
+                      <br />
+                      <a
+                        className="popup-item "
+                        onClick={() => handleFavoriteClick(post.id)}
+                      >
+                        <h3>
+                          Favorite
+                          <i
+                            className={`mdi mdi-bookmark bouncy ${
+                              post.favorite ? "favorited" : "not-favorited"
+                            }`}
+                            style={{ color: post.favorite ? "gold" : "tan" }} // Changez la couleur ici
+                          ></i>{" "}
+                        </h3>{" "}
+                        <br />
                       </a>
                       <hr />
                       <a href="#" className="popup-item">
@@ -486,8 +511,8 @@ function PostPage() { // Recevez posts en prop
                       className="small-fab"
                       onClick={() => toggleComments(post.id)}
                     >
-<i className="mdi mdi-message"></i>
-</a>
+                      <i className="mdi mdi-message"></i>
+                    </a>
                   </div>
 
                   {post.comments && (
@@ -506,7 +531,6 @@ function PostPage() { // Recevez posts en prop
                       onClick={() => openModal(post)}
                     >
                       <i className="mdi mdi-share"></i>
-
                     </a>
                   </div>
 
