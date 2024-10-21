@@ -7,8 +7,10 @@ import Modal from "../modal/Modal";
 import { createStatus } from "../../../api/tailleurs";
 import { toast } from "react-toastify";
 import StoryComponent from "./StoryWithInteraction";
+import decodedToken from "../../../utils/decryptJWT";
 
 function RightSideBar() {
+  const authFromToken = decodedToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [storyType, setStoryType] = useState("image");
   const [storyFile, setStoryFile] = useState("");
@@ -96,7 +98,11 @@ function RightSideBar() {
             <h4>Stories</h4>
           </div>
           <div className="card-body no-padding">
-            <div className="story-block">
+            <div
+              className={`story-block ${
+                authFromToken.role == "tailleur" ? "" : "!hidden"
+              }`}
+            >
               <a
                 id="add-story-button"
                 href="#"
@@ -105,7 +111,7 @@ function RightSideBar() {
               >
                 <i data-feather="plus"></i>
               </a>
-              <div className="story-meta">
+              <div className={`story-meta`}>
                 <span>Add a new Story</span>
                 <span>Share an image, a video or some text</span>
               </div>
