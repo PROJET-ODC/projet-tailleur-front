@@ -1,7 +1,7 @@
 import { FaTrash } from "react-icons/fa";
 
 // pour les commandes
-const ArticlePanier = ({ article, mettreAJourQuantite }) => (
+const ArticlePanier = ({ article, mettreAJourQuantite, supprimerArticle }) => (
   <div className="flex-table-item max-h-[80px] ">
     <div className="discount">
       <img src={article.post.files} alt={article.post.title}
@@ -42,7 +42,7 @@ className="!object-contain !object-top" />
       <span className="has-price">{(article.post.price * article.quantity)}fcfa</span>
     </div>
     <div className="discount">
-      <button>
+      <button onClick={() => supprimerArticle(article.post.id)}>
         <FaTrash className="text-red-600"/>
       </button>
     </div>
