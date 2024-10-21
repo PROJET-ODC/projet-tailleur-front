@@ -3031,6 +3031,9 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   z-index: 1000; /* Assurez-vous qu'il est au-dessus des autres éléments */
 }
 
+
+
+
 .popup-content {
   background: white;
   padding: 20px;
@@ -3039,7 +3042,6 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   width: 300px; /* Ajustez la largeur selon vos besoins */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ajoutez une ombre pour le style */
 }
-
 .close-popup {
   position: absolute;
   top: 10px;
@@ -3067,7 +3069,7 @@ background: #fff url('img/search.png') no-repeat 15px 15px;
   
 }
 
-label {
+.popup-contents label {
   margin-bottom: 5px;
   font-weight: bold;
 }
@@ -3083,13 +3085,13 @@ input[type="number"] {
   display: flex;
   gap: 150px;
 }
-/* .buttons{
+.popup-contents .buttons{
   border-radius: 6px  ;
   background-color: blue ;
   color:white;
   padding: 10px;
   
-} */
+}
 .buttone{
   border-radius: 10px  ;
   background-color: white ;

@@ -1,5 +1,6 @@
 import React from 'react';
 import useProfileData from './useProfileData';
+import ProfilsPage from '../../pages/ProfilsPage';
 
 const ProfilePost = ({ post }) => {
 
@@ -13,7 +14,6 @@ const ProfilePost = ({ post }) => {
     console.log(user);
 
     return (
-
         <div className="profile-post">
             <div className="time is-hidden-mobile">
                 <div className="img-container">

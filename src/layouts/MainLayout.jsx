@@ -221,7 +221,7 @@ const MainLayout = () => {
 
       <div className="view-wrapper">
         <div id="main-feed" className="container">
-          <div id="activity-feed" className="view-wrap true-dom">
+        <div id="activity-feed" className="view-wrap true-dom">
             <div className="columns">
               <LeftSideBar />
 

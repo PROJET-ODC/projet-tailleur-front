@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { UserApi } from "../../../api/UserApi";
 import { FaPhotoVideo } from "react-icons/fa";
+import InputColor from "react-input-color";
+import { toast } from "react-toastify";
 
 function PostInput({ onPostCreated }) {
   const [files, setFiles] = useState([]);
@@ -92,7 +94,6 @@ function PostInput({ onPostCreated }) {
 
     if (response.status === "OK") {
 
-      setSuccessMessage("Post créé avec succès !");
       // Réinitialiser les champs du formulaire si nécessaire
       handleClearAll();
       setContent("");
@@ -102,11 +103,15 @@ function PostInput({ onPostCreated }) {
       setStatus("PUBLIE");
       setCategorie("IMAGE");
       onPostCreated(response)
-      
+      toast.success("Post crée avec succès !");
+
 
     } else {
       setErrorMessage(response.message || "Une erreur est survenue.");
+      toast.error("echec de l'ajout du post  !");
+
     }
+
   };
 
   // onClick={handlePostClick}
@@ -405,9 +410,7 @@ function PostInput({ onPostCreated }) {
               <div className="dropdown is-up is-spaced is-modern is-neutral is-right dropdown-trigger">
                 <div>
                   <button className="button" aria-haspopup="true">
-                    <i className="main-icon" data-feather="smile"></i>
-                    <span>Amis</span>
-                    <i className="caret" data-feather="chevron-down"></i>
+                    <span onClick={handlePostClick}>Annuler</span>
                   </button>
                 </div>
                 <div className="dropdown-menu" role="menu">
