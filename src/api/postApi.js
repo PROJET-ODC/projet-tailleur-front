@@ -35,4 +35,5 @@ const addComment = async (postId, accountId, content) => {
 
 
 
+
 export { getPosts, likePost,addComment }; // Ajoutez likePost à l'export

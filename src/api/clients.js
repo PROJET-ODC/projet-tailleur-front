@@ -37,6 +37,20 @@ export const followApi = async (idFollowedCompte) => {
   return result;
 };
 
+
+export const unfollowApi = async (idFollowedCompte) => {
+  const result = await apiBase
+    .post("/client/unfollow", { idFollowedCompte })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+
 export const getNotificationsByUser = async () => {
   const result = await apiBase
     .get(`/client/notifications`)
@@ -99,4 +113,35 @@ export const sendMessages = async (data) => {
       return error.response.data;
     });
   return result;
+};
+
+
+export const addPaiementCommande = async (postId, accountId, qte, taille, montant) => {
+  try {
+      const response = await apiBase.post(`/client/paiements`, { 
+          post_id: postId, 
+          compte_id: accountId, 
+          qte, 
+          taille, 
+          montant 
+      });
+      return response.data; // Retourne la commande et le paiement ajoutés
+  } catch (error) {
+      console.error("Données envoyées : ", { post_id: postId, compte_id: accountId, qte, taille, montant });
+      throw new Error(error.response?.data?.message || "Erreur lors de l'ajout du paiement de la commande");
+  }
+};
+
+export const addNote = async (noter_id, noted_id, note) => {
+  try {
+      const response = await apiBase.post(`/client/note`, { 
+        noter_id: noter_id, // Correction ici
+        noted_id: noted_id, 
+        note: note
+      });
+      return response.data; // Retourne les données de la réponse
+  } catch (error) {
+      console.error("Erreur lors de l'ajout de la note : ", error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || "Erreur lors de l'ajout de la note");
+  }
 };
