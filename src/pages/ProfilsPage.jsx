@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPosts, likePost, addComment,Deletepost,favoritePost } from "../api/postApi"; // Assurez-vous d'importer la fonction likePost
+import { getPostsByAccount, likePost, addComment,Deletepost,favoritePost} from "../api/postApi"; // Assurez-vous d'importer la fonction likePost
 import { getTaille } from "../api/clients"; // Assurez-vous d'importer la fonction likePost
 
 import CommentsSection from "./CommentsSection";
@@ -69,7 +69,7 @@ function PostPage() { // Recevez posts en prop
 
     const fetchPosts = async () => {
       try {
-        const postsData = await getPosts(); // Récupérer les posts depuis l'API
+        const postsData = await getPostsByAccount(); // Récupérer les posts depuis l'API
         const tailleData = await getTaille();
 /*         const delete= await deletePosts();
  */
@@ -387,46 +387,37 @@ function PostPage() { // Recevez posts en prop
                     <p>{new Date(post.createdAt).toLocaleString()}</p>
                   </div>
                 </div>
+
                 <div
-  className="flex gap-10 dropdown is-spaced is-right is-neutral dropdown-trigger"
-  // Afficher le popup au clic
->
-  <div className="favorite-wrapper">
-    <a
-      href="javascript:void(0);"
-      className={`favorite-button ${
-        post.favorite ? "is-active white-button" : ""
-      }`}
-      onClick={() => handleFavoriteClick(post.id)}
-    >
-     
-      <span className="favorite-overlay"></span>
-    </a>
-  </div>
-
-  <div className="button" onClick={() => togglePopup(post.id)}>
-  <i className="mdi mdi-dots-vertical text-2xl"></i>
-  </div>
-</div>
-
+                  className="dropdown is-spaced is-right is-neutral dropdown-trigger"
+                  onClick={() => togglePopup(post.id)} // Afficher le popup au clic
+                >
+                  <div className="button">
+                    <i className="mdi mdi-cart"></i>
+                  </div>
+                </div>
 
                 {/* Popup qui s'affiche sur le bouton */}
                 {popupVisible[post.id] && (
-                  <div className="popup ml-20 p-5">
-                    <div className="popup-contents">
+                  <div className="popup">
+                    <div className="popup-content">
                       <a href="#" className="popup-item" onClick={() => handleDeletePost(post.id)}>
-                      <h3>Supprimer                </h3>
-                      </a> <br />
+                      <h3>Supprimer</h3>
+                      <small>Supprimer ce post.</small>
+
+
+                      </a>
                       <a className="popup-item " onClick={() => handleFavoriteClick(post.id)}>
                         <h3>Favorite
                         <i
       className={`mdi mdi-bookmark bouncy ${post.favorite ? "favorited" : "not-favorited"}`}
       style={{ color: post.favorite ? "gold" : "tan" }} // Changez la couleur ici
-    ></i>                        </h3> <br />
+    ></i>                        </h3>
                       </a>
                       <hr />
                       <a href="#" className="popup-item">
-                        <h3>signaler</h3>
+                        <h3>Flag</h3>
+                        <small>In case of inappropriate content.</small>
                       </a>
                     </div>
                   </div>
@@ -476,7 +467,7 @@ function PostPage() { // Recevez posts en prop
                         src={post.files}
                         alt="Post"
                         data-demo-src={post.files}
-                        className="!object-content !object-top"
+                        className="!object-none !object-top"
                       />
                     </a>
                   )}
@@ -486,8 +477,8 @@ function PostPage() { // Recevez posts en prop
                       className="small-fab"
                       onClick={() => toggleComments(post.id)}
                     >
-<i className="mdi mdi-message"></i>
-</a>
+                      <i data-feather="message-circle"></i>
+                    </a>
                   </div>
 
                   {post.comments && (
@@ -505,8 +496,7 @@ function PostPage() { // Recevez posts en prop
                       className="small-fab share-fab modal-trigger"
                       onClick={() => openModal(post)}
                     >
-                      <i className="mdi mdi-share"></i>
-
+                      <i data-feather="link-2"></i>
                     </a>
                   </div>
 
@@ -580,7 +570,7 @@ function PostPage() { // Recevez posts en prop
                           <div className="product-image is-active">
                             <img
                               src={selectedProduct.files}
-                              className="!object-content !object-top"
+                              className="!object-none !object-top"
                               alt=""
                             />
                           </div>

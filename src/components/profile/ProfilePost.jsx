@@ -1,5 +1,6 @@
 import React from 'react';
 import useProfileData from './useProfileData';
+import ProfilsPage from '../../pages/ProfilsPage';
 
 const ProfilePost = ({ post }) => {
 
@@ -13,7 +14,6 @@ const ProfilePost = ({ post }) => {
     console.log(user);
 
     return (
-
         <div className="profile-post">
             <div className="time is-hidden-mobile">
                 <div className="img-container">
@@ -42,10 +42,10 @@ const ProfilePost = ({ post }) => {
                         <div className="post-text">
                             <p>{post.content}</p>
                         </div>
-                        {post.files && post.files.images && post.files.images.length > 0 && (
+                        {post.files && (
                             <div className="post-image">
-                                <a href={post.files.images[0]}>
-                                    <img src={post.files.images[0]} alt="Post" />
+                                <a href={post.files}>
+                                    <img src={post.files} alt="Post" />
                                 </a>
                                 <div className="like-wrapper">
                                     <button className="like-button">
