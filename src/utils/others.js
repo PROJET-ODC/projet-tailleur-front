@@ -11,6 +11,8 @@ const groupAndCalculateDelay = (data) => {
         } = {},
         files,
         createdAt,
+        status_like,
+        id,
       } = current;
 
       const createdAtTime = new Date(createdAt).getTime();
@@ -49,9 +51,12 @@ const groupAndCalculateDelay = (data) => {
       const fileType = files.endsWith(".mp4") ? "video" : "image";
 
       acc[tailleur_id].files.push({
+        compte_id: tailleur_id,
         url: files,
         delay: delay,
         type: fileType, // Add the file type here
+        likes: status_like,
+        status_id: id,
       });
 
       return acc;

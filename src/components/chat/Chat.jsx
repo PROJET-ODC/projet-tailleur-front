@@ -125,7 +125,9 @@ const Chat = () => {
                     <img src={message.user.picture} alt="" />
                     <div className="message-block">
                       <span>{message.createdAt}</span>
-                      <div className="message-text">{message.texte}</div>
+                      <div className="message-text  !break-words !whitespace-normal">
+                        {message.texte}
+                      </div>
                     </div>
                   </div>
                 );

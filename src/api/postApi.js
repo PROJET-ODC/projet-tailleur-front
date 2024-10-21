@@ -5,15 +5,23 @@ const getPosts = async () => {
     const response = await apiBase.get("/tailleur/posts");
     return response.data; // Renvoie les données des posts
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Erreur lors de la récupération des posts");
+    throw new Error(
+      error.response?.data?.message ||
+        "Erreur lors de la récupération des posts"
+    );
   }
 };
 const likePost = async (postId, accountId) => {
   try {
-    const response = await apiBase.post(`/client/like`, { post_id: postId, compte_id: accountId });
+    const response = await apiBase.post(`/client/like`, {
+      post_id: postId,
+      compte_id: accountId,
+    });
     return response.data; // Renvoie les données du post liké
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Erreur lors du liking du post");
+    throw new Error(
+      error.response?.data?.message || "Erreur lors du liking du post"
+    );
   }
 };
 
@@ -50,19 +58,35 @@ const getPostsByAccount = async (accountId) => {
 // api/commentApi.js
 const addComment = async (postId, accountId, content) => {
   try {
-      const response = await apiBase.post(`/client/posts/comment`, { 
-          post_id: postId, 
-          compte_id: accountId, 
-          content 
-      });
-      return response.data; // Retourne le nouveau commentaire ajouté
+    const response = await apiBase.post(`/client/posts/comment`, {
+      post_id: postId,
+      compte_id: accountId,
+      content,
+    });
+    return response.data; // Retourne le nouveau commentaire ajouté
   } catch (error) {
-    console.error("Données envoyées : ", { post_id: postId, compte_id: accountId, content });
+    console.error("Données envoyées : ", {
+      post_id: postId,
+      compte_id: accountId,
+      content,
+    });
 
-      throw new Error(error.response?.data?.message || "Erreur lors de l'ajout du commentaire");
+    throw new Error(
+      error.response?.data?.message || "Erreur lors de l'ajout du commentaire"
+    );
   }
 };
 
+const getSearchResult = async (query) => {
+  const result = await apiBase
+    .post("/client/accueil/search", query)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
 
-
-export { getPosts, likePost,addComment,Deletepost ,getPostsByAccount,favoritePost}; // Ajoutez likePost à l'export
+export { getPosts, likePost,addComment,Deletepost ,getPostsByAccount,favoritePost, getSearchResult}; // Ajoutez likePost à l'export

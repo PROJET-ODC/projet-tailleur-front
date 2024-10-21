@@ -90,7 +90,7 @@ export const getDiscussionData = async () => {
   return result;
 };
 
-export const getTaille = async() => {
+export const getTaille = async () => {
   const result = await apiBase
     .get(`/client/taille`)
 
@@ -115,6 +115,29 @@ export const sendMessages = async (data) => {
   return result;
 };
 
+export const updateLikeStatus = async (data) => {
+  const result = await apiBase
+    .post("/client/statuslikes", data)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+};
+
+export const getAllLikesStatus = async (status_id) => {
+  const result = await apiBase
+    .get(`/client/statuslikes/${status_id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      return error.response.data;
+    });
+  return result;
+  };
 
 export const addPaiementCommande = async (postId, accountId, qte, taille, montant) => {
   try {
@@ -144,4 +167,4 @@ export const addNote = async (noter_id, noted_id, note) => {
       console.error("Erreur lors de l'ajout de la note : ", error.response?.data || error.message);
       throw new Error(error.response?.data?.message || "Erreur lors de l'ajout de la note");
   }
-};
+
