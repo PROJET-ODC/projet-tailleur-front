@@ -6,14 +6,18 @@ import { groupAndCalculateDelay } from "../../../utils/others";
 import Modal from "../modal/Modal";
 import { createStatus } from "../../../api/tailleurs";
 import { toast } from "react-toastify";
+import StoryComponent from "./StoryWithInteraction";
+import decodedToken from "../../../utils/decryptJWT";
 
 function RightSideBar() {
+  const authFromToken = decodedToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [storyType, setStoryType] = useState("image");
   const [storyFile, setStoryFile] = useState("");
   const [storyText, setStoryText] = useState("");
   const [isModalStoryOpen, setIsModalStoryOpen] = useState(false);
   const [story, setStory] = useState([]);
+  const [isPostingStory, setIsPostingStory] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -27,6 +31,7 @@ function RightSideBar() {
   const handleStoryTypeChange = (e) => setStoryType(e.target.value);
 
   const handlePostStory = async (e) => {
+    setIsPostingStory(true);
     e.preventDefault();
     const data = {
       image: storyFile,
@@ -35,6 +40,7 @@ function RightSideBar() {
     const result = await createStatus(data);
 
     if (result.status == "OK") {
+      setIsPostingStory(false);
       toast.success(result.message);
 
       // Récupère les nouvelles données pour mettre à jour le composant
@@ -52,6 +58,7 @@ function RightSideBar() {
   const openModalStory = (storyItem) => {
     setIsModalStoryOpen(true);
     setStory((prevState) => storyItem);
+    // console.log(storyItem);
   };
 
   const closeModalStory = () => {
@@ -70,12 +77,17 @@ function RightSideBar() {
     try {
       const data = await getFeedsInitData();
       const recentStatus = await data.recentStatus;
-      console.log("log", recentStatus);
+      // console.log("log", recentStatus);
 
       setStatusData(groupAndCalculateDelay(recentStatus));
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
+  };
+
+  const resetStories = async () => {
+    // await fetchData();
+    console.log("parentsss");
   };
 
   return (
@@ -86,7 +98,11 @@ function RightSideBar() {
             <h4>Stories</h4>
           </div>
           <div className="card-body no-padding">
-            <div className="story-block">
+            <div
+              className={`story-block ${
+                authFromToken.role == "tailleur" ? "" : "!hidden"
+              }`}
+            >
               <a
                 id="add-story-button"
                 href="#"
@@ -95,7 +111,7 @@ function RightSideBar() {
               >
                 <i data-feather="plus"></i>
               </a>
-              <div className="story-meta">
+              <div className={`story-meta`}>
                 <span>Add a new Story</span>
                 <span>Share an image, a video or some text</span>
               </div>
@@ -189,7 +205,12 @@ function RightSideBar() {
                 </form>
               </section>
               <footer className="modal-card-foot">
-                <button className="button is-success" onClick={handlePostStory}>
+                <button
+                  className={`button is-success ${
+                    isPostingStory ? "is-loading" : ""
+                  }`}
+                  onClick={handlePostStory}
+                >
                   Ajouter
                 </button>
                 <button className="button" onClick={closeModal}>
@@ -207,12 +228,13 @@ function RightSideBar() {
         title="My Modal"
       >
         {story && (
-          <Stories
-            stories={story}
-            defaultInterval={1500}
-            width={600}
-            height={800}
-          />
+          // <Stories
+          //   stories={story}
+          //   defaultInterval={1500}
+          //   width={600}
+          //   height={800}
+          // />
+          <StoryComponent stories={story} resetStories={resetStories} />
         )}
       </Modal>
     </>

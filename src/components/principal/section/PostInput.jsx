@@ -3,8 +3,10 @@ import { UserApi } from "../../../api/UserApi";
 import { FaPhotoVideo } from "react-icons/fa";
 import InputColor from "react-input-color";
 import { toast } from "react-toastify";
+import decodedToken from "../../../utils/decryptJWT";
 
 function PostInput({ onPostCreated }) {
+  const authFromToken = decodedToken();
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +60,14 @@ function PostInput({ onPostCreated }) {
     fileInputRef.current.click();
   };
 
+  // Fonction pour valider le prix
+  const isPriceValid = (price) => {
+    const parsedPrice = parseFloat(price);
+    return (
+      !isNaN(parsedPrice) && parsedPrice > 0 && Number.isInteger(parsedPrice)
+    );
+  };
+
   const handleSubmit = async () => {
     // const response = await UserApi(formData);
     setIsLoading(true); // Start loading when submitting
@@ -65,10 +75,17 @@ function PostInput({ onPostCreated }) {
     setErrorMessage("");
     setSuccessMessage("");
 
-
     if (!content || !title || files.length === 0) {
       setErrorMessage(
         "Tous les champs doivent être remplis, y compris le fichier."
+      );
+      return;
+    }
+
+    // Validation du prix
+    if (!isPriceValid(price)) {
+      setErrorMessage(
+        "Le prix doit être un nombre entier positif et ne doit pas etre vide."
       );
       return;
     }
@@ -90,10 +107,7 @@ function PostInput({ onPostCreated }) {
     // Appeler l'API pour poster les données
     const response = await UserApi(formData);
 
-    
-
     if (response.status === "OK") {
-
       // Réinitialiser les champs du formulaire si nécessaire
       handleClearAll();
       setContent("");
@@ -102,23 +116,25 @@ function PostInput({ onPostCreated }) {
       setUseCredit(false);
       setStatus("PUBLIE");
       setCategorie("IMAGE");
-      onPostCreated(response)
+      onPostCreated(response);
+
       toast.success("Post crée avec succès !");
-
-
     } else {
       setErrorMessage(response.message || "Une erreur est survenue.");
       toast.error("echec de l'ajout du post  !");
-
     }
-
   };
 
   // onClick={handlePostClick}
 
   return (
     <>
-      <div className="tabs-wrapper cursor-pointer" onClick={handlePostClick}>
+      <div
+        className={`tabs-wrapper cursor-pointer ${
+          authFromToken.role == "tailleur" ? "" : "hidden"
+        }`}
+        onClick={handlePostClick}
+      >
         <div className="tabs is-boxed is-fullwidth">
           <ul>
             <li className="w-full">
@@ -261,7 +277,7 @@ function PostInput({ onPostCreated }) {
                       className="input is-sm no-radius is-fade"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      placeholder="Entrez le titre de votre produit"
+                      placeholder="Entrez le prix de votre produit"
                     />
                   </div>
 
@@ -406,64 +422,18 @@ function PostInput({ onPostCreated }) {
             </div>
 
             <div className="card-footer">
-              {/* Menu Dropdown */}
               <div className="dropdown is-up is-spaced is-modern is-neutral is-right dropdown-trigger">
                 <div>
                   <button className="button" aria-haspopup="true">
                     <span onClick={handlePostClick}>Annuler</span>
                   </button>
                 </div>
-                <div className="dropdown-menu" role="menu">
-                  <div className="dropdown-content">
-                    <a href="#" className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="globe"></i>
-                        <div className="media-content">
-                          <h3>Public</h3>
-                          <small>
-                            Tout le monde peut voir cette publication.
-                          </small>
-                        </div>
-                      </div>
-                    </a>
-                    <a className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="users"></i>
-                        <div className="media-content">
-                          <h3>Amies</h3>
-                          <small>
-                            Seuls les amis peuvent voir cette publication.
-                          </small>
-                        </div>
-                      </div>
-                    </a>
-                    <a className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="user"></i>
-                        <div className="media-content">
-                          <h3>Amis spécifiques</h3>
-                          <small>Ne le montre pas à certains amis.</small>
-                        </div>
-                      </div>
-                    </a>
-                    <hr className="dropdown-divider" />
-                    <a className="dropdown-item">
-                      <div className="media">
-                        <i data-feather="lock"></i>
-                        <div className="media-content">
-                          <h3>Seulement moi</h3>
-                          <small>Seul moi peut voir cette publication.</small>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
               </div>
-
               <button
                 type="button"
                 className="button is-solid accent-button"
-                onClick={handleSubmit} >
+                onClick={handleSubmit}
+              >
                 Publier
               </button>
             </div>
